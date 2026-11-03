@@ -1,2 +1,9 @@
 @import 'tailwindcss';
 @import './styles/tokens.css';
+
+@layer base {
+  /* 版面最窄 768：手機靠 viewport 縮放；電腦把視窗拉窄時出現橫向捲軸，版面不會被擠壞 */
+  html {
+    min-width: 768px;
+  }
+}
