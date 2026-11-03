@@ -1,0 +1,31 @@
+# 開 PR 或推進 main、develop 時，自動檢查排版、lint、測試、打包
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+# 同一個分支連推好幾次，只跑最新的那次
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint:check
+      - run: npm test -- --run
+      - run: npm run build
