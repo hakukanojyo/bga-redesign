@@ -24,7 +24,8 @@
 - 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，頁尾標註版權
 - 排版：Prettier（版本寫死），規則在 `.prettierrc.json`，`npm run format` 排 `src/`
 - 檢查：ESLint（JS 建議規則＋`eslint-plugin-vue` 的 `flat/essential`，排版規則交給 Prettier），規則在 `eslint.config.js`，`npm run lint` 檢查並自動修
-- 之後加：Vitest、Storybook
+- 測試：Vitest＋`@vue/test-utils`（jsdom 模擬瀏覽器），測試檔放 `__tests__/`、檔名 `*.spec.js`，`npm test`
+- 之後加：Storybook
 
 ## 資料在哪（正本）
 
@@ -76,4 +77,5 @@
 - ✅ AI 協作規範、README（#1）
 - ✅ Prettier（#2）
 - ✅ ESLint（#3）
-- 接下來：Vitest、CI 各一個 PR → GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
+- ✅ Vitest（#4）：目前只有 `App.spec.js` 確認能跑，做版面骨架時要改
+- 接下來：CI → GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
