@@ -7,6 +7,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Noto+Sans+TC:wght@500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      // 裝置寬度小於 768（手機）時，以 768 寬縮放顯示平板版（SYS-02）
+      function fitViewport() {
+        var narrow = screen.width < 768
+        // 明確指定縮放比例：只寫 width=768 時，有些瀏覽器不會自動縮小到剛好塞滿螢幕
+        var scale = screen.width / 768
+        document
+          .querySelector('meta[name="viewport"]')
+          .setAttribute(
+            'content',
+            narrow
+              ? 'width=768, initial-scale=' + scale
+              : 'width=device-width, initial-scale=1.0',
+          )
+      }
+      fitViewport()
+      addEventListener('orientationchange', fitViewport)
+    </script>
     <title>Vite App</title>
   </head>
   <body>

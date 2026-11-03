@@ -61,6 +61,8 @@
   - 文字：用 `type-` 開頭的 class 對應 Figma 文字樣式（例：`type-tc-heading-24`），不要自己組字級和行高
   - 觸控尺寸：`min-h-(--tap-button-min-height)`；字級、觸控尺寸的 Tablet 模式由 CSS 自動切換
   - 效果（陰影、玻璃）還沒轉成 token，做到用到的元件時再加
+- 斷點：桌面優先，預設寫桌面版，平板（768～1279）用 `max-desktop:` 改寫（例：`p-24 max-desktop:p-16`）。沒有 768 以下的斷點：手機由 `index.html` 的 script 縮放成 768 寬，CSS 永遠看到 768 以上
+- 要判斷「是不是手機」時看 `screen.width < 768`（裝置寬度），不要看 `innerWidth` 或 media query，縮放後它們都是 768
 - Figma 變數改了：用 Figma MCP 重新讀變數，更新 `tokens.css`；`npm test` 會檢查每個 Semantic 都接到 Primitive
 - 畫面不直接 import 假資料，一律透過 `src/api/`
 - 元件名稱至少兩個字（例：`AppHeader.vue`，不要 `Header.vue`），ESLint 會擋單字的名稱
@@ -113,4 +115,5 @@
 - ✅ 檢查清單 `docs/checklists/`、照設計稿做畫面的規則（#10）
 - ✅ Tailwind CSS v4（#11）
 - ✅ 設計 token（#16）
+- ✅ 斷點、手機縮放、裝置建議橫幅（#17）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能

@@ -189,6 +189,9 @@
   /* 清掉 Tailwind 內建的色票、間距、字型等，寫不出設計稿以外的值 */
   --*: initial;
 
+  /* 桌面優先：預設寫桌面版，平板用 max-desktop: 改寫（SYS-01） */
+  --breakpoint-desktop: 1280px;
+
   --font-latin: 'Inter', 'Noto Sans TC', sans-serif;
   --font-cjk: 'Noto Sans TC', sans-serif;
   --default-font-family: var(--font-cjk);
