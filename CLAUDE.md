@@ -112,5 +112,5 @@
 - ✅ 技術決策紀錄 `docs/adr/`（#9）
 - ✅ 檢查清單 `docs/checklists/`、照設計稿做畫面的規則（#10）
 - ✅ Tailwind CSS v4（#11）
-- ✅ 設計 token（#12）
+- ✅ 設計 token（#16）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
