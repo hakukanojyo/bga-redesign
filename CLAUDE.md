@@ -22,7 +22,8 @@
 - 資料：第一階段用假資料，畫面只透過 `src/api/` 拿資料；第二階段換 Supabase
 - Pinia 預計放：收藏、我的牌桌、篩選條件
 - 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，頁尾標註版權
-- 之後加：ESLint、Prettier、Vitest、Storybook
+- 排版：Prettier（版本寫死），規則在 `.prettierrc.json`，`npm run format` 排 `src/`
+- 之後加：ESLint、Vitest、Storybook
 
 ## 資料在哪（正本）
 
@@ -70,5 +71,6 @@
 ## 目前進度
 
 - ✅ 用 create-vue 建立專案（Router、Pinia）
-- ⏳ AI 協作規範、README
-- 接下來：Prettier、ESLint、Vitest、CI 各一個 PR → GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
+- ✅ AI 協作規範、README（#1）
+- ✅ Prettier（#2）
+- 接下來：ESLint、Vitest、CI 各一個 PR → GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
