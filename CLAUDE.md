@@ -62,7 +62,7 @@
 |---|---|
 | 分支命名：`feat/`、`fix/`、`chore/`、`docs/`、`refactor/` 加內容，可以帶 issue 編號（例：`feat/12-search-bar`） | 使用中 |
 | Commit 用 [Conventional Commits](https://www.conventionalcommits.org/)，英文、簡短（例：`feat: add search bar`）；不加 `Co-Authored-By` 之類的 AI 署名 | 使用中 |
-| Issue 標題帶功能編號（例：`[FIND-03] 搜尋列`），內容連到功能清單或 PRD | 尚未開始 |
+| Issue 用範本開（`.github/ISSUE_TEMPLATE/`）：功能 issue 標題帶功能編號（例：`[SYS-09] 設計 token`），內容只放連結和狀態表；工具設定 issue 不用編號 | 使用中 |
 | 每個改動都開 PR；功能、修 bug、文件、工具設定的 PR 自我檢查後自己合併，reviewer 有空再事後看 | 使用中 |
 | 自我檢查：在「Files changed」看完整個 diff、CI 通過、PR 描述寫清楚做了什麼／為什麼／怎麼確認 | 使用中 |
 | 動到架構的 PR（資料模型、Pinia store 設計、共用元件寫法）留言請 reviewer 看，等回覆再合併 | 使用中 |
@@ -82,4 +82,5 @@
 - ✅ Vitest（#4）：目前只有 `App.spec.js` 確認能跑，做版面骨架時要改
 - ✅ CI（#5）
 - ✅ GitHub 設定：壓縮合併、`develop`、分支保護、PR 範本（#7）
+- ✅ Issue 範本（#8）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
