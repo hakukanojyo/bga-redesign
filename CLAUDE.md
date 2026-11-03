@@ -55,6 +55,13 @@
 ## 寫程式的規則
 
 - 顏色只用 Semantic token，不直接用 Primitives（規則見「顏色變數規則」）
+- Token 在 `src/styles/tokens.css`，名稱和 Figma 變數一樣，Tailwind 內建的主題已清掉：
+  - 顏色：`bg-surface-default`、`text-text-body`、`border-border-default`（Figma 的 `surface/default`、`text/body`…）
+  - 間距、圓角：只有 Figma 的級距，`p-16` 是 16px、`rounded-8` 是 8px
+  - 文字：用 `type-` 開頭的 class 對應 Figma 文字樣式（例：`type-tc-heading-24`），不要自己組字級和行高
+  - 觸控尺寸：`min-h-(--tap-button-min-height)`；字級、觸控尺寸的 Tablet 模式由 CSS 自動切換
+  - 效果（陰影、玻璃）還沒轉成 token，做到用到的元件時再加
+- Figma 變數改了：用 Figma MCP 重新讀變數，更新 `tokens.css`；`npm test` 會檢查每個 Semantic 都接到 Primitive
 - 畫面不直接 import 假資料，一律透過 `src/api/`
 - 元件名稱至少兩個字（例：`AppHeader.vue`，不要 `Header.vue`），ESLint 會擋單字的名稱
 - 跨頁面共用的資料放 Pinia（`src/stores/`），只有一頁用的放元件裡
@@ -105,4 +112,5 @@
 - ✅ 技術決策紀錄 `docs/adr/`（#9）
 - ✅ 檢查清單 `docs/checklists/`、照設計稿做畫面的規則（#10）
 - ✅ Tailwind CSS v4（#11）
+- ✅ 設計 token（#16）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能

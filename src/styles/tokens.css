@@ -1,0 +1,439 @@
+/*
+ * 設計 token：照 Figma 變數（fileKey YLgv7ISZngFsPRMqVxs8Aj）的名稱轉成 CSS。
+ * 規則見 Notion「顏色變數規則」；為什麼這樣接 Tailwind 見 docs/adr/0003。
+ *
+ * - Primitives：一般 CSS 變數，不產生 Tailwind class，畫面不直接用
+ * - Semantic：放在 @theme，產生 bg-*、text-*、border-* 等 class
+ * - Typography、Layout：Desktop／Tablet 兩種模式，用 media query 切換
+ */
+
+/* ---------- Primitives ---------- */
+:root {
+  --blue-50: #dae8ef;
+  --blue-100: #b1d0e3;
+  --blue-200: #87b9d8;
+  --blue-300: #5ea1cc;
+  --blue-400: #348ac1;
+  --blue-500: #0b72b5;
+  --blue-600: #0a6199;
+  --blue-700: #09507e;
+  --blue-800: #094062;
+  --blue-900: #082f47;
+  --blue-950: #071e2b;
+  --blue-50-a46: rgb(218 232 239 / 0.46);
+
+  --gray-50: #f4f4f4;
+  --gray-100: #dbdbdb;
+  --gray-200: #c2c2c2;
+  --gray-300: #a8a8a8;
+  --gray-400: #8f8f8f;
+  --gray-500: #767676;
+  --gray-600: #616161;
+  --gray-700: #4d4d4d;
+  --gray-750: #414141;
+  --gray-800: #383838;
+  --gray-900: #242424;
+  --gray-925: #212121;
+  --gray-950: #0f0f0f;
+  --gray-950-a36: rgb(15 15 15 / 0.36);
+
+  --red-50: #ffeeee;
+  --red-100: #e5a6a5;
+  --red-200: #e58584;
+  --red-300: #e46563;
+  --red-400: #e44442;
+  --red-450: #dc3131;
+  --red-500: #e42421;
+  --red-600: #c31e1c;
+  --red-700: #a11816;
+  --red-800: #801211;
+  --red-900: #5e0c0b;
+  --red-950: #3d0606;
+  --red-450-a25: rgb(220 49 49 / 0.25);
+
+  --gold-300: #ffe730;
+  --gold-500: #d2bd00;
+  --gold-600: #dc9600;
+  --gold-600-a0: rgb(220 150 0 / 0);
+
+  --yellow-50: #fdfff2;
+  --yellow-300: #f0eb5c;
+  --yellow-400: #dfdd45;
+  --yellow-950: #221d05;
+
+  --green-50: #f3fff9;
+  --green-300: #61e9a2;
+  --green-400: #49dc8f;
+  --green-500: #028805;
+  --green-950: #142706;
+
+  --purple-50: #fcf8ff;
+  --purple-300: #d49ff2;
+  --purple-400: #c788eb;
+  --purple-700: #7705a7;
+  --purple-950: #2c0a40;
+
+  --pink-50: #fff6f8;
+  --pink-300: #ffa2bb;
+  --pink-400: #f988a6;
+  --pink-950: #460c1c;
+
+  --cyan-50: #f0fbff;
+  --cyan-300: #58d3f9;
+  --cyan-400: #44c8f0;
+  --cyan-500: #00b2ff;
+  --cyan-950: #0b183d;
+
+  --orange-50: #fff8f0;
+  --orange-300: #fcab5e;
+  --orange-400: #ff9937;
+  --orange-950: #382009;
+
+  --coral-300: #ff6d53;
+  --coral-400: #e7573d;
+  --coral-600: #b8331c;
+
+  --lime-300: #e3f637;
+  --lime-500: #c4d628;
+  --teal-400: #2bc8cc;
+  --mint-400: #13ff89;
+  --mint-400-a25: rgb(19 255 137 / 0.25);
+
+  --base-white: #ffffff;
+  --base-white-a0: rgb(255 255 255 / 0);
+  --base-white-a16: rgb(255 255 255 / 0.16);
+  --base-white-a25: rgb(255 255 255 / 0.25);
+  --base-white-a30: rgb(255 255 255 / 0.3);
+  --base-white-a35: rgb(255 255 255 / 0.35);
+  --base-white-a56: rgb(255 255 255 / 0.56);
+  --base-white-a73: rgb(255 255 255 / 0.73);
+  --base-white-a90: rgb(255 255 255 / 0.9);
+  --base-black: #000000;
+  --base-black-a0: rgb(0 0 0 / 0);
+  --base-black-a30: rgb(0 0 0 / 0.3);
+  --base-black-a76: rgb(0 0 0 / 0.76);
+
+  /* 漸層色標：SYS-09 的例外，漸層直接用 Primitive */
+  --gradient-learn-1: #e4a4ec;
+  --gradient-learn-2: #ad50dc;
+  --gradient-learn-3: #b532cc;
+  --gradient-learn-4: #6f1f82;
+  --gradient-find-hover-1: #e3ef96;
+  --gradient-find-hover-2: #e1f241;
+  --gradient-find-hover-3: #e9ff1f;
+  --gradient-find-hover-4: #98a413;
+}
+
+/* ---------- Typography、Layout（Desktop 模式） ---------- */
+:root {
+  --size-10: 10px;
+  --size-11: 11px;
+  --size-12: 12px;
+  --size-13: 13px;
+  --size-14: 14px;
+  --size-16: 16px;
+  --size-18: 18px;
+  --size-20: 20px;
+  --size-24: 24px;
+
+  --line-height-14: 14px;
+  --line-height-16: 16px;
+  --line-height-18: 18px;
+  --line-height-20: 20px;
+  --line-height-22: 22px;
+  --line-height-24: 24px;
+  --line-height-28: 28px;
+  --line-height-32: 32px;
+
+  --tracking-none: 0px;
+  --tracking-tight: 0.1px;
+  --tracking-normal: 0.4px;
+  --tracking-wide: 1.2px;
+  --tracking-wider: 1.4px;
+
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tap-checkbox-min-height: 20px;
+  --tap-checkbox-gap: 12px;
+  --tap-tag-min-height: 28px;
+  --tap-button-min-height: 28px;
+  --footer-social-max-width: 254px;
+  --card-min-width: 300px;
+}
+
+/* Tablet 模式：寬度 768～1279 */
+@media (max-width: 1279px) {
+  :root {
+    --size-20: 18px;
+    --size-24: 20px;
+    --line-height-28: 26px;
+    --line-height-32: 28px;
+    --footer-social-max-width: 1440px;
+  }
+}
+
+/* 觸控尺寸：平板寬度，或寬度 1280 以上的觸控裝置（產品規則 6.2） */
+@media (max-width: 1279px), (hover: none) {
+  :root {
+    --tap-checkbox-min-height: 44px;
+    --tap-checkbox-gap: 0px;
+    --tap-tag-min-height: 36px;
+    --tap-button-min-height: 44px;
+  }
+}
+
+/* ---------- Tailwind 主題：只留設計稿的值 ---------- */
+@theme {
+  /* 清掉 Tailwind 內建的色票、間距、字型等，寫不出設計稿以外的值 */
+  --*: initial;
+
+  --font-latin: 'Inter', 'Noto Sans TC', sans-serif;
+  --font-cjk: 'Noto Sans TC', sans-serif;
+  --default-font-family: var(--font-cjk);
+
+  --spacing-0: 0px;
+  --spacing-2: 2px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+
+  --radius-2: 2px;
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-24: 24px;
+  --radius-full: 9999px;
+
+  /* Semantic */
+  --color-text-primary: var(--blue-900);
+  --color-text-secondary: var(--gray-700);
+  --color-text-inverse: var(--base-white);
+  --color-text-link: var(--blue-500);
+  --color-text-brand-strong: var(--blue-600);
+  --color-text-placeholder: var(--gray-400);
+  --color-text-danger: var(--red-400);
+  --color-text-body: var(--gray-925);
+  --color-text-disabled: var(--gray-200);
+  --color-text-link-inverse: var(--blue-200);
+
+  --color-surface-default: var(--base-white);
+  --color-surface-glass: var(--base-white-a90);
+  --color-surface-placeholder: var(--gray-200);
+  --color-surface-subtle: var(--gray-100);
+  --color-surface-muted: var(--gray-300);
+  --color-surface-header: var(--base-white-a73);
+  --color-surface-input: var(--base-white-a30);
+  --color-surface-glass-faint: var(--base-white-a16);
+  --color-surface-brand: var(--blue-500);
+  --color-surface-brand-subtle: var(--blue-100);
+  --color-surface-tooltip: var(--gray-750);
+  --color-surface-glass-light: var(--base-white-a35);
+  --color-surface-glass-panel: var(--base-white-a56);
+  --color-surface-glass-nav: var(--base-white-a25);
+  --color-surface-toast: var(--blue-900);
+
+  --color-overlay-scrim: var(--gray-950);
+  --color-overlay-scrim-strong: var(--gray-950-a36);
+  --color-overlay-backdrop: var(--base-black-a30);
+
+  --color-border-default: var(--gray-950);
+  --color-border-inverse: var(--base-white);
+  --color-border-link-hover: var(--cyan-500);
+  --color-border-subtle: var(--gray-100);
+  --color-border-on-image: var(--base-white-a35);
+  --color-border-faint: var(--gray-50);
+  --color-border-accent: var(--gold-300);
+  --color-border-brand: var(--blue-700);
+  --color-border-brand-strong: var(--blue-800);
+  --color-border-brand-subtle: var(--blue-400);
+  --color-border-nav-active: var(--lime-500);
+
+  --color-action-primary: var(--blue-500);
+  --color-action-primary-hover: var(--blue-700);
+  --color-action-primary-pressed: var(--blue-800);
+  --color-action-danger: var(--red-500);
+  --color-action-danger-hover: var(--red-600);
+  --color-action-danger-pressed: var(--red-700);
+
+  --color-icon-primary: var(--blue-900);
+  --color-icon-onmain: var(--base-white);
+  --color-icon-inverse: var(--base-white);
+  --color-icon-placeholder: var(--gray-400);
+  --color-icon-danger: var(--red-400);
+
+  --color-status-online: var(--green-500);
+  --color-status-notify: var(--red-500);
+  --color-status-success: var(--green-500);
+  --color-status-success-bg: var(--green-50);
+  --color-status-error: var(--red-700);
+  --color-status-error-bg: var(--red-50);
+
+  --color-selection-bg: var(--blue-50);
+  --color-selection-accent: var(--blue-500);
+  --color-badge-vip: var(--gold-300);
+  --color-highlight-self: var(--lime-300);
+
+  --color-favorite-bg: var(--coral-300);
+  --color-favorite-bg-active: var(--coral-400);
+  --color-favorite-border: var(--coral-600);
+  --color-favorite-icon-active: var(--red-800);
+
+  --color-filter-players-bg: var(--yellow-300);
+  --color-filter-players-bg-hover: var(--yellow-400);
+  --color-filter-players-surface: var(--yellow-50);
+  --color-filter-players-ink: var(--yellow-950);
+  --color-filter-time-bg: var(--green-300);
+  --color-filter-time-bg-hover: var(--green-400);
+  --color-filter-time-surface: var(--green-50);
+  --color-filter-time-ink: var(--green-950);
+  --color-filter-complexity-bg: var(--purple-300);
+  --color-filter-complexity-bg-hover: var(--purple-400);
+  --color-filter-complexity-surface: var(--purple-50);
+  --color-filter-complexity-ink: var(--purple-950);
+  --color-filter-type-bg: var(--pink-300);
+  --color-filter-type-bg-hover: var(--pink-400);
+  --color-filter-type-surface: var(--pink-50);
+  --color-filter-type-ink: var(--pink-950);
+  --color-filter-mechanics-bg: var(--cyan-300);
+  --color-filter-mechanics-bg-hover: var(--cyan-400);
+  --color-filter-mechanics-surface: var(--cyan-50);
+  --color-filter-mechanics-ink: var(--cyan-950);
+  --color-filter-topic-bg: var(--orange-300);
+  --color-filter-topic-bg-hover: var(--orange-400);
+  --color-filter-topic-surface: var(--orange-50);
+  --color-filter-topic-ink: var(--orange-950);
+
+  --color-rail-friends: var(--purple-700);
+  --color-rail-table: var(--teal-400);
+  --color-rail-favorite: var(--coral-300);
+  --color-rail-member: var(--gold-500);
+  --color-rail-elf: var(--blue-500);
+
+  --color-cta-start-tint: var(--mint-400-a25);
+  --color-cta-learn-tint: var(--red-450-a25);
+}
+
+/* ---------- 文字樣式：對應 Figma 的 Text Styles ---------- */
+@utility type-en-body-13-strong {
+  font-family: var(--font-latin);
+  font-size: var(--size-13);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-semibold);
+}
+@utility type-en-body-13 {
+  font-family: var(--font-latin);
+  font-size: var(--size-13);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-medium);
+}
+@utility type-en-body-16 {
+  font-family: var(--font-latin);
+  font-size: var(--size-16);
+  line-height: var(--line-height-24);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-medium);
+}
+@utility type-en-caption-11 {
+  font-family: var(--font-latin);
+  font-size: var(--size-11);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-medium);
+}
+@utility type-en-caption-10 {
+  font-family: var(--font-latin);
+  font-size: var(--size-10);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-medium);
+}
+@utility type-en-heading-20 {
+  font-family: var(--font-latin);
+  font-size: var(--size-20);
+  line-height: var(--line-height-28);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-semibold);
+}
+@utility type-tc-heading-24 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-24);
+  line-height: var(--line-height-32);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-bold);
+}
+@utility type-tc-heading-20 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-20);
+  line-height: var(--line-height-28);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-bold);
+}
+@utility type-tc-title-18 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-18);
+  line-height: var(--line-height-24);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-bold);
+}
+@utility type-tc-title-16 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-16);
+  line-height: var(--line-height-24);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-bold);
+}
+@utility type-tc-body-16 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-16);
+  line-height: var(--line-height-28);
+  letter-spacing: var(--tracking-wider);
+  font-weight: var(--weight-medium);
+}
+@utility type-tc-label-14 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-14);
+  line-height: var(--line-height-22);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-medium);
+}
+@utility type-tc-body-13 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-13);
+  line-height: var(--line-height-20);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-medium);
+}
+@utility type-tc-caption-12 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-12);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-medium);
+}
+@utility type-tc-caption-11 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-11);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-medium);
+}
+@utility type-footer-title-13 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-13);
+  line-height: var(--line-height-20);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-semibold);
+}
