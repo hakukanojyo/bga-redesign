@@ -13,6 +13,8 @@
 
 ## 技術選擇（已決定）
 
+每項的理由、考慮過的選項和代價見 `docs/adr/`。
+
 - Vue 3 ＋ Vite ＋ Vue Router ＋ Pinia，**純 JavaScript，不用 TypeScript**
 - 套件管理器 npm，Node.js 24 LTS
 - Tailwind CSS v4：Figma 的 Semantic 變數轉成 CSS token
@@ -37,6 +39,7 @@
 | 功能清單（功能編號、優先級、規則） | Google 試算表，檔名有 `_real` 的是新版 |
 | PRD | Notion「產品規則（共用）」、「PRD｜找遊戲到加入牌桌」（撰寫中） |
 | 設計決策 | Notion「Design Decision Record」 |
+| 技術決策 | `docs/adr/`（加套件、改架構、改開發流程時，在同一個 PR 新增） |
 | 顏色／尺寸變數規則 | Notion「顏色變數規則」 |
 | 設計稿 | Figma fileKey `YLgv7ISZngFsPRMqVxs8Aj`：hifi 頁 `303:395`、Components 頁 `539:1140` |
 | 設計交接 | Notion「交接｜Stage 9 Mockup 進度」 |
@@ -83,4 +86,5 @@
 - ✅ CI（#5）
 - ✅ GitHub 設定：壓縮合併、`develop`、分支保護、PR 範本（#7）
 - ✅ Issue 範本（#8）
+- ✅ 技術決策紀錄 `docs/adr/`（#9）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
