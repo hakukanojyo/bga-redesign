@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "lint": "eslint . --fix --cache"
   },
   "dependencies": {
     "pinia": "^4.0.3",
@@ -15,7 +16,12 @@
     "vue-router": "^5.3.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@vitejs/plugin-vue": "^6.0.8",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.12.0",
+    "globals": "^17.14.0",
     "prettier": "3.9.10",
     "vite": "^8.2.2",
     "vite-plugin-vue-devtools": "^8.2.1"
