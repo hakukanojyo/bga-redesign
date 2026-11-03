@@ -66,11 +66,12 @@
 | 每個改動都開 PR；功能、修 bug、文件、工具設定的 PR 自我檢查後自己合併，reviewer 有空再事後看 | 使用中 |
 | 自我檢查：在「Files changed」看完整個 diff、CI 通過、PR 描述寫清楚做了什麼／為什麼／怎麼確認 | 使用中 |
 | 動到架構的 PR（資料模型、Pinia store 設計、共用元件寫法）留言請 reviewer 看，等回覆再合併 | 使用中 |
-| release PR（`develop` → `main`）等 reviewer approve 才合併 | 尚未設定 |
-| PR 範本 | 尚未設定 |
+| release PR（`develop` → `main`）等 reviewer approve 才合併 | 使用中 |
+| PR 範本（`.github/pull_request_template.md`）：做了什麼／為什麼／怎麼確認／相關／截圖／自我檢查 | 使用中 |
 | CI（`.github/workflows/ci.yml`）：PR 和推進 `main`、`develop` 時自動跑 `format:check`、`lint:check`、`test`、`build` | 使用中 |
-| 分支保護、只允許壓縮合併（squash merge） | 尚未設定 |
-| 功能 PR 合進 `develop`，再從 `develop` 開 release PR 合進 `main` | 尚未設定（目前 PR 直接合進 `main`） |
+| 只允許壓縮合併（squash merge），合併後自動刪掉遠端分支 | 使用中 |
+| 分支保護（Rulesets）：`main` 要 1 個 approve＋CI 通過；`develop` 要 CI 通過；兩條都不能刪除、不能 force-push，沒有人可以繞過 | 使用中 |
+| 預設分支是 `develop`：新分支從 `develop` 開，功能 PR 合進 `develop`，再從 `develop` 開 release PR 合進 `main` | 使用中 |
 
 ## 目前進度
 
@@ -80,4 +81,5 @@
 - ✅ ESLint（#3）
 - ✅ Vitest（#4）：目前只有 `App.spec.js` 確認能跑，做版面骨架時要改
 - ✅ CI（#5）
-- 接下來：GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
+- ✅ GitHub 設定：壓縮合併、`develop`、分支保護、PR 範本（#7）
+- 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
