@@ -23,6 +23,7 @@
 - Pinia 預計放：收藏、我的牌桌、篩選條件
 - 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，頁尾標註版權
 - 排版：Prettier（版本寫死），規則在 `.prettierrc.json`，`npm run format` 排 `src/`
+- 本機的 `format`、`lint` 會自動修；`format:check`、`lint:check` 只檢查不修改，給 CI 用
 - 檢查：ESLint（JS 建議規則＋`eslint-plugin-vue` 的 `flat/essential`，排版規則交給 Prettier），規則在 `eslint.config.js`，`npm run lint` 檢查並自動修
 - 測試：Vitest＋`@vue/test-utils`（jsdom 模擬瀏覽器），測試檔放 `__tests__/`、檔名 `*.spec.js`，`npm test`
 - 之後加：Storybook
@@ -63,11 +64,11 @@
 | Commit 用 [Conventional Commits](https://www.conventionalcommits.org/)，英文、簡短（例：`feat: add search bar`）；不加 `Co-Authored-By` 之類的 AI 署名 | 使用中 |
 | Issue 標題帶功能編號（例：`[FIND-03] 搜尋列`），內容連到功能清單或 PRD | 尚未開始 |
 | 每個改動都開 PR；功能、修 bug、文件、工具設定的 PR 自我檢查後自己合併，reviewer 有空再事後看 | 使用中 |
-| 自我檢查：在「Files changed」看完整個 diff、CI 通過、PR 描述寫清楚做了什麼／為什麼／怎麼確認 | 使用中（CI 尚未設定） |
+| 自我檢查：在「Files changed」看完整個 diff、CI 通過、PR 描述寫清楚做了什麼／為什麼／怎麼確認 | 使用中 |
 | 動到架構的 PR（資料模型、Pinia store 設計、共用元件寫法）留言請 reviewer 看，等回覆再合併 | 使用中 |
 | release PR（`develop` → `main`）等 reviewer approve 才合併 | 尚未設定 |
 | PR 範本 | 尚未設定 |
-| CI：PR 自動跑 lint、test、build | 尚未設定 |
+| CI（`.github/workflows/ci.yml`）：PR 和推進 `main`、`develop` 時自動跑 `format:check`、`lint:check`、`test`、`build` | 使用中 |
 | 分支保護、只允許壓縮合併（squash merge） | 尚未設定 |
 | 功能 PR 合進 `develop`，再從 `develop` 開 release PR 合進 `main` | 尚未設定（目前 PR 直接合進 `main`） |
 
@@ -78,4 +79,5 @@
 - ✅ Prettier（#2）
 - ✅ ESLint（#3）
 - ✅ Vitest（#4）：目前只有 `App.spec.js` 確認能跑，做版面骨架時要改
-- 接下來：CI → GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
+- ✅ CI（#5）
+- 接下來：GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
