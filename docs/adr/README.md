@@ -48,3 +48,5 @@
 | [0005](0005-fake-api-layer.md) | 假資料放在 `src/api/` 後面，之後換 Supabase |
 | [0006](0006-git-workflow.md) | develop ＋ release PR、壓縮合併 |
 | [0007](0007-tooling-create-vue-defaults.md) | 工具設定沿用 create-vue 的預設 |
+| [0008](0008-folders-and-routing.md) | 資料夾結構與路由 |
+| [0009](0009-icons.md) | 圖示用 Font Awesome，自製圖示從 Figma 匯出 |

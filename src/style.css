@@ -6,4 +6,11 @@
   html {
     min-width: 768px;
   }
+
+  /* 全站木紋背景：Figma 是 500×1000 的圖、縮放 0.5 平鋪 */
+  body {
+    background: url('./assets/images/wood.jpg') repeat;
+    background-size: 250px 500px;
+    color: var(--color-text-body);
+  }
 }
