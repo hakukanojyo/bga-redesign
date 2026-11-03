@@ -23,7 +23,8 @@
 - Pinia 預計放：收藏、我的牌桌、篩選條件
 - 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，頁尾標註版權
 - 排版：Prettier（版本寫死），規則在 `.prettierrc.json`，`npm run format` 排 `src/`
-- 之後加：ESLint、Vitest、Storybook
+- 檢查：ESLint（JS 建議規則＋`eslint-plugin-vue` 的 `flat/essential`，排版規則交給 Prettier），規則在 `eslint.config.js`，`npm run lint` 檢查並自動修
+- 之後加：Vitest、Storybook
 
 ## 資料在哪（正本）
 
@@ -50,6 +51,7 @@
 
 - 顏色只用 Semantic token，不直接用 Primitives（規則見「顏色變數規則」）
 - 畫面不直接 import 假資料，一律透過 `src/api/`
+- 元件名稱至少兩個字（例：`AppHeader.vue`，不要 `Header.vue`），ESLint 會擋單字的名稱
 - 跨頁面共用的資料放 Pinia（`src/stores/`），只有一頁用的放元件裡
 
 ## Git 與 PR 規則
@@ -73,4 +75,5 @@
 - ✅ 用 create-vue 建立專案（Router、Pinia）
 - ✅ AI 協作規範、README（#1）
 - ✅ Prettier（#2）
-- 接下來：ESLint、Vitest、CI 各一個 PR → GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
+- ✅ ESLint（#3）
+- 接下來：Vitest、CI 各一個 PR → GitHub 設定（PR 範本、分支保護、壓縮合併、`develop`）→ 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
