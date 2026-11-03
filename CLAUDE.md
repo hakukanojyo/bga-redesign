@@ -60,10 +60,15 @@
   - 間距、圓角：只有 Figma 的級距，`p-16` 是 16px、`rounded-8` 是 8px
   - 文字：用 `type-` 開頭的 class 對應 Figma 文字樣式（例：`type-tc-heading-24`），不要自己組字級和行高
   - 觸控尺寸：`min-h-(--tap-button-min-height)`；字級、觸控尺寸的 Tablet 模式由 CSS 自動切換
-  - 效果（陰影、玻璃）還沒轉成 token，做到用到的元件時再加
+  - 效果、漸層：用到的元件才加進 `tokens.css`（例：`shadow-cta-sm`、`bg-(image:--gradient-cta-find)`）
+  - 寬高沒有 token（Figma 只有 padding、gap、圓角綁變數），照 Figma 的數值寫（例：`h-[72px]`）
 - 斷點：桌面優先，預設寫桌面版，平板（768～1279）用 `max-desktop:` 改寫（例：`p-24 max-desktop:p-16`）。沒有 768 以下的斷點：手機由 `index.html` 的 script 縮放成 768 寬，CSS 永遠看到 768 以上
 - 要判斷「是不是手機」時看 `screen.width < 768`（裝置寬度），不要看 `innerWidth` 或 media query，縮放後它們都是 768
 - Figma 變數改了：用 Figma MCP 重新讀變數，更新 `tokens.css`；`npm test` 會檢查每個 Semantic 都接到 Primitive
+- 資料夾和路由見 `docs/adr/0008`：頁面放 `src/views/`（`XxxView.vue`），版型放 `src/layouts/`，版型用的元件放 `src/components/layout/`
+- 圖示用 Font Awesome（`docs/adr/0009`）：元件裡 import 用到的圖示，大小用 `text-[14px]` 這種 font-size 調（`size-*` 會被 Font Awesome 的 CSS 蓋掉）；BGA logo 等自製圖示從 Figma 匯出
+- 從 Figma 匯出圖片後，確認背景是透明的；`download_assets` 的 export 可能把底色一起輸出，這時改用原始圖片
+- 導覽連結的「目前這頁」用 `aria-[current=page]:` 寫樣式，RouterLink 會自動加 `aria-current`
 - 畫面不直接 import 假資料，一律透過 `src/api/`
 - 元件名稱至少兩個字（例：`AppHeader.vue`，不要 `Header.vue`），ESLint 會擋單字的名稱
 - 跨頁面共用的資料放 Pinia（`src/stores/`），只有一頁用的放元件裡
@@ -107,7 +112,7 @@
 - ✅ AI 協作規範、README（#1）
 - ✅ Prettier（#2）
 - ✅ ESLint（#3）
-- ✅ Vitest（#4）：目前只有 `App.spec.js` 確認能跑，做版面骨架時要改
+- ✅ Vitest（#4）
 - ✅ CI（#5）
 - ✅ GitHub 設定：壓縮合併、`develop`、分支保護、PR 範本（#7）
 - ✅ Issue 範本（#8）
@@ -116,4 +121,5 @@
 - ✅ Tailwind CSS v4（#11）
 - ✅ 設計 token（#16）
 - ✅ 斷點、手機縮放、裝置建議橫幅（#17）
+- ⏳ 版面骨架 #14，拆 3 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄外框 ③ 頁尾
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
