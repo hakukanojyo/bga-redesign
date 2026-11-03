@@ -56,7 +56,7 @@
 | 規則 | 狀態 |
 |---|---|
 | 分支命名：`feat/`、`fix/`、`chore/`、`docs/`、`refactor/` 加內容，可以帶 issue 編號（例：`feat/12-search-bar`） | 使用中 |
-| Commit 用 [Conventional Commits](https://www.conventionalcommits.org/)，英文、簡短（例：`feat: add search bar`） | 使用中 |
+| Commit 用 [Conventional Commits](https://www.conventionalcommits.org/)，英文、簡短（例：`feat: add search bar`）；不加 `Co-Authored-By` 之類的 AI 署名 | 使用中 |
 | Issue 標題帶功能編號（例：`[FIND-03] 搜尋列`），內容連到功能清單或 PRD | 尚未開始 |
 | 每個改動都開 PR；功能、修 bug、文件、工具設定的 PR 自我檢查後自己合併，reviewer 有空再事後看 | 使用中 |
 | 自我檢查：在「Files changed」看完整個 diff、CI 通過、PR 描述寫清楚做了什麼／為什麼／怎麼確認 | 使用中（CI 尚未設定） |
