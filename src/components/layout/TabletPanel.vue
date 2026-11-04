@@ -38,23 +38,18 @@ function onInteractOutside(event) {
     <!-- 間距照 Figma：個人面板外層 12、內層 16、上方 20+8；Bottom Sheet 四周 24、標題和內容間隔 16 -->
     <SheetContent
       :side="shownPanel === 'profile' ? 'right' : 'bottom'"
-      :class="
-        shownPanel === 'profile'
-          ? 'bottom-[72px] w-[375px] px-12 py-20'
-          : 'bottom-[72px] h-[480px] p-24'
-      "
+      :class="shownPanel === 'profile' ? 'bottom-[72px] w-[375px]' : 'bottom-[72px] h-[480px]'"
       overlay-class="bottom-[72px]"
       :aria-describedby="undefined"
       @interact-outside="onInteractOutside"
     >
-      <div
-        class="flex flex-1 flex-col"
-        :class="shownPanel === 'profile' ? 'gap-16 px-16 pt-8' : 'gap-16'"
-      >
-        <SheetTitle>{{ panelTitles[shownPanel] }}</SheetTitle>
-        <div class="flex flex-1 flex-col items-center justify-center gap-8 text-text-secondary">
-          <FontAwesomeIcon :icon="faScrewdriverWrench" class="text-[32px]" />
-          <p class="type-tc-body-13">這張桌子還在佈置中</p>
+      <div class="flex flex-1 flex-col" :class="shownPanel === 'profile' ? 'px-12 py-20' : 'p-24'">
+        <div class="flex flex-1 flex-col gap-16" :class="shownPanel === 'profile' && 'px-16 pt-8'">
+          <SheetTitle>{{ panelTitles[shownPanel] }}</SheetTitle>
+          <div class="flex flex-1 flex-col items-center justify-center gap-8 text-text-secondary">
+            <FontAwesomeIcon :icon="faScrewdriverWrench" class="text-[32px]" />
+            <p class="type-tc-body-13">這張桌子還在佈置中</p>
+          </div>
         </div>
       </div>
     </SheetContent>
