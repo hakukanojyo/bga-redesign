@@ -36,6 +36,13 @@ const router = createRouter({
       component: () => import('@/views/PlaceholderView.vue'),
       meta: { title: '討論區' },
     },
+    // 頁尾連結的目的頁不在本輪範圍（PRD 5.3），先共用一個佔位頁
+    {
+      path: '/coming-soon',
+      name: 'coming-soon',
+      component: () => import('@/views/PlaceholderView.vue'),
+      meta: { title: '佈置中' },
+    },
   ],
   // 換頁回到頂端；上一頁回到原本的位置
   scrollBehavior(to, from, savedPosition) {

@@ -17,6 +17,8 @@ export default defineConfig([
     languageOptions: {
       globals: {
         ...globals.browser,
+        // vite.config.js 的 define 在 build 時帶入
+        __BUILD_VERSION__: 'readonly',
       },
     },
   },

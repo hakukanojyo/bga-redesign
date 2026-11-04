@@ -177,6 +177,7 @@
   --tracking-wide: 1.2px;
   --tracking-wider: 1.4px;
 
+  --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
@@ -471,6 +472,13 @@
   line-height: var(--line-height-20);
   letter-spacing: var(--tracking-wide);
   font-weight: var(--weight-semibold);
+}
+@utility type-footer-link-11 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-11);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-regular);
 }
 
 /* glow/purple：顏色跟著每個側欄項目的 --rail-color（見 SideRailItem）；選中的項目用 --rail-glow 改成白色 */

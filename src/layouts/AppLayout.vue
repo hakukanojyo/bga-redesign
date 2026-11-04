@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useMediaQuery } from '@vueuse/core'
 import DeviceBanner from '@/components/DeviceBanner.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
+import AppFooter from '@/components/layout/AppFooter.vue'
 import SideRail from '@/components/layout/SideRail.vue'
 import BottomNav from '@/components/layout/BottomNav.vue'
 import SidePanel from '@/components/layout/SidePanel.vue'
@@ -31,14 +32,16 @@ onMounted(async () => {
 })
 </script>
 
-<!-- 整頁版型：桌面右邊留 164 給右側欄，平板底部留 72 給底部導覽列。頁尾在 #14 的下一個 PR 加 -->
+<!-- 整頁版型：桌面右邊留 164 給右側欄，平板底部留 72 給底部導覽列；頁尾在內容區最下面，不蓋到兩者 -->
 <template>
-  <div class="pr-[164px] max-desktop:pr-0 max-desktop:pb-[72px]">
+  <!-- 至少一個畫面高、main 撐開：內容很短時（佔位頁、404）頁尾也貼在底部 -->
+  <div class="flex min-h-dvh flex-col pr-[164px] max-desktop:pr-0 max-desktop:pb-[72px]">
     <DeviceBanner />
     <AppHeader @open-profile="togglePanel('profile')" />
-    <main>
+    <main class="flex-1">
       <slot />
     </main>
+    <AppFooter />
   </div>
   <SideRail :open-panel="openPanel" :stats="stats" @toggle="togglePanel" />
   <BottomNav :open-panel="openPanel" :stats="stats" @toggle="togglePanel" />
