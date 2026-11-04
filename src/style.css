@@ -14,6 +14,12 @@
     overflow: hidden;
   }
 
+  /* 鍵盤焦點（產品規則 6.5、Figma Focus/Ring）：只在鍵盤操作時出現，所有可互動元素共用 */
+  :focus-visible {
+    outline: 2px solid var(--color-action-primary);
+    outline-offset: 2px;
+  }
+
   /* 全站木紋背景：Figma 是 500×1000 的圖、縮放 0.5 平鋪 */
   body {
     background: url('./assets/images/wood.jpg') repeat;

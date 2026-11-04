@@ -51,3 +51,4 @@
 | [0008](0008-folders-and-routing.md) | 資料夾結構與路由 |
 | [0009](0009-icons.md) | 圖示用 Font Awesome，自製圖示從 Figma 匯出 |
 | [0010](0010-shadcn-vue-sheet.md) | 平板面板用 shadcn-vue 的 Sheet |
+| [0011](0011-architecture-pr-review-after-merge.md) | 動到架構的 PR 也自己合併，reviewer 事後看 |

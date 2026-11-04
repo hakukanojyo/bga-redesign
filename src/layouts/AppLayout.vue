@@ -34,11 +34,11 @@ onMounted(async () => {
 
 <!-- 整頁版型：桌面右邊留 164 給右側欄，平板底部留 72 給底部導覽列；頁尾在內容區最下面，不蓋到兩者 -->
 <template>
-  <!-- 至少一個畫面高、main 撐開：內容很短時（佔位頁、404）頁尾也貼在底部 -->
+  <!-- 至少一個畫面高、main 撐開：內容很短時（佔位頁、404）頁尾也貼在底部；main 是 flex，頁面用 flex-1 就能置中 -->
   <div class="flex min-h-dvh flex-col pr-[164px] max-desktop:pr-0 max-desktop:pb-[72px]">
     <DeviceBanner />
     <AppHeader @open-profile="togglePanel('profile')" />
-    <main class="flex-1">
+    <main class="flex flex-1 flex-col">
       <slot />
     </main>
     <AppFooter />

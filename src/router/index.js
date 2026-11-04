@@ -43,6 +43,13 @@ const router = createRouter({
       component: () => import('@/views/PlaceholderView.vue'),
       meta: { title: '佈置中' },
     },
+    // 放最後：上面都對不上的網址都到這裡
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('@/views/NotFoundView.vue'),
+      meta: { title: '找不到頁面' },
+    },
   ],
   // 換頁回到頂端；上一頁回到原本的位置
   scrollBehavior(to, from, savedPosition) {

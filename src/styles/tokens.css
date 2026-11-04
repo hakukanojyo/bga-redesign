@@ -250,6 +250,10 @@
   --shadow-glass-nav: 0 2px 6.3px rgb(80 60 34 / 0.52);
   --shadow-glow-status-blue: 0 0 6.2px #0b72b5;
   --shadow-glow-status-green: 0 0 6.1px #17a91a;
+  /* inner/button-secondary：Figma 綁的是 Primitive（blue/400、blue/500），這裡改用同色的 Semantic */
+  --shadow-inner-button-secondary: inset 0 -2px 0 var(--color-border-brand-subtle);
+  --shadow-inner-button-secondary-hover: inset 0 -2px 0 var(--color-selection-accent);
+  --shadow-inner-button-secondary-press: inset 0 2px 0 var(--color-selection-accent);
 
   /* Semantic */
   --color-text-primary: var(--blue-900);
