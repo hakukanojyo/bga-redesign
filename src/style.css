@@ -1,10 +1,17 @@
 @import 'tailwindcss';
 @import './styles/tokens.css';
+/* shadcn-vue 元件的進場、離場動畫（animate-in、slide-in-from-bottom…） */
+@import 'tw-animate-css';
 
 @layer base {
   /* 版面最窄 768：手機靠 viewport 縮放；電腦把視窗拉窄時出現橫向捲軸，版面不會被擠壞 */
   html {
     min-width: 768px;
+  }
+
+  /* 桌面側欄面板（原生 <dialog>）開著時鎖住背景捲動；平板的 Sheet 由 Reka 鎖，兩邊才一致 */
+  html:has(dialog[open]) {
+    overflow: hidden;
   }
 
   /* 全站木紋背景：Figma 是 500×1000 的圖、縮放 0.5 平鋪 */

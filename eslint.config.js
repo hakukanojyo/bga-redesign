@@ -24,6 +24,12 @@ export default defineConfig([
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
 
+  // shadcn-vue 產生的元件沿用它的單字名稱（Sheet.vue），之後用 CLI 更新才不會對不上
+  {
+    files: ['src/components/ui/**'],
+    rules: { 'vue/multi-word-component-names': 'off' },
+  },
+
   {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],

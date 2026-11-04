@@ -19,7 +19,7 @@
 - 套件管理器 npm，Node.js 24 LTS
 - Tailwind CSS v4：Figma 的 Semantic 變數轉成 CSS token
 - 元件只有兩種：
-  - **shadcn-vue**（底層 Reka UI）：只用在行為複雜的元件（Modal、Select、Toast、Bottom Sheet），樣式改成設計稿的樣子
+  - **shadcn-vue**（底層 Reka UI）：只用在行為複雜的元件（Modal、Select、Toast、Bottom Sheet），樣式改成設計稿的樣子。放在 `src/components/ui/`；用 CLI 加元件後先看 `git status`，還原它改的 `style.css`、拿掉用不到的套件（例：`@lucide/vue`），內建圖示換成 Font Awesome。例外：桌面側欄面板是變形動畫，用原生 `<dialog>`（見 `docs/adr/0010`）
   - **自己寫的**：其他元件照 Figma 寫
 - 資料：第一階段用假資料，畫面只透過 `src/api/` 拿資料；第二階段換 Supabase
 - Pinia 預計放：收藏、我的牌桌、篩選條件
@@ -121,5 +121,5 @@
 - ✅ Tailwind CSS v4（#11）
 - ✅ 設計 token（#16）
 - ✅ 斷點、手機縮放、裝置建議橫幅（#17）
-- ⏳ 版面骨架 #14，拆 3 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet（shadcn-vue）④ 頁尾
+- ⏳ 版面骨架 #14，拆 3 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
