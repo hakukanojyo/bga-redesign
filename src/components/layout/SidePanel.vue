@@ -51,8 +51,8 @@ function onClick(event) {
         aria-hidden="true"
         class="absolute inset-x-0 top-0 -z-10 h-[72px] bg-surface-header transition-opacity duration-300 group-open/panel:opacity-0 starting:group-open/panel:opacity-100 motion-reduce:transition-none"
       />
-      <!-- 面板裡的側欄：可以直接切換到其他面板；平板用底部導覽列，不顯示 -->
-      <div class="flex w-[34px] flex-col max-desktop:hidden">
+      <!-- 面板裡的側欄：可以直接切換到其他面板 -->
+      <div class="flex w-[34px] flex-col">
         <div class="h-[72px] pt-20">
           <button
             type="button"

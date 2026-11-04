@@ -50,3 +50,4 @@
 | [0007](0007-tooling-create-vue-defaults.md) | 工具設定沿用 create-vue 的預設 |
 | [0008](0008-folders-and-routing.md) | 資料夾結構與路由 |
 | [0009](0009-icons.md) | 圖示用 Font Awesome，自製圖示從 Figma 匯出 |
+| [0010](0010-shadcn-vue-sheet.md) | 平板面板用 shadcn-vue 的 Sheet |

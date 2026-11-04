@@ -1,14 +1,19 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useMediaQuery } from '@vueuse/core'
 import DeviceBanner from '@/components/DeviceBanner.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import SideRail from '@/components/layout/SideRail.vue'
 import BottomNav from '@/components/layout/BottomNav.vue'
 import SidePanel from '@/components/layout/SidePanel.vue'
+import TabletPanel from '@/components/layout/TabletPanel.vue'
 import { getOnlineStats } from '@/api/stats'
 
 // 開著的側欄面板：profile、tables、favorites；同一時間只開一個
 const openPanel = ref(null)
+
+// 桌面打開右側面板，平板打開 Bottom Sheet 或個人面板；和 max-desktop: 同一個斷點
+const isTablet = useMediaQuery('(width < 1280px)')
 
 function togglePanel(panel) {
   openPanel.value = openPanel.value === panel ? null : panel
@@ -37,5 +42,6 @@ onMounted(async () => {
   </div>
   <SideRail :open-panel="openPanel" :stats="stats" @toggle="togglePanel" />
   <BottomNav :open-panel="openPanel" :stats="stats" @toggle="togglePanel" />
-  <SidePanel :panel="openPanel" @toggle="togglePanel" @close="openPanel = null" />
+  <SidePanel :panel="isTablet ? null : openPanel" @toggle="togglePanel" @close="openPanel = null" />
+  <TabletPanel :panel="isTablet ? openPanel : null" @close="openPanel = null" />
 </template>

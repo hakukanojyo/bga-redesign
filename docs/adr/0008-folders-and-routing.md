@@ -16,6 +16,7 @@
 | `src/views/` | 一個網址一個頁面元件，名稱 `XxxView.vue` |
 | `src/layouts/` | 整頁版型（頂部、內容、側欄、頁尾），目前只有 `AppLayout.vue` |
 | `src/components/layout/` | 版型用的元件：`AppHeader`、`FindTableButton`、右側欄（`SideRail`）、底部導覽列（`BottomNav`）、側欄面板（`SidePanel`），之後的頁尾 |
+| `src/components/ui/` | shadcn-vue 產生的元件（見 [0010](0010-shadcn-vue-sheet.md)） |
 | `src/components/` | 其他共用元件 |
 | `src/assets/images/`、`src/assets/icons/` | 從 Figma 匯出的圖片、圖示 |
 
