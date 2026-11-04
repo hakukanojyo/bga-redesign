@@ -246,6 +246,9 @@
 
   /* 效果樣式：Figma 的 Effect Styles 沒有綁變數，數值照抄；用到的元件才加 */
   --shadow-cta-sm: 0 1px 0.8px rgb(0 0 0 / 0.36);
+  --shadow-glass-nav: 0 2px 6.3px rgb(80 60 34 / 0.52);
+  --shadow-glow-status-blue: 0 0 6.2px #0b72b5;
+  --shadow-glow-status-green: 0 0 6.1px #17a91a;
 
   /* Semantic */
   --color-text-primary: var(--blue-900);
@@ -468,4 +471,10 @@
   line-height: var(--line-height-20);
   letter-spacing: var(--tracking-wide);
   font-weight: var(--weight-semibold);
+}
+
+/* glow/purple：顏色跟著每個側欄項目的 --rail-color（見 SideRailItem）；選中的項目用 --rail-glow 改成白色 */
+@utility glow-rail {
+  filter: drop-shadow(0 0 17.5px var(--rail-glow, var(--rail-color, currentColor)))
+    drop-shadow(0 0 6.2px var(--rail-glow, var(--rail-color, currentColor)));
 }

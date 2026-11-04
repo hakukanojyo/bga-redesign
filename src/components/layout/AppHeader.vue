@@ -4,6 +4,8 @@ import FindTableButton from '@/components/layout/FindTableButton.vue'
 import logo from '@/assets/images/logo.png'
 import avatar from '@/assets/images/avatar-demo.jpg'
 
+defineEmits(['open-profile'])
+
 const links = [
   { to: '/', label: '首頁' },
   { to: '/news', label: '新聞' },
@@ -11,7 +13,7 @@ const links = [
 ]
 </script>
 
-<!-- Figma：桌面是 382 寬的 logo 欄＋導覽列（首頁 625:3944）；平板是 Layout/Header（872:8727） -->
+<!-- Figma：桌面是 382 寬的 logo 欄＋中間 894 寬的導覽列（首頁 625:3944），右邊 164 是右側欄；平板是 Layout/Header（872:8727） -->
 <template>
   <header
     class="grid h-[72px] grid-cols-[382px_1fr] bg-surface-header max-desktop:flex max-desktop:justify-between max-desktop:px-24"
@@ -41,8 +43,14 @@ const links = [
         </ul>
       </nav>
       <FindTableButton />
-      <!-- 桌面的頭像在右側欄；點了打開個人面板（PROF-01）在下一個 PR 做 -->
-      <button type="button" aria-label="個人資料" class="hidden max-desktop:block">
+      <!-- 桌面的頭像在右側欄；平板在這裡，點了打開個人面板（PROF-01） -->
+      <button
+        type="button"
+        aria-label="個人資料"
+        aria-haspopup="dialog"
+        class="hidden max-desktop:block"
+        @click="$emit('open-profile')"
+      >
         <img
           :src="avatar"
           alt=""
