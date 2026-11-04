@@ -84,14 +84,16 @@ function onClick(event) {
         <div class="h-[63px]" />
       </div>
 
-      <!-- 固定寬度，面板變寬時內容不會被擠壓；跟著淡入 -->
+      <!-- 固定寬度，面板變寬時內容不會被擠壓；跟著淡入。上方間距照 Figma 是 20＋8，和平板的 TabletPanel 一樣拆兩層 -->
       <section
-        class="flex w-[351px] shrink-0 flex-col px-16 pt-28 opacity-0 transition-opacity duration-300 group-open/panel:opacity-100 starting:group-open/panel:opacity-0 motion-reduce:transition-none"
+        class="flex w-[351px] shrink-0 flex-col pt-20 opacity-0 transition-opacity duration-300 group-open/panel:opacity-100 starting:group-open/panel:opacity-0 motion-reduce:transition-none"
       >
-        <h2 class="type-tc-heading-20 text-text-primary">{{ panelTitles[panel] }}</h2>
-        <div class="flex flex-1 flex-col items-center justify-center gap-8 text-text-secondary">
-          <FontAwesomeIcon :icon="faScrewdriverWrench" class="text-[32px]" />
-          <p class="type-tc-body-13">這張桌子還在佈置中</p>
+        <div class="flex flex-1 flex-col px-16 pt-8">
+          <h2 class="type-tc-heading-20 text-text-primary">{{ panelTitles[panel] }}</h2>
+          <div class="flex flex-1 flex-col items-center justify-center gap-8 text-text-secondary">
+            <FontAwesomeIcon :icon="faScrewdriverWrench" class="text-[32px]" />
+            <p class="type-tc-body-13">這張桌子還在佈置中</p>
+          </div>
         </div>
       </section>
     </div>

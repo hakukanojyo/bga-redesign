@@ -23,7 +23,7 @@
   - **自己寫的**：其他元件照 Figma 寫
 - 資料：第一階段用假資料，畫面只透過 `src/api/` 拿資料；第二階段換 Supabase
 - Pinia 預計放：收藏、我的牌桌、篩選條件
-- 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，頁尾標註版權
+- 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，README 和作品集標註版權（頁尾照正式網站的寫法，不另外標註）
 - 排版：Prettier（版本寫死），規則在 `.prettierrc.json`，`npm run format` 排 `src/`
 - 本機的 `format`、`lint` 會自動修；`format:check`、`lint:check` 只檢查不修改，給 CI 用
 - 檢查：ESLint（JS 建議規則＋`eslint-plugin-vue` 的 `flat/essential`，排版規則交給 Prettier），規則在 `eslint.config.js`，`npm run lint` 檢查並自動修
@@ -121,5 +121,5 @@
 - ✅ Tailwind CSS v4（#11）
 - ✅ 設計 token（#16）
 - ✅ 斷點、手機縮放、裝置建議橫幅（#17）
-- ⏳ 版面骨架 #14，拆 3 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾
+- ✅ 版面骨架 #14，拆 4 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾、build 時帶入推出時間（#21）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
