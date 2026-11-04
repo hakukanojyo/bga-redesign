@@ -77,7 +77,7 @@
 
 - Figma 是設計意圖的參考，專案的寫法是正本：照意圖做，不逐像素照抄，新畫面要和其他畫面像同一個產品
 - Figma 和功能清單、PRD 對不上，或 Figma 的值找不到對應的 token 時，先問，不要自己選一個
-- 先找現有的元件；載入中、空的、錯誤、Toast 用共用的元件，不複製一份
+- 先找現有的元件；載入中、空的、錯誤、Toast 用共用的元件，不複製一份。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`
 - 用原生的結構：`button`、`a`、`label`、`ul`、標題照層級；Figma 的絕對定位改寫成 flex 或 grid
 - 要對齊的一組東西（一排等高的卡片）做成一個元件，不分開擺位置
 - 圖片設寬高避免版面跳動，`alt` 寫有意義的文字（純裝飾才留空）
@@ -98,7 +98,7 @@
 | 只有功能開 issue，用範本（`.github/ISSUE_TEMPLATE/feature.md`）：標題帶功能編號（例：`[SYS-09] 設計 token`），一個 issue 可以包一組功能，內容只放連結和狀態表；標籤 `enhancement`＋功能清單的優先級（`P0`／`P1`／`P2`）；開好後把 issue 編號填回功能清單的「Issue」欄。工具設定、文件直接開 PR，不開 issue | 使用中 |
 | 每個改動都開 PR；功能、修 bug、文件、工具設定的 PR 自我檢查後自己合併，reviewer 有空再事後看 | 使用中 |
 | 自我檢查：在「Files changed」看完整個 diff、CI 通過、PR 描述寫清楚做了什麼／為什麼／怎麼確認 | 使用中 |
-| 動到架構的 PR（資料模型、Pinia store 設計、共用元件寫法）留言請 reviewer 看，等回覆再合併 | 使用中 |
+| 動到架構的 PR（資料模型、Pinia store 設計、共用元件寫法）也自己合併，留言請 reviewer 事後看（`docs/adr/0011`） | 使用中 |
 | release PR（`develop` → `main`）等 reviewer approve 才合併 | 使用中 |
 | PR 範本（`.github/pull_request_template.md`）：做了什麼／為什麼／怎麼確認／相關／截圖／自我檢查 | 使用中 |
 | CI（`.github/workflows/ci.yml`）：PR 和推進 `main`、`develop` 時自動跑 `format:check`、`lint:check`、`test`、`build` | 使用中 |
@@ -122,4 +122,5 @@
 - ✅ 設計 token（#16）
 - ✅ 斷點、手機縮放、裝置建議橫幅（#17）
 - ✅ 版面骨架 #14，拆 4 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾、build 時帶入推出時間（#21）
+- ⏳ 佔位頁、找不到頁面 #15（#22）：共用 `PageState`、`AppButton`、全站鍵盤焦點框
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
