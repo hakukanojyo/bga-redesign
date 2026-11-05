@@ -8,6 +8,7 @@ import SideRail from '@/components/layout/SideRail.vue'
 import BottomNav from '@/components/layout/BottomNav.vue'
 import SidePanel from '@/components/layout/SidePanel.vue'
 import TabletPanel from '@/components/layout/TabletPanel.vue'
+import { Toaster } from '@/components/ui/sonner'
 import { getOnlineStats } from '@/api/stats'
 
 // 開著的側欄面板：profile、tables、favorites；同一時間只開一個
@@ -47,4 +48,6 @@ onMounted(async () => {
   <BottomNav :open-panel="openPanel" :stats="stats" @toggle="togglePanel" />
   <SidePanel :panel="isTablet ? null : openPanel" @toggle="togglePanel" @close="openPanel = null" />
   <TabletPanel :panel="isTablet ? openPanel : null" @close="openPanel = null" />
+  <!-- 提示在畫面下方置中；平板在底部導覽列（72）上方，兩者都離 16 -->
+  <Toaster :offset="{ bottom: isTablet ? 88 : 16 }" />
 </template>
