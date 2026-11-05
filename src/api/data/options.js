@@ -70,3 +70,40 @@ export const sortLabels = {
   duration: '遊玩時間：短到長',
   name: '遊戲名稱',
 }
+
+// 篩選的六類（PRD 7.3），順序照 Figma 左欄。key 和 matchesFilters 的參數、網址參數同名；
+// color 對應 tokens.css 的 filter-*；multiple：標籤可多選（同一類裡是「或」），不然是單選
+export const filterCategories = [
+  {
+    key: 'players',
+    title: '玩家數',
+    color: 'players',
+    multiple: false,
+    labels: Object.fromEntries(
+      Object.entries(playerOptions).map(([key, { label }]) => [key, label]),
+    ),
+  },
+  {
+    key: 'time',
+    title: '遊玩時間',
+    color: 'time',
+    multiple: false,
+    labels: Object.fromEntries(Object.entries(timeOptions).map(([key, { label }]) => [key, label])),
+  },
+  {
+    key: 'complexity',
+    title: '遊戲複雜度',
+    color: 'complexity',
+    multiple: false,
+    labels: complexityLabels,
+  },
+  {
+    key: 'mechanics',
+    title: '遊戲機制',
+    color: 'mechanics',
+    multiple: true,
+    labels: mechanicLabels,
+  },
+  { key: 'themes', title: '主題', color: 'topic', multiple: true, labels: themeLabels },
+  { key: 'types', title: '特定類型', color: 'type', multiple: true, labels: typeLabels },
+]

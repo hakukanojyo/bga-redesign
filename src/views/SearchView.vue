@@ -1,12 +1,14 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { getGames, getSearchSuggestions } from '@/api/games'
+import { getFilterSuggestion, getGames, getSearchSuggestions } from '@/api/games'
 import { sortLabels } from '@/api/data/options'
 import { useRequest } from '@/composables/useRequest'
+import { useSearchQuery } from '@/composables/useSearchQuery'
+import { hasFilters } from '@/utils/filters'
 import ConnectionError from '@/components/ConnectionError.vue'
 import GameCard from '@/components/GameCard.vue'
 import SkeletonBlock from '@/components/SkeletonBlock.vue'
+import FilterEmpty from '@/components/search/FilterEmpty.vue'
 import SearchEmpty from '@/components/search/SearchEmpty.vue'
 import SearchSidebar from '@/components/search/SearchSidebar.vue'
 import {
@@ -17,40 +19,41 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-const route = useRoute()
-const router = useRouter()
+// 條件都放在網址，換條件的規則（push／replace、擇一、清空回首頁）在 useSearchQuery
+const { query, filters, sort, search, setFilters, resetFilters, setSort } = useSearchQuery()
 
-// 條件都放在網址（PRD 7.2 第 8 條）：重新整理、上一頁、分享連結都保得住。預設的熱門排序不寫進網址
-const query = computed(() => route.query.q ?? '')
-const sort = computed(() => (route.query.sort in sortLabels ? route.query.sort : 'popular'))
-
-const { data, status, retry } = useRequest(() => getGames({ query: query.value, sort: sort.value }))
-watch([query, sort], retry)
+const { data, status, retry } = useRequest(() =>
+  getGames({ query: query.value, filters: filters.value, sort: sort.value }),
+)
+watch([query, filters, sort], retry)
 
 const games = computed(() => data.value ?? [])
 
-// 在搜尋結果頁裡換排序用 replace：按上一頁回到進來前的頁面（決定見 #25）
-function changeSort(value) {
-  router.replace({ query: { ...route.query, sort: value === 'popular' ? undefined : value } })
-}
-
-function clearSearch() {
-  router.replace({ query: { ...route.query, q: undefined } })
-}
-
-// 沒結果時才拿「也許你想找的是這些？」；拿不到就不顯示那一區，不影響整頁
+// 沒結果時才拿推薦：搜尋沒結果是「也許你想找的是這些？」，篩選沒結果是建議移除的條件和替代推薦。
+// 推薦是附加的，拿不到就不顯示那一區，不影響整頁
 const suggestions = ref([])
-watch([status, query], async () => {
+const relaxed = ref(null)
+watch([status, query, filters], async () => {
   suggestions.value = []
-  if (status.value !== 'success' || games.value.length || !query.value) return
-  const q = query.value
+  relaxed.value = null
+  if (status.value !== 'success' || games.value.length) return
+  const key = JSON.stringify([query.value, filters.value])
   try {
-    const result = await getSearchSuggestions(q)
-    if (q === query.value) suggestions.value = result
+    if (query.value) {
+      const result = await getSearchSuggestions(query.value)
+      if (key === JSON.stringify([query.value, filters.value])) suggestions.value = result
+    } else {
+      const result = await getFilterSuggestion(filters.value)
+      if (key === JSON.stringify([query.value, filters.value])) relaxed.value = result
+    }
   } catch {
-    // 推薦是附加的，失敗就不顯示
+    // 推薦失敗就不顯示
   }
 })
+
+function applyRelax() {
+  setFilters({ ...filters.value, [relaxed.value.remove.key]: [] })
+}
 
 // 第一次載入顯示骨架；之後換條件時舊結果留著，新的回來再換（產品規則 5.1）
 const firstLoad = computed(() => status.value === 'loading' && data.value === null)
@@ -80,7 +83,14 @@ const firstLoad = computed(() => status.value === 'loading' && data.value === nu
         v-else-if="!games.length && query"
         :query="query"
         :suggestions="suggestions"
-        @clear="clearSearch"
+        @clear="search('')"
+      />
+      <FilterEmpty
+        v-else-if="!games.length && hasFilters(filters)"
+        :remove="relaxed?.remove"
+        :games="relaxed?.games"
+        @apply="applyRelax"
+        @reset="resetFilters"
       />
 
       <template v-else>
@@ -89,7 +99,7 @@ const firstLoad = computed(() => status.value === 'loading' && data.value === nu
           <h1 class="type-tc-heading-20 text-text-primary" aria-live="polite">
             共 {{ games.length }} 個結果
           </h1>
-          <Select :model-value="sort" @update:model-value="changeSort">
+          <Select :model-value="sort" @update:model-value="setSort">
             <SelectTrigger class="w-[192px]" aria-label="排序方式">
               <SelectValue />
             </SelectTrigger>

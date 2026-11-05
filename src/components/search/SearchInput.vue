@@ -1,41 +1,34 @@
 <script>
-// 從首頁打字換到搜尋結果頁時，搜尋框是新的一個；記下來讓新的接回焦點，使用者可以繼續打字
+// 打字換頁時（首頁 → 搜尋結果、刪光字回首頁）搜尋框是新的一個；記下來讓新的接回焦點，使用者可以繼續打字
 let keepFocus = false
 </script>
 
 <script setup>
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { useSearchQuery } from '@/composables/useSearchQuery'
 
 const route = useRoute()
-const router = useRouter()
+const { query, search } = useSearchQuery()
 
-const text = ref(route.query.q ?? '')
+const text = ref(query.value)
 const input = ref(null)
 
 // 網址的搜尋字變了（清除搜尋條件、上一頁）就跟著換；正在打字時不換，免得蓋掉剛打的字
-watch(
-  () => route.query.q,
-  (q) => {
-    if (document.activeElement !== input.value) text.value = q ?? ''
-  },
-)
+watch(query, (q) => {
+  if (document.activeElement !== input.value) text.value = q
+})
 
-// 送出搜尋（PRD 7.2 第 1 條）：從別頁進搜尋結果是 push（按上一頁回得去）；
-// 已經在搜尋結果頁就 replace，邊打字邊更新網址也不會多出一堆瀏覽紀錄。
-// 假資料的 ?scenario= 一起帶著，展示載入中、失敗時才不會換頁就不見
+// 送出搜尋（PRD 7.2 第 1 條）；push 或 replace、清掉篩選、清空時回首頁都在 useSearchQuery
 function submit() {
   clearTimeout(timer)
   const q = text.value.trim()
-  if (route.name === 'search') {
-    if (q === (route.query.q ?? '')) return
-    router.replace({ query: { ...route.query, q: q || undefined } })
-  } else if (q) {
-    keepFocus = document.activeElement === input.value
-    router.push({ name: 'search', query: { q, scenario: route.query.scenario } })
-  }
+  if (q === query.value) return
+  // 會換頁的兩種：從別頁進搜尋結果、在搜尋結果頁刪光字回首頁
+  keepFocus = document.activeElement === input.value && (route.name !== 'search' || !q)
+  search(q)
 }
 
 // 停止打字 0.3 秒才搜；注音、倉頡選字（composition）時不算打字，選完字才開始計時

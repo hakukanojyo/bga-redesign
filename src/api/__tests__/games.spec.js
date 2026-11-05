@@ -7,6 +7,7 @@ import {
   matchesFilters,
   matchesQuery,
   recommend,
+  relaxFilters,
   searchGames,
   suggestGames,
 } from '../games'
@@ -181,5 +182,30 @@ describe('也許你想找的是這些？（PRD 7.2 第 5 條）', () => {
 
   it('counts aliases too', () => {
     expect(slugs(suggestGames(games, '狼人遊戲'))).toContain('werewolves')
+  })
+})
+
+describe('篩選沒結果時建議移除的條件（PRD 7.3 第 8 條）', () => {
+  it('never suggests removing players or time', () => {
+    expect(relaxFilters(games, { players: ['10+'], time: ['short'] })).toBeNull()
+  })
+
+  it('suggests the condition that brings back the most games', () => {
+    const filters = { players: ['2'], complexity: ['deep'], themes: ['zombie'] }
+    expect(searchGames(games, { filters })).toHaveLength(0)
+    const result = relaxFilters(games, filters)
+    const counts = ['complexity', 'themes'].map(
+      (key) => searchGames(games, { filters: { ...filters, [key]: [] } }).length,
+    )
+    expect(result.count).toBe(Math.max(...counts))
+    expect(result.games).toHaveLength(result.count)
+  })
+
+  it('removes a whole multi-choice category, not one tag', () => {
+    const filters = { players: ['10+'], types: ['family', 'award'] }
+    expect(searchGames(games, { filters })).toHaveLength(0)
+    const result = relaxFilters(games, filters)
+    expect(result.key).toBe('types')
+    expect(result.values).toEqual(['family', 'award'])
   })
 })
