@@ -1,8 +1,10 @@
 <script>
 import { ref } from 'vue'
 
-// 展開哪幾類：放在元件外面，首頁點了條件換到搜尋結果頁（新的一個篩選欄）時還是一樣（預設只展開玩家數）
+// 展開哪幾類：放在元件外面，首頁點了條件換到搜尋結果頁（新的一個篩選欄）時還是一樣。
+// 桌面可以同時開好幾類（預設玩家數），平板一次一類、預設都收起（PRD 7.3 第 6 條）
 const expanded = ref(['players'])
+const tabletOpen = ref(null)
 // 從首頁點條件換頁後，把鍵盤焦點接回剛剛按的那個選項
 let focusTarget = null
 </script>
@@ -10,6 +12,7 @@ let focusTarget = null
 <script setup>
 import { nextTick, onMounted, useTemplateRef } from 'vue'
 import { useRoute } from 'vue-router'
+import { useMediaQuery } from '@vueuse/core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faBrain,
@@ -23,10 +26,15 @@ import {
 import { filterCategories } from '@/api/data/options'
 import { useSearchQuery } from '@/composables/useSearchQuery'
 import { hasFilters } from '@/utils/filters'
+import FilterOptions from '@/components/search/FilterOptions.vue'
 import FilterTag from '@/components/search/FilterTag.vue'
 
 const route = useRoute()
 const { filters, setFilters, resetFilters } = useSearchQuery()
+
+// 桌面和平板的版面不同（直的收合列表／橫的分類加一個面板），用同一個斷點二選一渲染；
+// 兩份都放在頁面上再用 CSS 藏的話，同名的 radio 會互相影響，螢幕閱讀器也會讀到兩次
+const isTablet = useMediaQuery('(width < 1280px)')
 
 const icons = {
   players: faUserGroup,
@@ -37,30 +45,37 @@ const icons = {
   types: faDiceFive,
 }
 
-// 每類的標題列、展開後的底色；Tailwind 要看得到完整的 class 名稱
+// 每類的顏色；Tailwind 要看得到完整的 class 名稱。
+// head：桌面標題列、平板分類標籤；open：平板展開中的分類標籤（Figma Filter/Category Chip state=selected）；body：選項的底色
 const colors = {
   players: {
-    head: 'border-filter-players-ink bg-filter-players-bg text-filter-players-ink hover:bg-filter-players-bg-hover',
+    head: 'border-b-filter-players-ink bg-filter-players-bg text-filter-players-ink hover:bg-filter-players-bg-hover',
+    open: 'aria-expanded:border-filter-players-ink aria-expanded:bg-filter-players-bg-hover',
     body: 'bg-filter-players-surface',
   },
   time: {
-    head: 'border-filter-time-ink bg-filter-time-bg text-filter-time-ink hover:bg-filter-time-bg-hover',
+    head: 'border-b-filter-time-ink bg-filter-time-bg text-filter-time-ink hover:bg-filter-time-bg-hover',
+    open: 'aria-expanded:border-filter-time-ink aria-expanded:bg-filter-time-bg-hover',
     body: 'bg-filter-time-surface',
   },
   complexity: {
-    head: 'border-filter-complexity-ink bg-filter-complexity-bg text-filter-complexity-ink hover:bg-filter-complexity-bg-hover',
+    head: 'border-b-filter-complexity-ink bg-filter-complexity-bg text-filter-complexity-ink hover:bg-filter-complexity-bg-hover',
+    open: 'aria-expanded:border-filter-complexity-ink aria-expanded:bg-filter-complexity-bg-hover',
     body: 'bg-filter-complexity-surface',
   },
   mechanics: {
-    head: 'border-filter-mechanics-ink bg-filter-mechanics-bg text-filter-mechanics-ink hover:bg-filter-mechanics-bg-hover',
+    head: 'border-b-filter-mechanics-ink bg-filter-mechanics-bg text-filter-mechanics-ink hover:bg-filter-mechanics-bg-hover',
+    open: 'aria-expanded:border-filter-mechanics-ink aria-expanded:bg-filter-mechanics-bg-hover',
     body: 'bg-filter-mechanics-surface',
   },
   topic: {
-    head: 'border-filter-topic-ink bg-filter-topic-bg text-filter-topic-ink hover:bg-filter-topic-bg-hover',
+    head: 'border-b-filter-topic-ink bg-filter-topic-bg text-filter-topic-ink hover:bg-filter-topic-bg-hover',
+    open: 'aria-expanded:border-filter-topic-ink aria-expanded:bg-filter-topic-bg-hover',
     body: 'bg-filter-topic-surface',
   },
   type: {
-    head: 'border-filter-type-ink bg-filter-type-bg text-filter-type-ink hover:bg-filter-type-bg-hover',
+    head: 'border-b-filter-type-ink bg-filter-type-bg text-filter-type-ink hover:bg-filter-type-bg-hover',
+    open: 'aria-expanded:border-filter-type-ink aria-expanded:bg-filter-type-bg-hover',
     body: 'bg-filter-type-surface',
   },
 }
@@ -71,7 +86,10 @@ function toggleCategory(key) {
     : [...expanded.value, key]
 }
 
-const isSelected = (key, value) => filters.value[key].includes(value)
+// 平板：點另一類就換過去，再點一次同一類收起；選了選項不收（多選常常連選好幾個）
+function toggleTablet(key) {
+  tabletOpen.value = tabletOpen.value === key ? null : key
+}
 
 // 單選再點一次已選的就取消（PRD 7.3 第 1 條）；多選切換加入或移除
 function toggle({ key, multiple }, value) {
@@ -91,6 +109,8 @@ const activeTags = () =>
     filters.value[category.key].map((value) => ({ category, value })),
   )
 
+const openCategory = () => filterCategories.find((category) => category.key === tabletOpen.value)
+
 const panel = useTemplateRef('panel')
 onMounted(async () => {
   if (!focusTarget) return
@@ -102,96 +122,111 @@ onMounted(async () => {
 </script>
 
 <!--
-  Figma：搜尋結果左欄「篩選條件 FILTERS」、Filter/Players～Topic（389:6719 等）、Form/Radio（1153:19265）、
-  Form/Tag Chip（393:7231）、Filter/Active Tag（540:1062）。
-  單選用原生 radio（方向鍵換選項、螢幕閱讀器念「選項 2/5」）；原生 radio 不能取消，所以用 click 自己判斷。
-  多選用按鈕加 aria-pressed。標題列是按鈕，aria-expanded 告訴螢幕閱讀器展開了沒有；
-  不用 h3：整個左欄排在頁面的 h1 前面，用標題會讓層級顛倒（和「快速搜尋」一樣）
+  Figma：桌面搜尋結果左欄「篩選條件 FILTERS」、Filter/Players～Topic（389:6719 等）、Filter/Active Tag（540:1062）；
+  平板 Filter/Category Chip（872:9124）、Filter/Options Panel（872:9092）、首頁｜Tablet｜篩選展開（903:8027）。
+  標題列、分類標籤是按鈕，aria-expanded 告訴螢幕閱讀器展開了沒有。
+  不用 h3：整個左欄排在頁面的 h1 前面，用標題會讓層級顛倒（和「快速搜尋」一樣）。
+  分類標籤平常只有底線、展開時四邊外框：四邊都先留 2 的透明框，展開時才上色，寬度不會跳
 -->
 <template>
   <div ref="panel" class="flex flex-col gap-12">
-    <div class="flex flex-col gap-8 border-t border-border-subtle pt-12">
+    <!-- 平板：「篩選條件：」＋一排可以左右滑的分類，點了在下面展開那一類的選項 -->
+    <div v-if="isTablet" class="flex gap-12">
+      <p class="w-[95px] shrink-0 pt-12 type-tc-title-16 text-text-primary">篩選條件：</p>
+      <div class="flex min-w-0 flex-1 flex-col gap-12">
+        <ul class="flex gap-12 overflow-x-auto [scrollbar-width:none]">
+          <li v-for="category in filterCategories" :key="category.key" class="shrink-0">
+            <button
+              type="button"
+              class="flex h-[48px] items-center gap-4 rounded-12 border-2 border-transparent px-16 type-tc-title-16 whitespace-nowrap"
+              :class="[colors[category.color].head, colors[category.color].open]"
+              :aria-expanded="tabletOpen === category.key"
+              aria-controls="filter-tablet-panel"
+              @click="toggleTablet(category.key)"
+            >
+              <FontAwesomeIcon :icon="icons[category.key]" class="text-[16px]" aria-hidden="true" />
+              {{ category.title }}
+            </button>
+          </li>
+        </ul>
+        <div
+          v-if="openCategory()"
+          id="filter-tablet-panel"
+          class="rounded-12 px-16 py-12"
+          :class="colors[openCategory().color].body"
+        >
+          <FilterOptions
+            :category="openCategory()"
+            :selected="filters[openCategory().key]"
+            @toggle="toggle(openCategory(), $event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!--
+      目前套用條件（FILT-08）：有條件時才出現，沒有條件時整區不顯示（PRD 7.3 第 4 條）。桌面在分類上面、平板在下面。
+      桌面和下面的分類列表多隔 4（共 16），比分類之間的 12 寬一點，看得出是兩組
+      因為搜尋和篩選擇一、清空時回首頁，同一頁裡從 0 變 1 只有「搜尋模式點第一個條件」一種情況，那時結果本來就整個換掉
+    -->
+    <div
+      v-if="hasFilters(filters)"
+      class="flex flex-col gap-8"
+      :class="isTablet ? '' : 'border-t border-border-subtle pt-12 pb-4'"
+    >
       <div class="flex items-center justify-between gap-8">
         <p class="type-tc-title-16 text-text-primary">目前套用條件</p>
         <button
-          v-if="hasFilters(filters)"
           type="button"
-          class="flex items-center gap-4 type-tc-body-13 text-text-danger hover:underline"
+          class="flex min-h-(--tap-tag-min-height) items-center gap-4 type-tc-body-13 text-text-danger hover:underline"
           @click="resetFilters"
         >
           <FontAwesomeIcon :icon="faXmark" class="text-[12px]" aria-hidden="true" />
           重設所有條件
         </button>
       </div>
-      <ul v-if="hasFilters(filters)" class="flex flex-wrap gap-8" aria-label="目前套用條件">
+      <ul class="flex flex-wrap gap-8" aria-label="目前套用條件">
         <li v-for="{ category, value } in activeTags()" :key="`${category.key}:${value}`">
           <FilterTag :color="category.color" removable @remove="toggle(category, value)">
             {{ category.labels[value] }}
           </FilterTag>
         </li>
       </ul>
-      <p v-else class="type-tc-body-13 text-text-secondary">目前無套用條件</p>
     </div>
 
-    <section
-      v-for="category in filterCategories"
-      :key="category.key"
-      class="overflow-hidden rounded-12 border-b-2"
-      :class="colors[category.color].head"
-    >
-      <button
-        type="button"
-        class="flex w-full items-center gap-4 px-16 py-12 type-tc-title-16"
-        :aria-expanded="expanded.includes(category.key)"
-        :aria-controls="`filter-${category.key}`"
-        @click="toggleCategory(category.key)"
+    <!-- 桌面：直的收合列表，可以同時展開好幾類 -->
+    <template v-if="!isTablet">
+      <section
+        v-for="category in filterCategories"
+        :key="category.key"
+        class="overflow-hidden rounded-12 border-b-2"
+        :class="colors[category.color].head"
       >
-        <span class="flex size-[20px] items-center justify-center" aria-hidden="true">
-          <FontAwesomeIcon :icon="icons[category.key]" class="text-[16px]" />
-        </span>
-        {{ category.title }}
-      </button>
-      <div
-        v-show="expanded.includes(category.key)"
-        :id="`filter-${category.key}`"
-        class="px-16 py-12 text-text-body"
-        :class="colors[category.color].body"
-      >
-        <!-- 多選：標籤 -->
-        <ul v-if="category.multiple" class="flex flex-wrap gap-x-12 gap-y-8">
-          <li v-for="(label, value) in category.labels" :key="value">
-            <button
-              type="button"
-              :data-option="`${category.key}:${value}`"
-              :aria-pressed="isSelected(category.key, value)"
-              class="min-h-(--tap-tag-min-height) rounded-4 border border-border-default bg-surface-default px-12 py-4 type-tc-body-13 text-text-body hover:bg-selection-bg aria-pressed:border-selection-accent aria-pressed:bg-selection-accent aria-pressed:text-text-inverse"
-              @click="toggle(category, value)"
-            >
-              {{ label }}
-            </button>
-          </li>
-        </ul>
-        <!-- 單選：radio -->
-        <fieldset v-else class="flex flex-col gap-(--tap-checkbox-gap)">
-          <legend class="sr-only">{{ category.title }}</legend>
-          <label
-            v-for="(label, value) in category.labels"
-            :key="value"
-            class="group/radio flex min-h-(--tap-checkbox-min-height) cursor-pointer items-center gap-8 type-tc-body-13 has-checked:text-selection-accent"
-          >
-            <input
-              type="radio"
-              :name="`filter-${category.key}`"
-              :value="value"
-              :checked="isSelected(category.key, value)"
-              :data-option="`${category.key}:${value}`"
-              class="size-[18px] shrink-0 cursor-pointer appearance-none rounded-full border border-border-default bg-surface-default group-hover/radio:border-selection-accent group-hover/radio:bg-selection-bg checked:border-selection-accent checked:bg-surface-default checked:bg-[image:radial-gradient(var(--color-selection-accent)_4px,transparent_5px)]"
-              @click="toggle(category, value)"
-            />
-            {{ label }}
-          </label>
-        </fieldset>
-      </div>
-    </section>
+        <button
+          type="button"
+          class="flex w-full items-center gap-4 px-16 py-12 type-tc-title-16"
+          :aria-expanded="expanded.includes(category.key)"
+          :aria-controls="`filter-${category.key}`"
+          @click="toggleCategory(category.key)"
+        >
+          <span class="flex size-[20px] items-center justify-center" aria-hidden="true">
+            <FontAwesomeIcon :icon="icons[category.key]" class="text-[16px]" />
+          </span>
+          {{ category.title }}
+        </button>
+        <div
+          v-show="expanded.includes(category.key)"
+          :id="`filter-${category.key}`"
+          class="px-16 py-12"
+          :class="colors[category.color].body"
+        >
+          <FilterOptions
+            :category="category"
+            :selected="filters[category.key]"
+            @toggle="toggle(category, $event)"
+          />
+        </div>
+      </section>
+    </template>
   </div>
 </template>
