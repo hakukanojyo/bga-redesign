@@ -2,10 +2,11 @@
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faClock, faCrown, faUserGroup } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { gameName } from '@/api/games'
 import { formatDuration, formatPlayers } from '@/utils/format'
 import FavoriteButton from '@/components/FavoriteButton.vue'
+import VipBadge from '@/components/VipBadge.vue'
 
 defineProps({
   game: { type: Object, required: true },
@@ -67,13 +68,7 @@ const logoFailed = ref(false)
       />
     </div>
 
-    <span
-      v-if="game.isPremium"
-      class="flex h-[22px] w-[60px] items-center justify-center rounded-t-16 bg-badge-vip pt-2 text-text-primary shadow-bevel-button-gold"
-    >
-      <FontAwesomeIcon :icon="faCrown" class="text-[14px]" aria-hidden="true" />
-      <span class="sr-only">尊榮遊戲</span>
-    </span>
+    <VipBadge v-if="game.isPremium" />
     <div
       class="flex w-full flex-col gap-4 rounded-b-4 bg-surface-glass px-16 group-focus-within/card:gap-8 group-hover/card:gap-8"
       :class="size === 'large' ? 'py-8' : 'py-12'"
