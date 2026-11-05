@@ -77,8 +77,11 @@ export function searchGames(list, { query = '', filters = {}, sort = 'popular' }
     .sort(sorters[sort] ?? sorters.popular)
 }
 
+// 首頁每區最多 10 張：排序類（為你推薦、最新、熱門）一定 10 張，分類類只放符合的（PRD 7.1 第 9 條）
+const SECTION_SIZE = 10
+
 // 為你推薦：和收藏、玩過的遊戲共同的類型、機制、主題越多越前面；沒有紀錄時用熱門
-export function recommend(list, likedSlugs, limit = 8) {
+export function recommend(list, likedSlugs, limit = SECTION_SIZE) {
   const liked = list.filter((game) => likedSlugs.includes(game.slug))
   if (!liked.length) return searchGames(list).slice(0, limit)
   const tags = (game) => [...game.types, ...game.mechanics, ...game.themes]
@@ -94,31 +97,35 @@ export function recommend(list, likedSlugs, limit = 8) {
 export function homeSections(list, likedSlugs) {
   return [
     { key: 'recommended', title: '為你推薦', games: recommend(list, likedSlugs) },
-    { key: 'newest', title: '最新上線', games: searchGames(list, { sort: 'newest' }).slice(0, 8) },
+    {
+      key: 'newest',
+      title: '最新上線',
+      games: searchGames(list, { sort: 'newest' }).slice(0, SECTION_SIZE),
+    },
     {
       key: 'popular',
       title: '現正熱門',
-      games: searchGames(list, { sort: 'popular' }).slice(0, 8),
+      games: searchGames(list, { sort: 'popular' }).slice(0, SECTION_SIZE),
     },
     {
       key: 'casual',
       title: '輕鬆小品',
-      games: searchGames(list, { filters: { complexity: ['casual'] } }),
+      games: searchGames(list, { filters: { complexity: ['casual'] } }).slice(0, SECTION_SIZE),
     },
     {
       key: 'classic',
       title: '經典遊戲',
-      games: searchGames(list, { filters: { types: ['classic'] } }),
+      games: searchGames(list, { filters: { types: ['classic'] } }).slice(0, SECTION_SIZE),
     },
     {
       key: 'family',
       title: '適合家庭',
-      games: searchGames(list, { filters: { types: ['family'] } }),
+      games: searchGames(list, { filters: { types: ['family'] } }).slice(0, SECTION_SIZE),
     },
     {
       key: 'deep',
       title: '適合深度玩家',
-      games: searchGames(list, { filters: { complexity: ['deep'] } }),
+      games: searchGames(list, { filters: { complexity: ['deep'] } }).slice(0, SECTION_SIZE),
     },
   ]
 }
