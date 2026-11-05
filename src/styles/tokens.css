@@ -157,6 +157,17 @@
     var(--base-white-a56) 50%,
     transparent 100%
   );
+  /* Card/Carousel Arrow：靠卡片外側最實、往內變淡；Figma 整個填色再乘 72%，用 color-mix 算進去 */
+  --gradient-carousel-arrow: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--base-white) 72%, transparent),
+    color-mix(in srgb, var(--base-white-a30) 72%, transparent)
+  );
+  --gradient-carousel-arrow-hover: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--blue-50) 72%, transparent),
+    color-mix(in srgb, var(--blue-50-a46) 72%, transparent)
+  );
   /* 首頁中段精選橫幅：右半邊壓暗，白字才看得清楚 */
   --gradient-promo-overlay: linear-gradient(
     90deg,
@@ -266,6 +277,11 @@
   --shadow-cta-md-strong: 0 1.5px 1px rgb(0 0 0);
   --shadow-glass-nav: 0 2px 6.3px rgb(80 60 34 / 0.52);
   --shadow-card: 0 2px 6.3px rgb(80 60 34 / 0.52);
+  --shadow-card-cover: 0 4px 7px rgb(0 0 0 / 0.25);
+  /* bevel/button-gold：VIP 標籤的立體感（亮邊、暗邊、外陰影） */
+  --shadow-bevel-button-gold:
+    inset 1px 1px 0 rgb(255 255 255 / 0.65), inset -1px -1px 0 rgb(215 197 37),
+    0 -1px 2.8px rgb(0 0 0 / 0.11);
   --shadow-glow-status-blue: 0 0 6.2px #0b72b5;
   --shadow-glow-status-green: 0 0 6.1px #17a91a;
   /* inner/button-secondary：Figma 綁的是 Primitive（blue/400、blue/500），這裡改用同色的 Semantic */

@@ -114,7 +114,16 @@ describe('首頁分區（PRD 7.1）', () => {
     )
   })
 
+  it('shows 10 cards in sorted sections and at most 10 in category sections', () => {
+    const sections = homeSections(games, [])
+    const size = (key) => sections.find((section) => section.key === key).games.length
+    expect(['recommended', 'newest', 'popular'].map(size)).toEqual([10, 10, 10])
+    ;['casual', 'classic', 'family', 'deep'].forEach((key) =>
+      expect(size(key)).toBeLessThanOrEqual(10),
+    )
+  })
+
   it('falls back to popular games when there is no history', () => {
-    expect(slugs(recommend(games, []))).toEqual(slugs(searchGames(games)).slice(0, 8))
+    expect(slugs(recommend(games, []))).toEqual(slugs(searchGames(games)).slice(0, 10))
   })
 })
