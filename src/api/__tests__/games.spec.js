@@ -3,6 +3,7 @@ import { games } from '../data/games'
 import {
   findGame,
   gameName,
+  getSimilarGames,
   homeSections,
   matchesFilters,
   matchesQuery,
@@ -207,5 +208,14 @@ describe('篩選沒結果時建議移除的條件（PRD 7.3 第 8 條）', () =>
     const result = relaxFilters(games, filters)
     expect(result.key).toBe('types')
     expect(result.values).toEqual(['family', 'award'])
+  })
+})
+
+describe('遊戲主畫面的推薦（PRD 7.4 第 4、5 條）', () => {
+  it('recommends 5 games with similar tags, never the game itself', async () => {
+    const result = await getSimilarGames('werewolves')
+    expect(result).toHaveLength(5)
+    expect(slugs(result)).not.toContain('werewolves')
+    expect(slugs(result)).toEqual(slugs(recommend(games, { played: ['werewolves'] }, 5)))
   })
 })

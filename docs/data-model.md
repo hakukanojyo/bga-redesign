@@ -30,10 +30,12 @@
 | `releasedAt` | string（日期） | `2025-03-12` | 「最新上線」排序 |
 | `playsLast30Days` | number | `48210` | 「現正熱門」、預設排序 |
 | `totalPlays` | number | `2310455` | 遊戲資訊「遊戲場數」 |
-| `credits` | `{ designers, artists, publisher, year, developer }` | | 遊戲資訊 |
-| `versions` | `{ version, date, notes }[]` | | 版本更新紀錄 |
+| `credits` | `{ designers, artists, publisher, year, developer }` | 沒有的是 `[]` 或 `''` | 遊戲資訊；空的那一列不顯示 |
+| `versions` | `{ version, date, notes: string[] }[]` | 新的在前；`notes` 一項一行 | 版本更新紀錄 |
+| `rulesVersion` | string | `2024 繁中版` | 規則專區標題旁「最後核定版本」 |
 | `rules` | `{ title, sizeMB }[]` | `{ title: '繁體中文官方手冊', sizeMB: 12 }` | 規則手冊卡片 |
-| `videos` | `{ title, kind }[]` | `kind`：`tutorial` \| `strategy` | 影音教學 |
+| `videos` | `{ title, kind }[]` | `kind`：`tutorial` \| `strategy` | 影音教學；沒有縮圖，畫面用這款的橫幅加播放圖示 |
+| `gallery` | string[]（圖片網址） | 目前都是 `[]` | 遊戲圖片；空的時整個章節和導覽項目不顯示 |
 
 **不存、用算的**：
 

@@ -54,5 +54,6 @@ onMounted(async () => {
   <SidePanel :panel="isTablet ? null : openPanel" @toggle="togglePanel" @close="openPanel = null" />
   <TabletPanel :panel="isTablet ? openPanel : null" @close="openPanel = null" />
   <!-- 提示在畫面下方置中；平板在底部導覽列（72）上方，兩者都離 16 -->
-  <Toaster :offset="{ bottom: isTablet ? 88 : 16 }" />
+  <!-- 提示在畫面上方置中、Header 下面 16（ADR 0016）：桌面和平板一樣 -->
+  <Toaster position="top-center" :offset="{ top: 'calc(var(--header-height) + 16px)' }" />
 </template>
