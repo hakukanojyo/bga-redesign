@@ -9,7 +9,7 @@ const props = defineProps({
   id: { type: String, required: false },
   invert: { type: Boolean, required: false },
   theme: { type: String, required: false },
-  position: { type: String, required: false, default: 'bottom-center' },
+  position: { type: String, required: false, default: 'top-center' },
   closeButtonPosition: { type: String, required: false },
   hotkey: { type: Array, required: false },
   richColors: { type: Boolean, required: false },

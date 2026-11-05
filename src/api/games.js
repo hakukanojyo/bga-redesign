@@ -226,6 +226,12 @@ export function getGame(slug) {
   return fakeRequest(allGames.find((game) => game.slug === slug) ?? null)
 }
 
+// 遊戲主畫面的推薦（GAME-13）：只看類型、機制、主題和這款相近的，不含這款本身，5 款（PRD 7.4 第 4、5 條）。
+// 和為你推薦同一套算法，把這款當成唯一一筆「玩過」的紀錄
+export function getSimilarGames(slug) {
+  return fakeRequest(recommend(allGames, { played: [slug] }, 5))
+}
+
 // 首頁主視覺（HOME-01）：廣告版位，人工指定，所以不用算的
 export function getFeaturedGame() {
   return getGame('zombicide-2e')

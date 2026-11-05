@@ -2,23 +2,35 @@
 // 人數、時間、製作群是盒子上的公開事實；介紹是自己寫的，不是 BGA 或出版商的原文
 // 熱門度、上架日期、場數、版本紀錄是虛構的
 // 介紹的長度刻意長短都有（BGA 上也是），測得出很短、很長、有分段時的版面；分段用 \n\n
-// 沒有 zh-TW 的遊戲沒有官方中文名，顯示英文名；製作群空白的畫面顯示「—」
+// 沒有 zh-TW 的遊戲沒有官方中文名，顯示英文名；製作群空白的那一列畫面不顯示
+// 遊戲圖片（gallery）還沒有授權的圖，先都是空的，遊戲頁整個章節不顯示（PRD 7.4）
 
 // 每款都有的規則手冊、影片、版本紀錄，內容一樣就用同一個樣板
 function common({ name, rulesMB = 8, updatedAt = '2026-09-18' }) {
   return {
+    rulesVersion: '2024 繁中版',
     rules: [
       { title: '繁體中文官方手冊', sizeMB: rulesMB },
       { title: 'English Rulebook', sizeMB: rulesMB + 2 },
+      { title: '快速參考卡', sizeMB: 1 },
+      { title: '常見問題 FAQ', sizeMB: 2 },
+      { title: '新手入門指南', sizeMB: 3 },
     ],
     videos: [
       { title: `五分鐘學會${name}`, kind: 'tutorial' },
+      { title: `${name}新手常犯的錯誤`, kind: 'tutorial' },
       { title: `${name}高手對局實況`, kind: 'strategy' },
+      { title: `${name}進階策略解析`, kind: 'strategy' },
     ],
     versions: [
-      { version: '1.4.2', date: updatedAt, notes: '修正平板上分數顯示被裁切的問題。' },
-      { version: '1.4.0', date: '2026-06-02', notes: '新增繁體中文介面，調整回合計時。' },
+      { version: '1.4.2', date: updatedAt, notes: ['修正平板上分數顯示被裁切的問題。'] },
+      {
+        version: '1.4.0',
+        date: '2026-06-02',
+        notes: ['新增繁體中文介面。', '調整回合計時，逾時前 10 秒提醒。'],
+      },
     ],
+    gallery: [],
   }
 }
 

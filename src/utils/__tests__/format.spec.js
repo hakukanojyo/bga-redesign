@@ -2,11 +2,14 @@ import { describe, it, expect } from 'vitest'
 import {
   formatCountry,
   formatDuration,
+  formatFileSize,
   formatPlayers,
+  formatPlays,
   formatScore,
   formatSeats,
   formatSettings,
   formatTimeAgo,
+  formatVersion,
   formatWait,
 } from '../format'
 
@@ -44,5 +47,13 @@ describe('國家', () => {
   it('shows the Chinese country name from its code', () => {
     expect(formatCountry('TW')).toBe('台灣')
     expect(formatCountry('JP')).toBe('日本')
+  })
+})
+
+describe('遊戲主畫面', () => {
+  it('formats file sizes, play counts and versions', () => {
+    expect(formatFileSize(12)).toBe('12 MB')
+    expect(formatPlays(2310455)).toBe('2,310,455 場')
+    expect(formatVersion({ version: '1.4.2', date: '2026-10-28' })).toBe('版本 1.4.2（2026-10-28）')
   })
 })

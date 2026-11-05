@@ -1,7 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GameCard from '@/components/GameCard.vue'
-import GameCarousel from '@/components/home/GameCarousel.vue'
+import GameCarousel from '@/components/GameCarousel.vue'
 
 defineProps({
   title: { type: String, required: true },

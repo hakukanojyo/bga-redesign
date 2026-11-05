@@ -42,3 +42,18 @@ const regionNames = new Intl.DisplayNames(['zh-TW'], { type: 'region' })
 export function formatCountry(code) {
   return regionNames.of(code)
 }
+
+// 檔案大小：12 → 12 MB（數字和英文之間空半形）
+export function formatFileSize(mb) {
+  return `${mb} MB`
+}
+
+// 遊戲場數：2310455 → 2,310,455 場
+export function formatPlays(count) {
+  return `${count.toLocaleString('zh-TW')} 場`
+}
+
+// 版本紀錄標題：版本 1.4.2（2026-10-28）
+export function formatVersion({ version, date }) {
+  return `版本 ${version}（${date}）`
+}
