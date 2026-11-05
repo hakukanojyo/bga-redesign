@@ -2,7 +2,7 @@
 import { nextTick, useTemplateRef, watch } from 'vue'
 
 const props = defineProps({
-  // { id, label }[]：連到頁面上 id 一樣的章節
+  // { id, label, count? }[]：連到頁面上 id 一樣的章節；count 顯示在名稱右邊（開放桌的「3 桌」）
   items: { type: Array, required: true },
   // 目前看到的章節（scroll spy）
   active: { type: String, default: null },
@@ -43,7 +43,7 @@ watch(
         <a
           :href="`#${item.id}`"
           :aria-current="item.id === active ? 'location' : undefined"
-          class="group/link flex h-[36px] items-center type-tc-body-16 text-text-primary max-desktop:h-(--tap-button-min-height) aria-[current=location]:type-tc-title-16 aria-[current=location]:text-text-brand-strong"
+          class="group/link flex h-[36px] items-center justify-between gap-16 type-tc-body-16 text-text-primary max-desktop:h-(--tap-button-min-height) aria-[current=location]:type-tc-title-16 aria-[current=location]:text-text-brand-strong"
           @click.prevent="emit('select', item.id)"
         >
           <span class="grid">
@@ -56,6 +56,7 @@ watch(
               {{ item.label }}
             </span>
           </span>
+          <span v-if="item.count != null" class="type-tc-label-14">{{ item.count }} 桌</span>
         </a>
       </li>
     </ul>

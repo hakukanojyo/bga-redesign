@@ -30,7 +30,8 @@ const seating = ['隨機', '依加入順序']
 // 2026-11-05 10:00（台灣時間）往前推，每桌差 3 分鐘
 const base = Date.parse('2026-11-05T10:00:00+08:00')
 
-export const openTables = Array.from({ length: 34 }, (_, i) => {
+// 40 桌：前 4 款遊戲（狼人、璀璨寶石、多米諾王國、Sky Team）各有 4 桌，遊戲頁才看得到「查看全部 N 桌」
+export const openTables = Array.from({ length: 40 }, (_, i) => {
   const gameSlug = tableGames[i % tableGames.length]
   // 每輪完一次遊戲就錯開一格，同一款遊戲才會有不同的模式和制度
   const round = Math.floor(i / tableGames.length)

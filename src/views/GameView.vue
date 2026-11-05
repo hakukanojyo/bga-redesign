@@ -1,10 +1,11 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { gameName, getGame } from '@/api/games'
 import { addRecentlyViewed } from '@/api/history'
 import { useRequest } from '@/composables/useRequest'
 import { useScrollSpy } from '@/composables/useScrollSpy'
+import { GAME_TABLES_LIMIT } from '@/api/tables'
 import ConnectionError from '@/components/ConnectionError.vue'
 import SkeletonBlock from '@/components/SkeletonBlock.vue'
 import GameActions from '@/components/game/GameActions.vue'
@@ -15,6 +16,7 @@ import GameLearn from '@/components/game/GameLearn.vue'
 import GameRecommend from '@/components/game/GameRecommend.vue'
 import GameSection from '@/components/game/GameSection.vue'
 import GameSectionNav from '@/components/game/GameSectionNav.vue'
+import GameTables from '@/components/game/GameTables.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 
 const props = defineProps({ slug: { type: String, required: true } })
@@ -32,13 +34,20 @@ watch(status, (value) => {
   document.title = `${game.value ? gameName(game.value) : '找不到頁面'}｜BGA Redesign`
 })
 
-// 章節導覽的項目：第一項是遊戲名稱（主視覺）。沒有遊戲圖片時圖片章節和導覽項目都不顯示（PRD 7.4 第 4 條）。
-// 開放桌在 #35 的 PR ③ 加進來
+// 這款遊戲總共幾桌開放桌（GameTables 拿到資料後回報）：章節導覽的「N 桌」、標題右邊的「查看全部 N 桌」
+const tablesTotal = ref(null)
+watch(
+  () => props.slug,
+  () => (tablesTotal.value = null),
+)
+
+// 章節導覽的項目：第一項是遊戲名稱（主視覺）。沒有遊戲圖片時圖片章節和導覽項目都不顯示（PRD 7.4 第 4 條）
 const navItems = computed(() => {
   if (!game.value) return []
   return [
     { id: 'overview', label: gameName(game.value) },
     { id: 'about', label: '遊戲簡介' },
+    { id: 'tables', label: '開放桌', count: tablesTotal.value },
     { id: 'learn', label: '以其他方式學習遊戲' },
     { id: 'info', label: '遊戲資訊與版本更新' },
     game.value.gallery.length && { id: 'gallery', label: '遊戲圖片' },
@@ -191,6 +200,18 @@ watch(status, async (value) => {
               {{ paragraph }}
             </p>
           </div>
+        </GameSection>
+        <GameSection id="tables" title="開放桌">
+          <template v-if="tablesTotal > GAME_TABLES_LIMIT" #action>
+            <!-- 前往尋找開放桌並帶入這款遊戲的名稱（PRD 7.4 第 4 條） -->
+            <RouterLink
+              :to="{ name: 'tables', query: { q: gameName(game) } }"
+              class="shrink-0 type-tc-label-14 text-text-link hover:underline"
+            >
+              查看全部 {{ tablesTotal }} 桌
+            </RouterLink>
+          </template>
+          <GameTables v-model:total="tablesTotal" :slug="game.slug" />
         </GameSection>
         <GameSection id="learn" title="以其他方式學習遊戲">
           <GameLearn :game="game" />
