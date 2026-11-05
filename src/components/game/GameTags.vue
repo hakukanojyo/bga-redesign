@@ -3,6 +3,7 @@ import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { filterCategories } from '@/api/data/options'
 import { filtersToQuery } from '@/utils/filters'
 import FilterTag from '@/components/search/FilterTag.vue'
+import VipBadge from '@/components/VipBadge.vue'
 
 const props = defineProps({
   game: { type: Object, required: true },
@@ -37,10 +38,12 @@ async function expand() {
 
 <!--
   Figma：Filter/Active Tag 的六種顏色和 category=more（「+N」：半透明玻璃底、白字，hover 變亮）。
-  最多 5 個，超過時第 6 個位置是「+N」，點了在原處展開全部（GAME-01）
+  最多 5 個，超過時第 6 個位置是「+N」，點了在原處展開全部（GAME-01）。
+  尊榮遊戲的皇冠（Badge/VIP pill）排在第一個，不算在 5 個裡；它不是連結，螢幕閱讀器讀「尊榮遊戲」
 -->
 <template>
-  <ul ref="list" class="flex flex-wrap gap-8" aria-label="遊戲標籤">
+  <ul ref="list" class="flex flex-wrap items-center gap-8" aria-label="遊戲標籤">
+    <li v-if="game.isPremium"><VipBadge shape="pill" /></li>
     <li v-for="tag in shown" :key="tag.key">
       <FilterTag :color="tag.color" :to="tag.to">{{ tag.label }}</FilterTag>
     </li>
