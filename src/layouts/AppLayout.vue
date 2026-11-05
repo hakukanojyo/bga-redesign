@@ -10,6 +10,7 @@ import SidePanel from '@/components/layout/SidePanel.vue'
 import TabletPanel from '@/components/layout/TabletPanel.vue'
 import { Toaster } from '@/components/ui/sonner'
 import { getOnlineStats } from '@/api/stats'
+import { useFavoritesStore } from '@/stores/favorites'
 
 // 開著的側欄面板：profile、tables、favorites；同一時間只開一個
 const openPanel = ref(null)
@@ -24,7 +25,11 @@ function togglePanel(panel) {
 // 右側欄和底部導覽列共用同一份人數，只抓一次；失敗時維持 null（顯示「—」）
 const stats = ref(null)
 
+// 收藏在首頁卡片、遊戲頁、收藏面板都會用到，進站時拿一次
+const favorites = useFavoritesStore()
+
 onMounted(async () => {
+  favorites.load()
   try {
     stats.value = await getOnlineStats()
   } catch {

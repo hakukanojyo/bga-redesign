@@ -80,23 +80,34 @@ export function searchGames(list, { query = '', filters = {}, sort = 'popular' }
 // 首頁每區最多 10 張：排序類（為你推薦、最新、熱門）一定 10 張，分類類只放符合的（PRD 7.1 第 9 條）
 const SECTION_SIZE = 10
 
-// 為你推薦：和收藏、玩過的遊戲共同的類型、機制、主題越多越前面；沒有紀錄時用熱門
-export function recommend(list, likedSlugs, limit = SECTION_SIZE) {
-  const liked = list.filter((game) => likedSlugs.includes(game.slug))
-  if (!liked.length) return searchGames(list).slice(0, limit)
+// 為你推薦的三種紀錄和權重：玩過 > 收藏 > 看過（PRD 7.1 第 8 條）
+const WEIGHTS = { played: 3, favorites: 2, viewed: 1 }
+
+// 為你推薦：和每款紀錄裡的遊戲比類型、機制、主題，相同的個數 × 那種紀錄的權重，加總越高越前面。
+// 玩過、收藏的不再推薦；只是看過的還會推薦（還沒決定要玩）。不足 limit 款時用熱門補，沒有紀錄時就是熱門
+export function recommend(list, signals = {}, limit = SECTION_SIZE) {
   const tags = (game) => [...game.types, ...game.mechanics, ...game.themes]
-  const likedTags = liked.flatMap(tags)
-  const score = (game) => tags(game).filter((tag) => likedTags.includes(tag)).length
+  const weighted = Object.entries(WEIGHTS).flatMap(([kind, weight]) =>
+    list
+      .filter((game) => (signals[kind] ?? []).includes(game.slug))
+      .map((game) => ({ tags: tags(game), weight })),
+  )
+  const owned = [...(signals.played ?? []), ...(signals.favorites ?? [])]
+  const score = (game) =>
+    weighted.reduce(
+      (sum, item) => sum + item.weight * tags(game).filter((tag) => item.tags.includes(tag)).length,
+      0,
+    )
   return list
-    .filter((game) => !likedSlugs.includes(game.slug))
+    .filter((game) => !owned.includes(game.slug))
     .sort((a, b) => score(b) - score(a) || sorters.popular(a, b))
     .slice(0, limit)
 }
 
 // 首頁分區：都從遊戲的欄位算出來，不另外存清單（PRD 7.1）
-export function homeSections(list, likedSlugs) {
+export function homeSections(list, signals) {
   return [
-    { key: 'recommended', title: '為你推薦', games: recommend(list, likedSlugs) },
+    { key: 'recommended', title: '為你推薦', games: recommend(list, signals) },
     {
       key: 'newest',
       title: '最新上線',
@@ -152,11 +163,12 @@ export function getPromoGame() {
 }
 
 export function getHomeSections() {
-  const liked = [
-    ...loadStored('bga:favorites', initialFavorites),
-    ...me.playHistory.map((item) => item.gameSlug),
-  ]
-  return fakeRequest(scenario() === 'empty' ? [] : homeSections(allGames, liked))
+  const signals = {
+    played: me.playHistory.map((item) => item.gameSlug),
+    favorites: loadStored('bga:favorites', initialFavorites),
+    viewed: loadStored('bga:recently-viewed', []),
+  }
+  return fakeRequest(scenario() === 'empty' ? [] : homeSections(allGames, signals))
 }
 
 // 收藏、牌桌要用遊戲資料時從這裡拿，不重複存

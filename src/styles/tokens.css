@@ -91,6 +91,7 @@
 
   --coral-300: #ff6d53;
   --coral-400: #e7573d;
+  --coral-500: #d0452b;
   --coral-600: #b8331c;
 
   --lime-300: #e3f637;
@@ -360,6 +361,7 @@
 
   --color-favorite-bg: var(--coral-300);
   --color-favorite-bg-active: var(--coral-400);
+  --color-favorite-bg-active-hover: var(--coral-500);
   --color-favorite-border: var(--coral-600);
   --color-favorite-icon-active: var(--red-800);
 
