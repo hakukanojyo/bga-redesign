@@ -83,7 +83,7 @@
 
 - Figma 是設計意圖的參考，專案的寫法是正本：照意圖做，不逐像素照抄，新畫面要和其他畫面像同一個產品
 - Figma 和功能清單、PRD 對不上，或 Figma 的值找不到對應的 token 時，先問，不要自己選一個
-- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的用共用的元件，不複製一份；提示用 `src/utils/toast.js`（`docs/adr/0015`）；拿資料用 `useRequest`（`src/composables/`）。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`
+- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的用共用的元件，不複製一份；提示用 `src/utils/toast.js`（`docs/adr/0015`）；拿資料用 `useRequest`（`src/composables/`）；搜尋字、篩選條件、排序改網址用 `useSearchQuery`（push／replace、搜尋和篩選擇一、清空回首頁都在裡面）。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`
 - 用原生的結構：`button`、`a`、`label`、`ul`、標題照層級；Figma 的絕對定位改寫成 flex 或 grid
 - 要對齊的一組東西（一排等高的卡片）做成一個元件，不分開擺位置
 - 圖片設寬高避免版面跳動，`alt` 寫有意義的文字（純裝飾才留空）

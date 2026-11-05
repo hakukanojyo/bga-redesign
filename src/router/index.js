@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
+import { filtersFromQuery, hasFilters } from '@/utils/filters'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,6 +11,11 @@ const router = createRouter({
       name: 'search',
       component: () => import('@/views/SearchView.vue'),
       meta: { title: '搜尋結果' },
+      // 沒有搜尋字也沒有篩選時沒東西可搜，首頁就是沒有條件時的瀏覽頁（PRD 7.2 第 7 條）
+      beforeEnter: (to) =>
+        to.query.q || hasFilters(filtersFromQuery(to.query))
+          ? true
+          : { name: 'home', query: { scenario: to.query.scenario }, replace: true },
     },
     {
       path: '/game/:slug',

@@ -162,6 +162,22 @@ export function suggestGames(list, query, signals = {}, limit = 3) {
   return [...similar, ...fill].slice(0, limit)
 }
 
+// ---------- 篩選沒結果時建議移除哪個條件（PRD 7.3 第 8 條） ----------
+// 玩家數、遊玩時間是使用者的現實限制（今晚幾個人、有多少時間），不建議移除；只從偏好裡挑。
+// 同一類的標籤是「或」，拿掉其中一個只會更少，所以多選的類別整類一起移除。
+// 每類試著拿掉，選多出最多款的；一樣多時照這裡的順序。都救不回來時回傳 null
+const RELAXABLE = ['complexity', 'types', 'mechanics', 'themes']
+
+export function relaxFilters(list, filters) {
+  const best = RELAXABLE.filter((key) => filters[key]?.length)
+    .map((key) => {
+      const relaxed = { ...filters, [key]: [] }
+      return { key, values: filters[key], games: searchGames(list, { filters: relaxed }) }
+    })
+    .reduce((top, item) => (item.games.length > (top?.games.length ?? 0) ? item : top), null)
+  return best && { key: best.key, values: best.values, count: best.games.length, games: best.games }
+}
+
 // 首頁分區：都從遊戲的欄位算出來，不另外存清單（PRD 7.1）
 export function homeSections(list, signals) {
   return [
@@ -235,6 +251,16 @@ export function getHomeSections() {
 
 export function getSearchSuggestions(query) {
   return fakeRequest(suggestGames(allGames, query, currentSignals()))
+}
+
+// 篩選沒結果時的建議：remove 是建議移除的條件和多出幾款；games 是替代推薦 3 款
+// （移除後最熱門的；沒有可以移除的條件時用為你推薦）
+export function getFilterSuggestion(filters) {
+  const relaxed = relaxFilters(allGames, filters)
+  return fakeRequest({
+    remove: relaxed && { key: relaxed.key, values: relaxed.values, count: relaxed.count },
+    games: relaxed ? relaxed.games.slice(0, 3) : recommend(allGames, currentSignals(), 3),
+  })
 }
 
 // 收藏、牌桌要用遊戲資料時從這裡拿，不重複存

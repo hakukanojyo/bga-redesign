@@ -3,10 +3,20 @@
 /* shadcn-vue 元件的進場、離場動畫（animate-in、slide-in-from-bottom…） */
 @import 'tw-animate-css';
 
+/*
+  頂部導覽列的高度：Header 吸頂（產品規則 6.3），其他吸頂的東西（搜尋篩選左欄、遊戲頁章節導覽）都停在它下面。
+  寬高沒有 Figma 變數，這個是版面用的常數；Header 改高度只改這裡
+*/
+:root {
+  --header-height: 72px;
+}
+
 @layer base {
   /* 版面最窄 768：手機靠 viewport 縮放；電腦把視窗拉窄時出現橫向捲軸，版面不會被擠壞 */
   html {
     min-width: 768px;
+    /* 點章節錨點、Tab 到被 Header 蓋住的東西時，捲動停在 Header 下面（產品規則 6.3） */
+    scroll-padding-top: var(--header-height);
   }
 
   /* 桌面側欄面板（原生 <dialog>）開著時鎖住背景捲動；平板的 Sheet 由 Reka 鎖，兩邊才一致 */

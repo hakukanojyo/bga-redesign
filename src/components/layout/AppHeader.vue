@@ -13,10 +13,14 @@ const links = [
 ]
 </script>
 
-<!-- Figma：桌面是 382 寬的 logo 欄＋中間 894 寬的導覽列（首頁 625:3944），右邊 164 是右側欄；平板是 Layout/Header（872:8727） -->
+<!--
+  Figma：桌面是 382 寬的 logo 欄＋中間 894 寬的導覽列（首頁 625:3944），右邊 164 是右側欄；平板是 Layout/Header（872:8727）。
+  吸頂（產品規則 6.3）：半透明玻璃底加模糊，內容捲到下面會透出來。z-30 蓋過內容，
+  但在 Bottom Sheet、遮罩（z-40）和底部導覽列（z-50）下面；桌面側欄面板是原生 dialog，本來就在最上層
+-->
 <template>
   <header
-    class="grid h-[72px] grid-cols-[382px_1fr] bg-surface-header max-desktop:flex max-desktop:justify-between max-desktop:px-24"
+    class="sticky top-0 z-30 grid h-(--header-height) grid-cols-[382px_1fr] bg-surface-header backdrop-blur-[4px] max-desktop:flex max-desktop:justify-between max-desktop:px-24"
   >
     <RouterLink to="/" class="self-end pl-80 max-desktop:pl-0">
       <img
