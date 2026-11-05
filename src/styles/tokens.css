@@ -295,6 +295,8 @@
   --color-text-secondary: var(--gray-700);
   --color-text-inverse: var(--base-white);
   --color-text-link: var(--blue-500);
+  /* 淺色底（surface/toast）上的連結：text/link 在 blue/100 上只有 3.18:1，blue/700 是 5.28:1 */
+  --color-text-link-on-light: var(--blue-700);
   --color-text-brand-strong: var(--blue-600);
   --color-text-placeholder: var(--gray-400);
   --color-text-danger: var(--red-400);
@@ -316,7 +318,7 @@
   --color-surface-glass-light: var(--base-white-a35);
   --color-surface-glass-panel: var(--base-white-a56);
   --color-surface-glass-nav: var(--base-white-a25);
-  --color-surface-toast: var(--blue-900);
+  --color-surface-toast: var(--blue-100);
 
   --color-overlay-scrim: var(--gray-950);
   --color-overlay-scrim-strong: var(--gray-950-a36);

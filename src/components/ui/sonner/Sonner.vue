@@ -37,15 +37,15 @@ const designOptions = {
   classes: {
     toast: cn(
       'pointer-events-auto inset-x-0 mx-auto flex w-fit items-center gap-8 rounded-8 px-16 py-12 shadow-card',
-      'bg-surface-toast text-text-inverse',
+      'bg-surface-toast text-text-primary',
       'data-[type=success]:bg-status-success-bg data-[type=success]:text-status-success',
       'data-[type=error]:bg-status-error-bg data-[type=error]:text-status-error',
     ),
     title: 'type-tc-body-16 whitespace-nowrap',
     icon: 'flex text-[20px]',
-    // neutral 的「復原」離訊息 16，success 的「查看」照 gap 8
+    // neutral 的「復原」離訊息 16、用 text/link-on-light（淺藍底上對比才夠）；success 的「查看」照 gap 8、text/link
     actionButton: cn(
-      'ml-8 shrink-0 cursor-pointer type-tc-label-14 text-text-link-inverse hover:underline',
+      'ml-8 shrink-0 cursor-pointer type-tc-label-14 text-text-link-on-light hover:underline',
       'in-data-[type=success]:ml-0 in-data-[type=success]:text-text-link',
     ),
   },
