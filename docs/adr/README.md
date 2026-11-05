@@ -52,3 +52,5 @@
 | [0009](0009-icons.md) | 圖示用 Font Awesome，自製圖示從 Figma 匯出 |
 | [0010](0010-shadcn-vue-sheet.md) | 平板面板用 shadcn-vue 的 Sheet |
 | [0011](0011-architecture-pr-review-after-merge.md) | 動到架構的 PR 也自己合併，reviewer 事後看 |
+| [0012](0012-data-model.md) | 資料模型的原則 |
+| [0013](0013-image-optimization.md) | 遊戲圖片用 sharp 壓縮成 WebP |

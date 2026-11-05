@@ -28,7 +28,10 @@
 npm install
 npm run dev     # 開發伺服器，http://localhost:5173
 npm run build   # 打包
+npm test        # 測試
 ```
+
+遊戲圖片的原圖不在 repo 裡；有原圖（`design-source/games/`）時，`npm run images` 會壓縮成 WebP 放進 `src/assets/images/games/`。
 
 ## 開發流程
 
@@ -39,3 +42,11 @@ npm run build   # 打包
 © 2026 [013](https://github.com/hakukanojyo)。本專案公開僅供瀏覽，未經同意不得複製、修改、散布或用於商業用途。
 
 本專案為個人作品，與 Board Game Arena 無關。Board Game Arena 名稱、標誌，以及遊戲名稱、圖片與資料的版權屬於 Board Game Arena 與各遊戲的出版商。
+
+### 資料來源
+
+- 遊戲名稱、人數、遊玩時間、製作群：各遊戲公開的盒裝資訊（2026 年 11 月整理），共 25 款
+- 遊戲封面、橫幅插畫、標準字：版權屬於各遊戲的出版商，僅作展示用途
+- Board Game Arena 標誌與木紋背景：Board Game Arena 的品牌素材，改版沿用原有品牌
+- 遊戲介紹：依遊戲內容自行撰寫，不是 Board Game Arena 或出版商的原文
+- 熱門度、上架日期、玩家、牌桌、排行榜、遊玩紀錄：全部為虛構的示範資料，不對應任何真實帳號

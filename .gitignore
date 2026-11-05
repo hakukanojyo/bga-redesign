@@ -40,3 +40,6 @@ __screenshots__/
 
 # Claude Code personal settings
 CLAUDE.local.md
+
+# 原始素材（未壓縮的遊戲圖片），壓縮後的版本放 src/assets/
+design-source

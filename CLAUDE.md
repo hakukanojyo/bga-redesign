@@ -22,6 +22,7 @@
   - **shadcn-vue**（底層 Reka UI）：只用在行為複雜的元件（Modal、Select、Toast、Bottom Sheet），樣式改成設計稿的樣子。放在 `src/components/ui/`；用 CLI 加元件後先看 `git status`，還原它改的 `style.css`、拿掉用不到的套件（例：`@lucide/vue`），內建圖示換成 Font Awesome。例外：桌面側欄面板是變形動畫，用原生 `<dialog>`（見 `docs/adr/0010`）
   - **自己寫的**：其他元件照 Figma 寫
 - 資料：第一階段用假資料，畫面只透過 `src/api/` 拿資料；第二階段換 Supabase
+- 遊戲圖片：原圖放 `design-source/games/`（不進 git），`npm run images` 用 sharp 壓縮成 WebP 到 `src/assets/images/games/`（`docs/adr/0013`）
 - Pinia 預計放：收藏、我的牌桌、篩選條件
 - 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，README 和作品集標註版權（頁尾照正式網站的寫法，不另外標註）
 - 排版：Prettier（版本寫死），規則在 `.prettierrc.json`，`npm run format` 排 `src/`
@@ -37,9 +38,10 @@
 | 資料 | 位置 |
 |---|---|
 | 功能清單（功能編號、優先級、規則） | Google 試算表，檔名有 `_real` 的是新版 |
-| PRD | Notion「產品規則（共用）」、「PRD｜找遊戲到加入牌桌」（撰寫中） |
+| PRD | Notion「產品規則（共用）」v0.3、「PRD｜找遊戲到加入牌桌」v0.3 |
 | 設計決策 | Notion「Design Decision Record」 |
 | 技術決策 | `docs/adr/`（加套件、改架構、改開發流程時，在同一個 PR 新增） |
+| 資料模型 | `docs/data-model.md`（欄位、選項代號、假資料放哪） |
 | 顏色／尺寸變數規則 | Notion「顏色變數規則」 |
 | 設計稿 | Figma fileKey `YLgv7ISZngFsPRMqVxs8Aj`：hifi 頁 `303:395`、Components 頁 `539:1140` |
 | 設計交接 | Notion「交接｜Stage 9 Mockup 進度」 |
@@ -70,6 +72,7 @@
 - 從 Figma 匯出圖片後，確認背景是透明的；`download_assets` 的 export 可能把底色一起輸出，這時改用原始圖片
 - 導覽連結的「目前這頁」用 `aria-[current=page]:` 寫樣式，RouterLink 會自動加 `aria-current`
 - 畫面不直接 import 假資料，一律透過 `src/api/`
+- 人數、時間、等待、牌桌設定、積分的顯示格式一律用 `src/utils/format.js`，不在元件裡組字串；遊戲名稱用 `gameName()`
 - 元件名稱至少兩個字（例：`AppHeader.vue`，不要 `Header.vue`），ESLint 會擋單字的名稱
 - 跨頁面共用的資料放 Pinia（`src/stores/`），只有一頁用的放元件裡
 
@@ -122,5 +125,6 @@
 - ✅ 設計 token（#16）
 - ✅ 斷點、手機縮放、裝置建議橫幅（#17）
 - ✅ 版面骨架 #14，拆 4 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾、build 時帶入推出時間（#21）
-- ⏳ 佔位頁、找不到頁面 #15（#22）：共用 `PageState`、`AppButton`、全站鍵盤焦點框
+- ✅ 佔位頁、找不到頁面 #15（#22）：共用 `PageState`、`AppButton`、全站鍵盤焦點框
+- ⏳ 資料模型與假資料（`docs/data-model.md`、`src/api/`、25 款遊戲、圖片壓縮）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
