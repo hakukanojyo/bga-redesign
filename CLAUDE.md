@@ -81,7 +81,7 @@
 
 - Figma 是設計意圖的參考，專案的寫法是正本：照意圖做，不逐像素照抄，新畫面要和其他畫面像同一個產品
 - Figma 和功能清單、PRD 對不上，或 Figma 的值找不到對應的 token 時，先問，不要自己選一個
-- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的、Toast 用共用的元件，不複製一份；拿資料用 `useRequest`（`src/composables/`）。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`
+- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的用共用的元件，不複製一份；提示用 `src/utils/toast.js`（`docs/adr/0015`）；拿資料用 `useRequest`（`src/composables/`）。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`
 - 用原生的結構：`button`、`a`、`label`、`ul`、標題照層級；Figma 的絕對定位改寫成 flex 或 grid
 - 要對齊的一組東西（一排等高的卡片）做成一個元件，不分開擺位置
 - 圖片設寬高避免版面跳動，`alt` 寫有意義的文字（純裝飾才留空）
@@ -128,5 +128,6 @@
 - ✅ 版面骨架 #14，拆 4 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾、build 時帶入推出時間（#21）
 - ✅ 佔位頁、找不到頁面 #15（#22）：共用 `PageState`、`AppButton`、全站鍵盤焦點框
 - ✅ 資料模型與假資料（#23）：`docs/data-model.md`、`src/api/`、25 款遊戲、圖片壓縮
-- ⏳ 首頁 #24，拆 2 個 PR：① 主視覺、排行榜、中段橫幅，共用 `SkeletonBlock`、`BlockError`、`useRequest` ② 7 個遊戲分區、卡片、輪播
+- ⏳ 首頁 #24，拆 2 個 PR：① 主視覺、排行榜、中段橫幅，共用 `SkeletonBlock`、`BlockError`、`useRequest`（#26）② 7 個遊戲分區、卡片、輪播
+- ✅ 提示 Toast（shadcn-vue Sonner，`src/utils/toast.js`）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
