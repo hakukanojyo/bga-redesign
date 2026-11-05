@@ -17,6 +17,7 @@ import HomeHero from '@/components/home/HomeHero.vue'
 import HomeLeaderboard from '@/components/home/HomeLeaderboard.vue'
 import HomePromo from '@/components/home/HomePromo.vue'
 import HomeSection from '@/components/home/HomeSection.vue'
+import SearchSidebar from '@/components/search/SearchSidebar.vue'
 
 // 每個分區的圖示和卡片大小（Figma 首頁）；中段橫幅放在「輕鬆小品」之後（HOME-09）
 const layout = {
@@ -37,15 +38,15 @@ const sections = computed(() => (data.value ?? []).filter((section) => section.g
 </script>
 
 <!--
-  Figma：首頁（625:3944，平板 857:4834）。桌面左邊 382 是快速搜尋和篩選欄（#25，之後做，先留位置），右邊是內容（854 寬＋左右 20）；
-  平板沒有左欄，內容左右 24。主視覺、排行榜、中段橫幅各自拿資料、各自失敗；分區拿不到時整頁換成連線錯誤（產品規則 5.3）
+  Figma：首頁（625:3944，平板 857:4834）。桌面左邊 382 是快速搜尋和篩選欄（#25），右邊是內容（854 寬＋左右 20）；
+  平板快速搜尋在內容上方，內容左右 24。主視覺、排行榜、中段橫幅各自拿資料、各自失敗；分區拿不到時整頁換成連線錯誤（產品規則 5.3）
 -->
 <template>
   <div v-if="status === 'error'" class="flex flex-1 items-center justify-center">
     <ConnectionError @retry="retry" />
   </div>
-  <div v-else class="flex">
-    <div class="w-[382px] shrink-0 max-desktop:hidden" />
+  <div v-else class="flex max-desktop:flex-col">
+    <SearchSidebar />
     <div class="flex min-w-0 flex-1 flex-col gap-24 px-20 pt-20 pb-40 max-desktop:px-24">
       <h1 class="sr-only">Board Game Arena 首頁</h1>
       <div class="flex gap-12 max-desktop:gap-24">

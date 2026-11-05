@@ -104,6 +104,64 @@ export function recommend(list, signals = {}, limit = SECTION_SIZE) {
     .slice(0, limit)
 }
 
+// ---------- 也許你想找的是這些？（PRD 7.2 第 5 條） ----------
+// 中文和英文分開比：中文看共同的字，英文一個單字一個單字看拼得像不像
+
+const hanChars = (text) => new Set(normalize(text).match(/\p{Script=Han}/gu) ?? [])
+const latinWords = (text) => normalize(text).match(/[a-z0-9]+/g) ?? []
+
+// 編輯距離（Levenshtein）：a 要改、加、刪幾個字母才會變成 b
+function editDistance(a, b) {
+  let row = Array.from({ length: b.length + 1 }, (_, j) => j)
+  for (let i = 1; i <= a.length; i++) {
+    const next = [i]
+    for (let j = 1; j <= b.length; j++) {
+      next[j] = Math.min(row[j] + 1, next[j - 1] + 1, row[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1))
+    }
+    row = next
+  }
+  return row[b.length]
+}
+
+// 英文單字允許打錯幾個字母，照 Algolia 的級距：3 個字母以下不容錯、4～7 個錯 1 個、8 個以上錯 2 個
+const allowedTypos = (word) => (word.length >= 8 ? 2 : word.length >= 4 ? 1 : 0)
+const wordMatches = (typed, word) =>
+  word.startsWith(typed) || editDistance(typed, word) <= allowedTypos(typed)
+
+// 一個名稱和搜尋字有多像，0 是不像：
+// 中文：共同的字至少 2 個，或超過搜尋字的一半（「璀燦寶石」→ 璀璨寶石）；分數是共同的字數
+// 英文：搜尋字的單字是名稱某個單字的開頭（werew → Werewolves），或拼錯在容許範圍內（Splendour → Splendor）；
+// 分數是對到的單字數
+function nameSimilarity(name, query) {
+  const typedHan = hanChars(query)
+  const shared = [...hanChars(name)].filter((char) => typedHan.has(char)).length
+  const hanScore = shared >= 2 || shared > typedHan.size / 2 ? shared : 0
+  const words = latinWords(name)
+  const wordScore = latinWords(query).filter((typed) =>
+    words.some((word) => wordMatches(typed, word)),
+  ).length
+  return hanScore + wordScore
+}
+
+// 各語言的名稱和別名都比，取最像的那個
+const similarity = (game, query) =>
+  Math.max(
+    ...[...Object.values(game.name), ...game.aliases].map((name) => nameSimilarity(name, query)),
+  )
+
+// 先放名稱像的，越像越前面；不夠 limit 款用為你推薦補，不重複。
+// 只用在沒結果時的推薦；正式搜尋結果還是只放完全相符的（錯字容錯、同音字下一輪）
+export function suggestGames(list, query, signals = {}, limit = 3) {
+  const similar = list
+    .map((game) => ({ game, score: similarity(game, query) }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || sorters.popular(a.game, b.game))
+    .map(({ game }) => game)
+    .slice(0, limit)
+  const fill = recommend(list, signals, list.length).filter((game) => !similar.includes(game))
+  return [...similar, ...fill].slice(0, limit)
+}
+
 // 首頁分區：都從遊戲的欄位算出來，不另外存清單（PRD 7.1）
 export function homeSections(list, signals) {
   return [
@@ -162,13 +220,21 @@ export function getPromoGame() {
   return getGame('distilled')
 }
 
-export function getHomeSections() {
-  const signals = {
+// 為你推薦用的三種紀錄
+function currentSignals() {
+  return {
     played: me.playHistory.map((item) => item.gameSlug),
     favorites: loadStored('bga:favorites', initialFavorites),
     viewed: loadStored('bga:recently-viewed', []),
   }
-  return fakeRequest(scenario() === 'empty' ? [] : homeSections(allGames, signals))
+}
+
+export function getHomeSections() {
+  return fakeRequest(scenario() === 'empty' ? [] : homeSections(allGames, currentSignals()))
+}
+
+export function getSearchSuggestions(query) {
+  return fakeRequest(suggestGames(allGames, query, currentSignals()))
 }
 
 // 收藏、牌桌要用遊戲資料時從這裡拿，不重複存

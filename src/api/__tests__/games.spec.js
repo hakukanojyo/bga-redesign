@@ -8,6 +8,7 @@ import {
   matchesQuery,
   recommend,
   searchGames,
+  suggestGames,
 } from '../games'
 
 const game = (slug) => games.find((item) => item.slug === slug)
@@ -151,5 +152,34 @@ describe('首頁分區（PRD 7.1）', () => {
     expect(result).not.toContain('skull')
     expect(result).not.toContain('catan')
     expect(result).toHaveLength(10)
+  })
+})
+
+describe('也許你想找的是這些？（PRD 7.2 第 5 條）', () => {
+  it('puts games with similar names first', () => {
+    expect(slugs(suggestGames(games, '璀燦寶石'))[0]).toBe('splendor')
+  })
+
+  it('fills up to 3 with recommendations, without duplicates', () => {
+    const result = suggestGames(games, '大富翁')
+    expect(result).toHaveLength(3)
+    expect(slugs(result)).toEqual(slugs(recommend(games, {}, 3)))
+  })
+
+  it('does not treat shared English letters as similar', () => {
+    expect(slugs(suggestGames(games, 'xyz'))).toEqual(slugs(recommend(games, {}, 3)))
+  })
+
+  it('allows English typos by word length, like Algolia', () => {
+    expect(slugs(suggestGames(games, 'Splendour'))[0]).toBe('splendor')
+    expect(slugs(suggestGames(games, 'catn'))[0]).toBe('catan')
+  })
+
+  it('matches the start of an English word', () => {
+    expect(slugs(suggestGames(games, 'werew'))[0]).toBe('werewolves')
+  })
+
+  it('counts aliases too', () => {
+    expect(slugs(suggestGames(games, '狼人遊戲'))).toContain('werewolves')
   })
 })
