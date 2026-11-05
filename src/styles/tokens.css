@@ -148,6 +148,22 @@
     var(--gradient-find-hover-3) 80%,
     var(--gradient-find-hover-4) 100%
   );
+  /* Button/CTA type=立即遊玩 的主色：元件用圖片的主色覆蓋，沒給時是品牌藍 */
+  --cta-accent: var(--color-action-primary);
+  /* Skeleton/Card 的掃光：白色半透明亮帶 */
+  --gradient-skeleton-shine: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--base-white-a56) 50%,
+    transparent 100%
+  );
+  /* 首頁中段精選橫幅：右半邊壓暗，白字才看得清楚 */
+  --gradient-promo-overlay: linear-gradient(
+    90deg,
+    transparent 30%,
+    var(--color-overlay-scrim-strong) 55%,
+    var(--color-overlay-scrim-strong) 100%
+  );
 }
 
 /* ---------- Typography、Layout（Desktop 模式） ---------- */
@@ -247,6 +263,7 @@
 
   /* 效果樣式：Figma 的 Effect Styles 沒有綁變數，數值照抄；用到的元件才加 */
   --shadow-cta-sm: 0 1px 0.8px rgb(0 0 0 / 0.36);
+  --shadow-cta-md-strong: 0 1.5px 1px rgb(0 0 0);
   --shadow-glass-nav: 0 2px 6.3px rgb(80 60 34 / 0.52);
   --shadow-glow-status-blue: 0 0 6.2px #0b72b5;
   --shadow-glow-status-green: 0 0 6.1px #17a91a;
@@ -489,4 +506,25 @@
 @utility glow-rail {
   filter: drop-shadow(0 0 17.5px var(--rail-glow, var(--rail-color, currentColor)))
     drop-shadow(0 0 6.2px var(--rail-glow, var(--rail-color, currentColor)));
+}
+
+/*
+  Button/CTA type=立即遊玩：顏色從主視覺圖片自動擷取（npm run images → games/colors.json，docs/adr/0014）。
+  元件上設 --cta-accent，四段漸層從主色算：上面混白變淺、下面混黑變深；hover、按下各再深一階
+*/
+@utility cta-accent {
+  --cta-base: var(--cta-accent);
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--cta-base) 55%, white) 0%,
+    color-mix(in oklab, var(--cta-base) 85%, white) 15%,
+    var(--cta-base) 84%,
+    color-mix(in oklab, var(--cta-base) 40%, black) 100%
+  );
+}
+@utility cta-accent-hover {
+  --cta-base: color-mix(in oklab, var(--cta-accent) 86%, black);
+}
+@utility cta-accent-pressed {
+  --cta-base: color-mix(in oklab, var(--cta-accent) 74%, black);
 }

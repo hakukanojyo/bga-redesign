@@ -38,6 +38,11 @@ describe('圖片', () => {
     expect(kingdomino.images.banner).toBeTruthy()
     expect(findGame('azul-queens-garden').images.banner).toBeNull()
   })
+
+  it('uses the banner color for the CTA, and brand blue when there is no banner', () => {
+    expect(findGame('zombicide-2e').accentColor).toMatch(/^#[0-9a-f]{6}$/)
+    expect(findGame('azul-queens-garden').accentColor).toBe('#0b72b5')
+  })
 })
 
 describe('名稱與搜尋（PRD 7.2）', () => {

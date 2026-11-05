@@ -18,6 +18,7 @@
 | `name` | `{ 'zh-TW', en }` | `{ 'zh-TW': '璀璨寶石', en: 'Splendor' }` | 顯示目前語言的；沒有 `zh-TW` 時顯示 `en`。搜尋時兩個都比對 |
 | `aliases` | string[] | `['寶石商人']` | 只給搜尋用，不顯示（SRCH-03） |
 | `images` | `{ box, banner, logo }` | 圖片網址；沒有的是 `null` | 卡片、遊戲頁、主視覺 |
+| `accentColor` | string | `#cd4636` | 主視覺「立即遊玩」的顏色。不手動填，`npm run images` 從橫幅算出來（ADR 0014），沒有橫幅是品牌藍 |
 | `players` | `{ min, max }` | `{ min: 2, max: 4 }` | 卡片「2-4 人」、玩家數篩選 |
 | `duration` | number（分鐘） | `15` | 卡片「15 分鐘」、時間篩選、排序 |
 | `complexity` | `casual` \| `standard` \| `deep` | `casual` | 複雜度篩選、首頁分區 |
@@ -122,3 +123,5 @@
 ## 圖片
 
 原圖放在 `design-source/games/`（不進 git），命名 `代稱_banner`、`代稱_box`、`代稱_logo`。壓縮成 WebP 後放進 `src/assets/images/games/`，只有壓縮過的進 repo 和網站。
+
+頭像（排行榜、桌主）是 8 張 Unsplash 的動物照片，原圖和來源在 `design-source/avatars/`，壓縮後放 `src/assets/images/avatars/`，由 `src/api/data/people.js` 輪流分配。自己的頭像是 `avatar-demo.jpg`。

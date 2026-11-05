@@ -15,7 +15,14 @@ function imagesOf(slug) {
   return { box: find('box'), banner: find('banner'), logo: find('logo') }
 }
 
-const allGames = games.map((game) => ({ ...game, images: imagesOf(game.slug) }))
+// 每張橫幅的主色（npm run images 算的）：主視覺的「立即遊玩」按鈕跟著換色（docs/adr/0014）；沒有橫幅的用品牌藍
+import accentColors from '@/assets/images/games/colors.json'
+
+const allGames = games.map((game) => ({
+  ...game,
+  images: imagesOf(game.slug),
+  accentColor: accentColors[game.slug] ?? '#0b72b5',
+}))
 
 // 名稱依語言顯示；沒有官方中文名時顯示英文名
 export function gameName(game, locale = 'zh-TW') {
@@ -130,6 +137,11 @@ export function getGame(slug) {
 // 首頁主視覺（HOME-01）：廣告版位，人工指定，所以不用算的
 export function getFeaturedGame() {
   return getGame('zombicide-2e')
+}
+
+// 首頁中段精選橫幅（HOME-09）：和主視覺一樣是人工指定的廣告版位
+export function getPromoGame() {
+  return getGame('distilled')
 }
 
 export function getHomeSections() {

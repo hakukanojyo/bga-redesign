@@ -22,7 +22,8 @@
   - **shadcn-vue**（底層 Reka UI）：只用在行為複雜的元件（Modal、Select、Toast、Bottom Sheet），樣式改成設計稿的樣子。放在 `src/components/ui/`；用 CLI 加元件後先看 `git status`，還原它改的 `style.css`、拿掉用不到的套件（例：`@lucide/vue`），內建圖示換成 Font Awesome。例外：桌面側欄面板是變形動畫，用原生 `<dialog>`（見 `docs/adr/0010`）
   - **自己寫的**：其他元件照 Figma 寫
 - 資料：第一階段用假資料，畫面只透過 `src/api/` 拿資料；第二階段換 Supabase
-- 遊戲圖片：原圖放 `design-source/games/`（不進 git），`npm run images` 用 sharp 壓縮成 WebP 到 `src/assets/images/games/`（`docs/adr/0013`）
+- 遊戲圖片：原圖放 `design-source/games/`（不進 git），`npm run images` 用 sharp 壓縮成 WebP 到 `src/assets/images/games/`（`docs/adr/0013`），同時從橫幅算出「立即遊玩」的顏色（`colors.json`，`docs/adr/0014`）
+- 頭像：Unsplash 的動物照片，原圖和來源在 `design-source/avatars/`；國旗用 `flag-icons`，`src/utils/flags.js` 換成網址
 - Pinia 預計放：收藏、我的牌桌、篩選條件
 - 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，README 和作品集標註版權（頁尾照正式網站的寫法，不另外標註）
 - 排版：Prettier（版本寫死），規則在 `.prettierrc.json`，`npm run format` 排 `src/`
@@ -56,7 +57,7 @@
 
 ## 寫程式的規則
 
-- 顏色只用 Semantic token，不直接用 Primitives（規則見「顏色變數規則」）
+- 顏色只用 Semantic token，不直接用 Primitives（規則見「顏色變數規則」）。唯一例外：依遊戲變色的 CTA 用 `--cta-accent`（`docs/adr/0014`）
 - Token 在 `src/styles/tokens.css`，名稱和 Figma 變數一樣，Tailwind 內建的主題已清掉：
   - 顏色：`bg-surface-default`、`text-text-body`、`border-border-default`（Figma 的 `surface/default`、`text/body`…）
   - 間距、圓角：只有 Figma 的級距，`p-16` 是 16px、`rounded-8` 是 8px
@@ -80,7 +81,7 @@
 
 - Figma 是設計意圖的參考，專案的寫法是正本：照意圖做，不逐像素照抄，新畫面要和其他畫面像同一個產品
 - Figma 和功能清單、PRD 對不上，或 Figma 的值找不到對應的 token 時，先問，不要自己選一個
-- 先找現有的元件；載入中、空的、錯誤、Toast 用共用的元件，不複製一份。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`
+- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的、Toast 用共用的元件，不複製一份；拿資料用 `useRequest`（`src/composables/`）。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`
 - 用原生的結構：`button`、`a`、`label`、`ul`、標題照層級；Figma 的絕對定位改寫成 flex 或 grid
 - 要對齊的一組東西（一排等高的卡片）做成一個元件，不分開擺位置
 - 圖片設寬高避免版面跳動，`alt` 寫有意義的文字（純裝飾才留空）
@@ -126,5 +127,6 @@
 - ✅ 斷點、手機縮放、裝置建議橫幅（#17）
 - ✅ 版面骨架 #14，拆 4 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾、build 時帶入推出時間（#21）
 - ✅ 佔位頁、找不到頁面 #15（#22）：共用 `PageState`、`AppButton`、全站鍵盤焦點框
-- ⏳ 資料模型與假資料（`docs/data-model.md`、`src/api/`、25 款遊戲、圖片壓縮）
+- ✅ 資料模型與假資料（#23）：`docs/data-model.md`、`src/api/`、25 款遊戲、圖片壓縮
+- ⏳ 首頁 #24，拆 2 個 PR：① 主視覺、排行榜、中段橫幅，共用 `SkeletonBlock`、`BlockError`、`useRequest` ② 7 個遊戲分區、卡片、輪播
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能

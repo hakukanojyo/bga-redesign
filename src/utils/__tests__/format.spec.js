@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
+  formatCountry,
   formatDuration,
   formatPlayers,
   formatScore,
@@ -36,5 +37,12 @@ describe('資料格式（產品規則 6.6）', () => {
     const now = Date.parse('2026-11-05T10:15:00+08:00')
     expect(formatTimeAgo('2026-11-05T10:00:00+08:00', now)).toBe('15 分鐘前')
     expect(formatTimeAgo('2026-11-05T07:15:00+08:00', now)).toBe('3 小時前')
+  })
+})
+
+describe('國家', () => {
+  it('shows the Chinese country name from its code', () => {
+    expect(formatCountry('TW')).toBe('台灣')
+    expect(formatCountry('JP')).toBe('日本')
   })
 })
