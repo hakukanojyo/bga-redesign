@@ -24,7 +24,7 @@
 - 資料：第一階段用假資料，畫面只透過 `src/api/` 拿資料；第二階段換 Supabase
 - 遊戲圖片：原圖放 `design-source/games/`（不進 git），`npm run images` 用 sharp 壓縮成 WebP 到 `src/assets/images/games/`（`docs/adr/0013`），同時從橫幅算出「立即遊玩」的顏色（`colors.json`，`docs/adr/0014`）
 - 頭像：Unsplash 的動物照片，原圖和來源在 `design-source/avatars/`；國旗用 `flag-icons`，`src/utils/flags.js` 換成網址
-- Pinia 預計放：收藏、我的牌桌、篩選條件
+- Pinia：收藏（`src/stores/favorites.js`）；之後放我的牌桌、篩選條件
 - 遊戲資料從 BGA 取 20–30 款，遵守 robots.txt 和使用條款，README 和作品集標註版權（頁尾照正式網站的寫法，不另外標註）
 - 排版：Prettier（版本寫死），規則在 `.prettierrc.json`，`npm run format` 排 `src/`
 - 本機的 `format`、`lint` 會自動修；`format:check`、`lint:check` 只檢查不修改，給 CI 用
@@ -76,6 +76,8 @@
 - 人數、時間、等待、牌桌設定、積分的顯示格式一律用 `src/utils/format.js`，不在元件裡組字串；遊戲名稱用 `gameName()`
 - 元件名稱至少兩個字（例：`AppHeader.vue`，不要 `Header.vue`），ESLint 會擋單字的名稱
 - 跨頁面共用的資料放 Pinia（`src/stores/`），只有一頁用的放元件裡
+- 幾乎一定會成功、失敗也不嚴重的操作（收藏、取消收藏）用樂觀更新：先改畫面，失敗再改回原狀並提示「操作失敗，請再試一次」；結果要看別人狀態的（加入這桌）要等回應，中間顯示「加入中…」
+- 整張可點的卡片裡還有按鈕時，不要把按鈕放進連結（HTML 不允許）：用 stretched link，連結只包名稱、用 `after:absolute after:inset-0` 撐滿卡片，按鈕加 `relative z-10` 疊在上面，焦點框用 `has-[a:focus-visible]:` 畫在整張卡上（例：`GameCard.vue`）
 
 ### 照設計稿做畫面
 
@@ -128,6 +130,6 @@
 - ✅ 版面骨架 #14，拆 4 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾、build 時帶入推出時間（#21）
 - ✅ 佔位頁、找不到頁面 #15（#22）：共用 `PageState`、`AppButton`、全站鍵盤焦點框
 - ✅ 資料模型與假資料（#23）：`docs/data-model.md`、`src/api/`、25 款遊戲、圖片壓縮
-- ⏳ 首頁 #24，拆 3 個 PR：① 主視覺、排行榜、中段橫幅，共用 `SkeletonBlock`、`BlockError`、`useRequest`（#26）② 7 個遊戲分區、大卡和小卡（`GameCard`）、輪播（scroll-snap）、連線錯誤頁 ③ 懸停預覽、加入收藏（Pinia）、最近看過、為你推薦權重
+- ⏳ 首頁 #24，拆 3 個 PR：① 主視覺、排行榜、中段橫幅，共用 `SkeletonBlock`、`BlockError`、`useRequest`（#26）② 7 個遊戲分區、大卡和小卡（`GameCard`）、輪播（scroll-snap）、連線錯誤頁（#28、卡片修正 #29）③ 懸停預覽、加入收藏（Pinia）、最近看過、為你推薦權重
 - ✅ 提示 Toast（shadcn-vue Sonner，`src/utils/toast.js`）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能

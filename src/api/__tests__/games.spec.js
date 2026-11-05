@@ -32,16 +32,23 @@ describe('遊戲資料', () => {
 })
 
 describe('圖片', () => {
-  it('finds compressed images by slug, and null for the ones we do not have', () => {
+  it('finds compressed images by slug', () => {
     const kingdomino = findGame('kingdomino')
     expect(kingdomino.images.box).toBeTruthy()
     expect(kingdomino.images.banner).toBeTruthy()
-    expect(findGame('azul-queens-garden').images.banner).toBeNull()
   })
 
-  it('uses the banner color for the CTA, and brand blue when there is no banner', () => {
+  // 首頁卡片是橫幅＋標準字兩層，加新遊戲時兩張都要補（npm run images）
+  it('has a banner and a logo for every game', () => {
+    const missing = games
+      .map((item) => findGame(item.slug))
+      .filter((item) => !item.images.banner || !item.images.logo)
+      .map((item) => item.slug)
+    expect(missing).toEqual([])
+  })
+
+  it('uses the banner color for the CTA', () => {
     expect(findGame('zombicide-2e').accentColor).toMatch(/^#[0-9a-f]{6}$/)
-    expect(findGame('azul-queens-garden').accentColor).toBe('#0b72b5')
   })
 })
 
@@ -102,12 +109,12 @@ describe('排序（SRCH-05）', () => {
 
 describe('首頁分區（PRD 7.1）', () => {
   it('derives 輕鬆小品 from complexity instead of a stored list', () => {
-    const casual = homeSections(games, []).find((section) => section.key === 'casual')
+    const casual = homeSections(games, {}).find((section) => section.key === 'casual')
     expect(casual.games.every((item) => item.complexity === 'casual')).toBe(true)
   })
 
   it('recommends games similar to liked ones, without the liked ones', () => {
-    const result = recommend(games, ['werewolves'])
+    const result = recommend(games, { favorites: ['werewolves'] })
     expect(slugs(result)).not.toContain('werewolves')
     expect(result[0].mechanics.some((code) => game('werewolves').mechanics.includes(code))).toBe(
       true,
@@ -115,7 +122,7 @@ describe('首頁分區（PRD 7.1）', () => {
   })
 
   it('shows 10 cards in sorted sections and at most 10 in category sections', () => {
-    const sections = homeSections(games, [])
+    const sections = homeSections(games, {})
     const size = (key) => sections.find((section) => section.key === key).games.length
     expect(['recommended', 'newest', 'popular'].map(size)).toEqual([10, 10, 10])
     ;['casual', 'classic', 'family', 'deep'].forEach((key) =>
@@ -124,6 +131,25 @@ describe('首頁分區（PRD 7.1）', () => {
   })
 
   it('falls back to popular games when there is no history', () => {
-    expect(slugs(recommend(games, []))).toEqual(slugs(searchGames(games)).slice(0, 10))
+    expect(slugs(recommend(games, {}))).toEqual(slugs(searchGames(games)).slice(0, 10))
+  })
+
+  it('weighs played above viewed', () => {
+    // 玩過狼人（派對）、只看過 Twilight Imperium（深度策略）：派對類要排在前面
+    const result = slugs(
+      recommend(games, { played: ['werewolves'], viewed: ['twilight-imperium'] }),
+    )
+    const party = result.findIndex((slug) => game(slug).types.includes('party'))
+    const deep = result.findIndex((slug) => game(slug).complexity === 'deep')
+    expect(party).toBeLessThan(deep === -1 ? Infinity : deep)
+  })
+
+  it('still recommends viewed games but never played or favorited ones', () => {
+    const result = slugs(
+      recommend(games, { played: ['skull'], favorites: ['catan'], viewed: ['fluxx'] }),
+    )
+    expect(result).not.toContain('skull')
+    expect(result).not.toContain('catan')
+    expect(result).toHaveLength(10)
   })
 })
