@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
@@ -7,6 +8,8 @@ defineProps({
   color: { type: String, required: true },
   // 有 × 可以移除（已套用條件）；沒有的話只是顯示（篩選沒結果的「移除『…』」）
   removable: { type: Boolean, default: false },
+  // 有 to 就是連結（遊戲主畫面的標籤：點了前往已套用這個條件的搜尋結果，GAME-01）
+  to: { type: [String, Object], default: null },
 })
 defineEmits(['remove'])
 
@@ -31,7 +34,8 @@ const hovers = {
 
 <!--
   Figma：Filter/Active Tag（540:1062）。底色和文字用各類的 filter/*；time 的文字 Figma 原本是 text/body，
-  和其他五類不一致，改成 filter/time/ink（Figma 已同步）。可以移除時整顆是按鈕，螢幕閱讀器念「移除條件：…」
+  和其他五類不一致，改成 filter/time/ink（Figma 已同步）。可以移除時整顆是按鈕，螢幕閱讀器念「移除條件：…」；
+  有 to 時是連結，hover 和按鈕一樣變深一階
 -->
 <template>
   <button
@@ -45,6 +49,14 @@ const hovers = {
     <slot />
     <FontAwesomeIcon :icon="faXmark" class="text-[10px]" aria-hidden="true" />
   </button>
+  <RouterLink
+    v-else-if="to"
+    :to="to"
+    class="inline-flex min-h-(--tap-tag-min-height) items-center rounded-4 px-8 py-4 type-tc-body-13"
+    :class="[colors[color], hovers[color]]"
+  >
+    <slot />
+  </RouterLink>
   <span
     v-else
     class="inline-flex min-h-(--tap-tag-min-height) items-center rounded-4 px-8 py-4 type-tc-body-13"

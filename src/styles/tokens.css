@@ -151,6 +151,8 @@
   );
   /* Button/CTA type=立即遊玩 的主色：元件用圖片的主色覆蓋，沒給時是品牌藍 */
   --cta-accent: var(--color-action-primary);
+  /* 遊戲主畫面主視覺：橫幅下方疊黑色漸層，白字才看得清楚（Figma 303:2096；色標綁 Primitive 是允許的例外） */
+  --gradient-game-hero: linear-gradient(0deg, var(--base-black-a76) 0%, var(--base-black-a0) 60%);
   /* Skeleton/Card 的掃光：白色半透明亮帶 */
   --gradient-skeleton-shine: linear-gradient(
     90deg,
@@ -276,6 +278,7 @@
   /* 效果樣式：Figma 的 Effect Styles 沒有綁變數，數值照抄；用到的元件才加 */
   --shadow-cta-sm: 0 1px 0.8px rgb(0 0 0 / 0.36);
   --shadow-cta-md-strong: 0 1.5px 1px rgb(0 0 0);
+  --shadow-cta-lg-strong: 0 2px 1.2px rgb(0 0 0);
   --shadow-glass-nav: 0 2px 6.3px rgb(80 60 34 / 0.52);
   --shadow-card: 0 2px 6.3px rgb(80 60 34 / 0.52);
   --shadow-card-cover: 0 4px 7px rgb(0 0 0 / 0.25);
@@ -548,4 +551,36 @@
 }
 @utility cta-accent-pressed {
   --cta-base: color-mix(in oklab, var(--cta-accent) 74%, black);
+}
+
+/*
+  Button/CTA type=開始遊戲、學習遊戲：四段色標放在 --cta-1～4，漸層由 cta-gradient 畫；
+  hover、按下各深一階＝每段色標混黑 14%／26%（oklab），和立即遊玩一樣，Figma 也照這個算（不疊 Tint 圖層）
+*/
+@utility cta-gradient {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--cta-1) var(--cta-shade, 100%), black) 0%,
+    color-mix(in oklab, var(--cta-2) var(--cta-shade, 100%), black) 15%,
+    color-mix(in oklab, var(--cta-3) var(--cta-shade, 100%), black) 84%,
+    color-mix(in oklab, var(--cta-4) var(--cta-shade, 100%), black) 100%
+  );
+}
+@utility cta-start {
+  --cta-1: var(--blue-200);
+  --cta-2: var(--blue-400);
+  --cta-3: var(--blue-500);
+  --cta-4: var(--blue-900);
+}
+@utility cta-learn {
+  --cta-1: var(--gradient-learn-1);
+  --cta-2: var(--gradient-learn-2);
+  --cta-3: var(--gradient-learn-3);
+  --cta-4: var(--gradient-learn-4);
+}
+@utility cta-shade-hover {
+  --cta-shade: 86%;
+}
+@utility cta-shade-pressed {
+  --cta-shade: 74%;
 }
