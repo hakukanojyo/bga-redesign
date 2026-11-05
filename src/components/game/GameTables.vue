@@ -8,8 +8,7 @@ import BlockError from '@/components/BlockError.vue'
 import PageState from '@/components/PageState.vue'
 import SkeletonBlock from '@/components/SkeletonBlock.vue'
 import OpenTableRow from '@/components/game/OpenTableRow.vue'
-// 吉祥物圖之後換正式版（使用者提供），先用佔位頁的
-import mascot from '@/assets/images/mascot-building.svg'
+import mascot from '@/assets/images/mascot-cool.svg'
 
 const props = defineProps({
   slug: { type: String, required: true },
