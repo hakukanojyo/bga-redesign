@@ -1,5 +1,15 @@
 // 我、排行榜、桌主：全部虛構，不對應任何真實的 BGA 帳號
+// 假玩家的頭像是 Unsplash 的動物照片（design-source/avatars/CREDITS.md），8 張輪流用
 import avatar from '@/assets/images/avatar-demo.jpg'
+
+const avatarFiles = import.meta.glob('@/assets/images/avatars/*.webp', {
+  eager: true,
+  import: 'default',
+})
+const avatars = Object.keys(avatarFiles)
+  .sort()
+  .map((key) => avatarFiles[key])
+const avatarAt = (index) => avatars[index % avatars.length]
 
 export const me = {
   name: '013qq',
@@ -23,7 +33,7 @@ export const leaderboard = [
   { rank: 4, name: 'tileTactician', countryCode: 'DE', score: 6400000 },
   { rank: 5, name: 'BoardNomad', countryCode: 'AT', score: 5800000 },
   { rank: 6, name: 'lucky7cards', countryCode: 'TW', score: 3700000 },
-].map((entry) => ({ ...entry, avatar }))
+].map((entry, index) => ({ ...entry, avatar: avatarAt(index) }))
 
 export const myScore = { rank: me.rank, name: me.name, countryCode: 'TW', score: 30, avatar }
 
@@ -37,4 +47,4 @@ export const hosts = [
   'pandaplays',
   'greenpawn',
   'oolong_gamer',
-].map((name) => ({ name, avatar }))
+].map((name, index) => ({ name, avatar: avatarAt(index) }))

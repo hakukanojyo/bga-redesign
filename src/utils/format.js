@@ -35,3 +35,10 @@ export function formatTimeAgo(iso, now = Date.now()) {
   if (minutes < 60 * 24) return `${Math.floor(minutes / 60)} 小時前`
   return `${Math.floor(minutes / 60 / 24)} 天前`
 }
+
+// 國家代碼 → 目前語言的國名（TW → 台灣）；瀏覽器內建，不用自己存國名表
+const regionNames = new Intl.DisplayNames(['zh-TW'], { type: 'region' })
+
+export function formatCountry(code) {
+  return regionNames.of(code)
+}

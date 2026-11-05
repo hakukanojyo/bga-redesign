@@ -54,3 +54,4 @@
 | [0011](0011-architecture-pr-review-after-merge.md) | 動到架構的 PR 也自己合併，reviewer 事後看 |
 | [0012](0012-data-model.md) | 資料模型的原則 |
 | [0013](0013-image-optimization.md) | 遊戲圖片用 sharp 壓縮成 WebP |
+| [0014](0014-cta-accent-color.md) | 首頁「立即遊玩」的顏色從橫幅自動取 |
