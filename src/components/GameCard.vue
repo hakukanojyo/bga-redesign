@@ -11,6 +11,8 @@ defineProps({
   game: { type: Object, required: true },
   // large：Card/Game Cover（直的）；small：Card/Game Result（橫的）
   size: { type: String, default: 'large' },
+  // 放在格線裡（搜尋結果）：寬度跟著欄寬（桌面 277、平板約 229），高度固定 175
+  fluid: { type: Boolean, default: false },
 })
 
 const bannerFailed = ref(false)
@@ -18,7 +20,7 @@ const logoFailed = ref(false)
 </script>
 
 <!--
-  Figma：Card/Game Cover（360:4447，223×299）、Card/Game Result（575:655，排在分區裡是 300×190）。
+  Figma：Card/Game Cover（360:4447，223×299）、Card/Game Result（575:655，排在分區裡是 300×190，搜尋結果的格線裡固定 175 高、寬度跟著欄寬）。
   兩層圖：橫幅鋪滿（object-cover，從中間裁），標準字完整放進資訊面板上方的區域（object-contain），
   上新遊戲不用一張一張調位置；方形的標準字用最大寬高限制。標準字區域的下緣＝平常的面板高度＋VIP 標籤
   （大卡 88、小卡 96，再加外框 3），面板 hover 時往上長、蓋在標準字上面，標準字不會跟著縮。
@@ -34,7 +36,13 @@ const logoFailed = ref(false)
 <template>
   <article
     class="group/card relative isolate flex shrink-0 flex-col items-end justify-end overflow-hidden rounded-8 bg-surface-placeholder p-[3px] after:pointer-events-none after:absolute after:inset-0 after:rounded-8 after:border-3 after:border-border-on-image has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-action-primary"
-    :class="size === 'large' ? 'h-[299px] w-[223px] shadow-card-cover' : 'h-[190px] w-[300px]'"
+    :class="
+      size === 'large'
+        ? 'h-[299px] w-[223px] shadow-card-cover'
+        : fluid
+          ? 'h-[175px] w-full'
+          : 'h-[190px] w-[300px]'
+    "
   >
     <img
       v-if="game.images.banner && !bannerFailed"

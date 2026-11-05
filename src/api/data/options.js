@@ -62,3 +62,11 @@ export const timeOptions = {
 
 export const modeLabels = { simple: '簡易', arena: '競技場' }
 export const paceLabels = { realtime: '即時制', turn: '回合制' }
+
+// 搜尋結果的排序（SRCH-05）：第一個是預設
+export const sortLabels = {
+  popular: '依熱門程度排序',
+  newest: '最新上線',
+  duration: '遊玩時間：短到長',
+  name: '遊戲名稱',
+}

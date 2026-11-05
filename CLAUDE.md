@@ -130,6 +130,7 @@
 - ✅ 版面骨架 #14，拆 4 個 PR：① 路由、整頁版型、木紋背景、頂部導覽列（#18）② 右側欄、底部導覽列、側欄面板（#19）③ 平板 Bottom Sheet、個人面板（shadcn-vue Sheet，#20）④ 頁尾、build 時帶入推出時間（#21）
 - ✅ 佔位頁、找不到頁面 #15（#22）：共用 `PageState`、`AppButton`、全站鍵盤焦點框
 - ✅ 資料模型與假資料（#23）：`docs/data-model.md`、`src/api/`、25 款遊戲、圖片壓縮
-- ⏳ 首頁 #24，拆 3 個 PR：① 主視覺、排行榜、中段橫幅，共用 `SkeletonBlock`、`BlockError`、`useRequest`（#26）② 7 個遊戲分區、大卡和小卡（`GameCard`）、輪播（scroll-snap）、連線錯誤頁（#28、卡片修正 #29）③ 懸停預覽、加入收藏（Pinia）、最近看過、為你推薦權重
+- ✅ 首頁 #24，拆 3 個 PR：① 主視覺、排行榜、中段橫幅，共用 `SkeletonBlock`、`BlockError`、`useRequest`（#26）② 7 個遊戲分區、大卡和小卡（`GameCard`）、輪播（scroll-snap）、連線錯誤頁（#28、卡片修正 #29）③ 懸停預覽、加入收藏（Pinia）、最近看過、為你推薦權重（#30）
+- ⏳ 搜尋與篩選 #25，拆 3 個 PR：① 搜尋框、搜尋結果頁、排序（shadcn-vue Select）、搜尋沒結果 ② 桌面篩選欄、已套用條件、篩選沒結果 ③ 平板篩選卡片
 - ✅ 提示 Toast（shadcn-vue Sonner，`src/utils/toast.js`）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
