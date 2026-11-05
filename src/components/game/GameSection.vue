@@ -17,12 +17,11 @@ defineProps({
     :aria-labelledby="`${id}-title`"
     class="flex scroll-mt-(--sticky-offset) flex-col gap-32 rounded-12 bg-surface-glass-light px-20 pt-4 pb-20 shadow-card max-desktop:rounded-8"
   >
-    <h2
-      :id="`${id}-title`"
-      class="border-b-2 border-action-primary py-12 type-tc-heading-24 text-text-link"
-    >
-      {{ title }}
-    </h2>
+    <div class="flex items-center justify-between gap-16 border-b-2 border-action-primary py-12">
+      <h2 :id="`${id}-title`" class="type-tc-heading-24 text-text-link">{{ title }}</h2>
+      <!-- 標題右邊的連結，例如開放桌的「查看全部 N 桌」 -->
+      <slot name="action" />
+    </div>
     <slot />
   </section>
 </template>

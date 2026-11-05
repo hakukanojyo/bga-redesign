@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, provide, ref } from 'vue'
 import { useMediaQuery } from '@vueuse/core'
 import DeviceBanner from '@/components/DeviceBanner.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
@@ -21,6 +21,12 @@ const isTablet = useMediaQuery('(width < 1280px)')
 function togglePanel(panel) {
   openPanel.value = openPanel.value === panel ? null : panel
 }
+
+// 頁面裡也要能打開面板：例如加入開放桌成功的提示按「查看」打開我的牌桌（PRD 7.6 第 2 條）。
+// 面板開關只有版型在管，用 provide 交出去，頁面 inject('openPanel') 呼叫，不用為一個開關另外開 store
+provide('openPanel', (panel) => {
+  openPanel.value = panel
+})
 
 // 右側欄和底部導覽列共用同一份人數，只抓一次；失敗時維持 null（顯示「—」）
 const stats = ref(null)

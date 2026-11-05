@@ -49,6 +49,23 @@ export function getOpenTables(params, { refresh = false } = {}) {
   return fakeRequest(scenario() === 'empty' ? [] : filterTables(current, params))
 }
 
+// 遊戲主畫面的開放桌（GAME-07、PRD 7.4）：這款遊戲最新開的 3 桌＋總共幾桌。
+// 自己已經加入的不放進來：它在我的牌桌裡，留在列表上也不能再加入
+export const GAME_TABLES_LIMIT = 3
+
+export function getGameTables(slug, { refresh = false } = {}) {
+  if (refresh) simulateRefresh()
+  const mine = loadStored(KEY, initialMyTables).map((item) => item.tableId)
+  const list =
+    scenario() === 'empty'
+      ? []
+      : current
+          .filter((table) => table.gameSlug === slug && !mine.includes(table.id))
+          .map(withGame)
+          .sort(sorters.newest)
+  return fakeRequest({ total: list.length, tables: list.slice(0, GAME_TABLES_LIMIT) })
+}
+
 // 加入這桌（TABLE-07、08）：已額滿或已經在我的牌桌就失敗；成功後放進排隊中
 export async function joinTable(tableId) {
   const table = current.find((item) => item.id === tableId)
