@@ -15,6 +15,8 @@ vi.mock('@/utils/toast', () => ({ toast: { success: vi.fn(), error: vi.fn() } })
 const table = (id) => ({
   id,
   host: { name: `host-${id}`, avatar: '' },
+  pace: 'turn',
+  mode: 'arena',
   settings: ['基礎版', '10 分鐘局', '隨機'],
   seats: { taken: 2, max: 4 },
   estimatedWaitMinutes: 5,
@@ -48,6 +50,11 @@ describe('GameTables', () => {
     const wrapper = await mountTables()
     expect(wrapper.findAll('li')).toHaveLength(3)
     expect(wrapper.emitted('update:total')).toEqual([[4]])
+  })
+
+  it('shows pace and mode before the settings, whatever the filter is', async () => {
+    const wrapper = await mountTables()
+    expect(wrapper.find('li').text()).toContain('回合制／競技場／基礎版／10 分鐘局／隨機')
   })
 
   it('shows 已加入, then removes the row after 1.5 seconds (PRD 7.6)', async () => {

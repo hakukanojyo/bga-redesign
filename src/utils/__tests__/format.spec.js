@@ -73,4 +73,8 @@ describe('formatTableInfo', () => {
       formatTableInfo({ pace: 'turn', mode: 'simple', settings: ['基礎版', '10 分鐘局', '隨機'] }),
     ).toBe('回合制／簡易／基礎版／10 分鐘局／隨機')
   })
+
+  it('skips pace or mode when the data has none', () => {
+    expect(formatTableInfo({ settings: ['基礎版'] })).toBe('基礎版')
+  })
 })

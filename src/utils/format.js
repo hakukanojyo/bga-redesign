@@ -20,9 +20,9 @@ export function formatSettings(settings) {
 }
 
 // 牌桌的制度、模式加設定（2026-11-06）：「回合制／簡易／基礎版／10 分鐘局／隨機」。
-// 制度和模式會影響要不要選這桌，一律寫出來，不管篩選選了什麼；我的牌桌先用，尋找開放桌之後也改用這個
+// 制度和模式會影響要不要選這桌，一律寫出來，不管篩選選了什麼。尋找開放桌、遊戲頁的開放桌、我的牌桌都用這個
 export function formatTableInfo({ pace, mode, settings }) {
-  return formatSettings([paceLabels[pace], modeLabels[mode], ...settings])
+  return formatSettings([paceLabels[pace], modeLabels[mode], ...settings].filter(Boolean))
 }
 
 export function formatSeats({ taken, max }) {
