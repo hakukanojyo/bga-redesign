@@ -57,6 +57,9 @@ function applyRelax() {
 
 // 第一次載入顯示骨架；之後換條件時舊結果留著，新的回來再換（產品規則 5.1）
 const firstLoad = computed(() => status.value === 'loading' && data.value === null)
+
+const centered =
+  'min-h-[calc(100dvh-var(--header-height)-60px)] justify-center max-desktop:min-h-0 max-desktop:justify-start'
 </script>
 
 <!--
@@ -79,14 +82,20 @@ const firstLoad = computed(() => status.value === 'loading' && data.value === nu
         </div>
       </template>
 
+      <!--
+        空狀態在 Header 下方的可見區域上下置中（2026-11-06）：至少一個畫面高（扣掉 Header 和上下內距 20＋40），
+        內容比畫面高時自然從上面排。平板上方有搜尋卡片、置中沒有意義，照原本靠上
+      -->
       <SearchEmpty
         v-else-if="!games.length && query"
+        :class="centered"
         :query="query"
         :suggestions="suggestions"
         @clear="search('')"
       />
       <FilterEmpty
         v-else-if="!games.length && hasFilters(filters)"
+        :class="centered"
         :remove="relaxed?.remove"
         :games="relaxed?.games"
         @apply="applyRelax"

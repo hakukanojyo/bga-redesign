@@ -19,9 +19,10 @@ describe('找不到頁面與佔位頁（產品規則 5.1）', () => {
   it('not-found offers 回首頁 and 尋找開放桌, without showing 404', async () => {
     const wrapper = await mountAt('/no-such-page', NotFoundView)
     const links = wrapper.findAll('a').map((a) => [a.text(), a.attributes('href')])
+    // 主要按鈕放右邊：次要的「尋找開放桌」在前
     expect(links).toEqual([
-      ['回首頁', '/'],
       ['尋找開放桌', '/tables'],
+      ['回首頁', '/'],
     ])
     expect(wrapper.text()).not.toContain('404')
   })

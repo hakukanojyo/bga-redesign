@@ -39,8 +39,8 @@ defineEmits(['clear-search', 'reset-filters'])
     description="開一桌當第一位玩家 其他人就能加入你"
     class="mx-auto"
   >
-    <AppButton to="/coming-soon">建立遊戲桌</AppButton>
     <AppButton variant="secondary" @click="$emit('clear-search')">清除搜尋條件</AppButton>
+    <AppButton to="/coming-soon">建立遊戲桌</AppButton>
   </PageState>
   <PageState
     v-else-if="reason === 'no-tables'"

@@ -1,6 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { openTables } from '../data/tables'
-import { emptyReason, filterTables, getGameTables, getOpenTables, joinTable } from '../tables'
+import {
+  emptyReason,
+  filterTables,
+  getGameTables,
+  getOpenTables,
+  joinTable,
+  TABLES_PAGE_SIZE,
+} from '../tables'
 
 describe('開放桌（TABLE）', () => {
   it('sorts by newest first by default', () => {
@@ -77,17 +84,28 @@ describe('尋找開放桌（PRD 7.5）', () => {
 
   it('leaves out tables I already joined, like the game page does', async () => {
     const all = await run(getOpenTables({}))
-    const target = all.find((table) => table.status === 'waiting')
+    const target = all.tables.find((table) => table.status === 'waiting')
     await run(joinTable(target.id))
     const after = await run(getOpenTables({}))
-    expect(after.map((table) => table.id)).not.toContain(target.id)
-    expect(after).toHaveLength(all.length - 1)
+    expect(after.tables.map((table) => table.id)).not.toContain(target.id)
+    expect(after.total).toBe(all.total - 1)
   })
 
   it('filters by mode and pace together', async () => {
-    const result = await run(getOpenTables({ mode: ['arena'], pace: ['turn'] }))
-    expect(result.length).toBeGreaterThan(0)
-    expect(result.every((table) => table.mode === 'arena' && table.pace === 'turn')).toBe(true)
+    const { tables } = await run(getOpenTables({ mode: ['arena'], pace: ['turn'] }))
+    expect(tables.length).toBeGreaterThan(0)
+    expect(tables.every((table) => table.mode === 'arena' && table.pace === 'turn')).toBe(true)
+  })
+
+  it('hands out tables in batches of 20 with the total (載入更多)', async () => {
+    const first = await run(getOpenTables({}))
+    expect(first.tables).toHaveLength(TABLES_PAGE_SIZE)
+    // 40 桌扣掉一開始就在我的牌桌裡的 3 桌
+    expect(first.total).toBe(37)
+    const next = await run(getOpenTables({}, { offset: TABLES_PAGE_SIZE }))
+    expect(next.tables).toHaveLength(17)
+    const ids = [...first.tables, ...next.tables].map((table) => table.id)
+    expect(new Set(ids).size).toBe(37)
   })
 })
 
@@ -119,7 +137,7 @@ describe('自動刷新像真的網站一樣（TABLE-06）', () => {
     for (let i = 0; i < 30; i += 1) {
       const promise = getOpenTables({}, { refresh: true })
       await vi.runAllTimersAsync()
-      counts.push((await promise).length)
+      counts.push((await promise).total)
     }
     expect(Math.min(...counts)).toBeGreaterThanOrEqual(34)
     expect(Math.max(...counts)).toBeLessThanOrEqual(46)

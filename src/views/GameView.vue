@@ -1,6 +1,8 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { gameName, getGame } from '@/api/games'
 import { addRecentlyViewed } from '@/api/history'
 import { useRequest } from '@/composables/useRequest'
@@ -206,9 +208,11 @@ watch(status, async (value) => {
             <!-- 前往尋找開放桌並帶入這款遊戲的名稱（PRD 7.4 第 4 條） -->
             <RouterLink
               :to="{ name: 'tables', query: { q: gameName(game) } }"
-              class="shrink-0 type-tc-label-14 text-text-link hover:underline"
+              class="group/link flex shrink-0 items-center gap-4 type-tc-label-14 text-text-link"
             >
-              查看全部 {{ tablesTotal }} 桌
+              <!-- 和許願連結一樣：右邊「›」提示前往別頁，底線只畫在文字下 -->
+              <span class="group-hover/link:underline">查看全部 {{ tablesTotal }} 桌</span>
+              <FontAwesomeIcon :icon="faChevronRight" class="text-[12px]" aria-hidden="true" />
             </RouterLink>
           </template>
           <GameTables v-model:total="tablesTotal" :slug="game.slug" />

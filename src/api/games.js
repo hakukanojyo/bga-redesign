@@ -259,13 +259,21 @@ export function getSearchSuggestions(query) {
   return fakeRequest(suggestGames(allGames, query, currentSignals()))
 }
 
-// 篩選沒結果時的建議：remove 是建議移除的條件和多出幾款；games 是替代推薦 3 款
-// （移除後最熱門的；沒有可以移除的條件時用為你推薦）
+const FILTER_SUGGESTION_SIZE = 3
+
+// 篩選沒結果時的建議：remove 是建議移除的條件和多出幾款；games 是替代推薦，一定補滿 3 款
+// （先放移除後最熱門的，不夠的用為你推薦補，再不夠用現正熱門；不重複，PRD 7.3 第 8 條）
 export function getFilterSuggestion(filters) {
   const relaxed = relaxFilters(allGames, filters)
+  const candidates = [
+    ...(relaxed?.games ?? []),
+    ...recommend(allGames, currentSignals(), FILTER_SUGGESTION_SIZE),
+    ...searchGames(allGames, { sort: 'popular' }),
+  ]
+  const games = [...new Map(candidates.map((game) => [game.slug, game])).values()]
   return fakeRequest({
     remove: relaxed && { key: relaxed.key, values: relaxed.values, count: relaxed.count },
-    games: relaxed ? relaxed.games.slice(0, 3) : recommend(allGames, currentSignals(), 3),
+    games: games.slice(0, FILTER_SUGGESTION_SIZE),
   })
 }
 

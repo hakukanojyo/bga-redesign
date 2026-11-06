@@ -55,7 +55,7 @@ watch(
   Figma：開放桌（303:2161）。最多 3 桌、最新的在前（PRD 7.4 第 4 條）；自己已經加入的不放進來。
   加入成功：按鈕變「已加入」停 1.5 秒，那一列淡出、下面的往上補（TransitionGroup）；減少動態效果時直接移除。
   刷新時被拿掉的、新出現的桌也用同一套動畫。
-  沒有開放桌：吉祥物＋標題＋說明＋「建立遊戲桌」（本輪連佔位頁，PRD 7.4）
+  沒有開放桌：吉祥物＋標題＋說明＋「建立遊戲桌」（本輪連佔位頁，PRD 7.4）；下面多留 24，和上面標題到吉祥物的距離差不多
 -->
 <template>
   <div v-if="status === 'loading'" class="flex flex-col gap-8" aria-busy="true">
@@ -68,7 +68,7 @@ watch(
     :level="3"
     title="這款遊戲還沒有人開桌"
     description="開一桌當第一位玩家 其他人就能加入你"
-    class="mx-auto"
+    class="mx-auto pb-24"
   >
     <AppButton to="/coming-soon">建立遊戲桌</AppButton>
   </PageState>

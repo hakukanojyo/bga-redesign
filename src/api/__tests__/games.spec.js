@@ -8,6 +8,7 @@ import {
   matchesFilters,
   matchesQuery,
   recommend,
+  getFilterSuggestion,
   relaxFilters,
   searchGames,
   suggestGames,
@@ -208,6 +209,16 @@ describe('篩選沒結果時建議移除的條件（PRD 7.3 第 8 條）', () =>
     const result = relaxFilters(games, filters)
     expect(result.key).toBe('types')
     expect(result.values).toEqual(['family', 'award'])
+  })
+
+  it('always fills the alternatives up to 3, with the relaxed games first', async () => {
+    const filters = { players: ['1'], time: ['medium'], complexity: ['deep'] }
+    const relaxed = relaxFilters(games, filters)
+    expect(relaxed.count).toBeLessThan(3)
+    const { games: result } = await getFilterSuggestion(filters)
+    expect(result).toHaveLength(3)
+    expect(new Set(slugs(result)).size).toBe(3)
+    expect(slugs(result).slice(0, relaxed.count)).toEqual(slugs(relaxed.games))
   })
 })
 
