@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { formatSeats, formatSettings, formatWait } from '@/utils/format'
+import { formatSeats, formatTableInfo, formatWait } from '@/utils/format'
 import AppButton from '@/components/AppButton.vue'
 
 const props = defineProps({
@@ -11,7 +11,8 @@ const props = defineProps({
 
 defineEmits(['join'])
 
-const settings = computed(() => formatSettings(props.table.settings))
+// 制度、模式加設定，和尋找開放桌、我的牌桌一樣（2026-11-06）
+const settings = computed(() => formatTableInfo(props.table))
 </script>
 
 <!--
