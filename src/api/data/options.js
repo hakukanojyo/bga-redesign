@@ -63,6 +63,13 @@ export const timeOptions = {
 export const modeLabels = { simple: '簡易', arena: '競技場' }
 export const paceLabels = { realtime: '即時制', turn: '回合制' }
 
+// 尋找開放桌的排序（TABLE-05）：第一個是預設；代號和 src/api/tables.js 的 sorters 一樣
+export const tableSortLabels = {
+  newest: '依開桌時間：新至舊',
+  wait: '等候時間：短到長',
+  'almost-full': '即將額滿優先',
+}
+
 // 搜尋結果的排序（SRCH-05）：第一個是預設
 export const sortLabels = {
   popular: '依熱門程度排序',

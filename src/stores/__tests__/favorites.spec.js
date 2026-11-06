@@ -32,7 +32,7 @@ describe('收藏 store', () => {
     await store.load()
     await store.add('skull')
     expect(store.slugs).toEqual(['catan'])
-    expect(toast.error).toHaveBeenCalledWith('操作失敗，請再試一次')
+    expect(toast.error).toHaveBeenCalledWith('操作失敗 請再試一次')
   })
 
   it('toggles off a game that is already a favorite', async () => {

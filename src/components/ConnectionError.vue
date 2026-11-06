@@ -16,7 +16,7 @@ const suggestions = ['確認 Wi-Fi 或行動網路已開啟', '重新整理這�
   <PageState
     :image="mascot"
     title="目前無法連線"
-    description="可能是網路連線中斷，或伺服器暫時沒有回應。"
+    description="可能是網路連線中斷 或伺服器暫時沒有回應"
   >
     <template #details>
       <div class="flex w-full flex-col gap-8 rounded-8 bg-surface-glass-panel p-16 text-left">

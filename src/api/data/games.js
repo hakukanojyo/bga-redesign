@@ -23,11 +23,11 @@ function common({ name, rulesMB = 8, updatedAt = '2026-09-18' }) {
       { title: `${name}進階策略解析`, kind: 'strategy' },
     ],
     versions: [
-      { version: '1.4.2', date: updatedAt, notes: ['修正平板上分數顯示被裁切的問題。'] },
+      { version: '1.4.2', date: updatedAt, notes: ['修正平板上分數顯示被裁切的問題'] },
       {
         version: '1.4.0',
         date: '2026-06-02',
-        notes: ['新增繁體中文介面。', '調整回合計時，逾時前 10 秒提醒。'],
+        notes: ['新增繁體中文介面', '調整回合計時 逾時前 10 秒提醒'],
       },
     ],
     gallery: [],

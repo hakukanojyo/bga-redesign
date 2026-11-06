@@ -38,8 +38,16 @@ describe('資料格式（產品規則 6.6）', () => {
 
   it('formats how long ago a table was opened', () => {
     const now = Date.parse('2026-11-05T10:15:00+08:00')
+    expect(formatTimeAgo('2026-11-05T10:14:30+08:00', now)).toBe('剛剛')
     expect(formatTimeAgo('2026-11-05T10:00:00+08:00', now)).toBe('15 分鐘前')
     expect(formatTimeAgo('2026-11-05T07:15:00+08:00', now)).toBe('3 小時前')
+    expect(formatTimeAgo('2026-11-03T10:15:00+08:00', now)).toBe('2 天前')
+  })
+
+  it('switches to a date after a week (產品規則 6.6)', () => {
+    const now = Date.parse('2026-11-05T10:15:00+08:00')
+    expect(formatTimeAgo('2026-10-29T12:00:00+08:00', now)).toBe('6 天前')
+    expect(formatTimeAgo('2026-10-20T12:00:00+08:00', now)).toBe('10/20')
   })
 })
 

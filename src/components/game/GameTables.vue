@@ -1,8 +1,9 @@
 <script setup>
-import { computed, inject, onBeforeUnmount, onMounted, reactive, watch } from 'vue'
-import { getGameTables, joinTable } from '@/api/tables'
+import { computed, watch } from 'vue'
+import { getGameTables } from '@/api/tables'
+import { useJoinTable } from '@/composables/useJoinTable'
+import { usePolling } from '@/composables/usePolling'
 import { useRequest } from '@/composables/useRequest'
-import { toast } from '@/utils/toast'
 import AppButton from '@/components/AppButton.vue'
 import BlockError from '@/components/BlockError.vue'
 import PageState from '@/components/PageState.vue'
@@ -17,17 +18,8 @@ const props = defineProps({
 // 總共幾桌：章節導覽的「N 桌」和標題右邊的「查看全部 N 桌」用
 const total = defineModel('total', { type: Number, default: null })
 
-// 開放桌每 10 秒刷新（產品規則 3.1）
-const REFRESH_MS = 10_000
-// 加入成功後「已加入」停多久才移除（2026-11-05 決定）
-const JOINED_MS = 1500
-
 const { data, status, retry } = useRequest(() => getGameTables(props.slug))
-
-// 每一列在使用者這邊的暫時狀態：joining、joined、full（伺服器說滿了，下次刷新才拿掉）
-const rowState = reactive({})
-// 加入成功、已經移除的桌（下次刷新伺服器也不會再給，因為在我的牌桌裡了）
-const removed = reactive(new Set())
+const { removed, stateOf, join, afterRefresh, clear } = useJoinTable()
 
 const rows = computed(() => (data.value?.tables ?? []).filter((table) => !removed.has(table.id)))
 
@@ -38,60 +30,25 @@ watch(
   },
 )
 
-function stateOf(table) {
-  return rowState[table.id] ?? (table.status === 'full' ? 'full' : 'waiting')
-}
-
-// 自動刷新：失敗時保留上一次的資料、不顯示錯誤（產品規則 5.3）；分頁在背景時不刷新
-async function refresh() {
-  if (document.hidden || status.value !== 'success') return
+// 每 10 秒刷新（產品規則 3.1）：失敗時保留上一次的資料、不顯示錯誤（產品規則 5.3）
+usePolling(async () => {
+  if (status.value !== 'success') return
   try {
     const next = await getGameTables(props.slug, { refresh: true })
-    removed.clear()
-    for (const id of Object.keys(rowState)) {
-      if (rowState[id] !== 'joining') delete rowState[id]
-    }
+    afterRefresh()
     data.value = next
   } catch {
     // 下次再試
   }
-}
-
-let timer
-onMounted(() => {
-  timer = setInterval(refresh, REFRESH_MS)
-})
-onBeforeUnmount(() => clearInterval(timer))
+}, 10_000)
 
 watch(
   () => props.slug,
   () => {
-    removed.clear()
-    for (const id of Object.keys(rowState)) delete rowState[id]
+    clear()
     retry()
   },
 )
-
-const openPanel = inject('openPanel', () => {})
-
-// 加入這桌（PRD 7.6）：要等伺服器回應（結果看別人的狀態），中間顯示「加入中…」
-async function join(table) {
-  rowState[table.id] = 'joining'
-  try {
-    await joinTable(table.id)
-    rowState[table.id] = 'joined'
-    toast.success('已加入這桌', { onView: () => openPanel('tables') })
-    setTimeout(() => removed.add(table.id), JOINED_MS)
-  } catch (error) {
-    if (error.code === 'full') {
-      rowState[table.id] = 'full'
-      toast.error('加入失敗，牌桌已滿')
-    } else {
-      delete rowState[table.id]
-      toast.error('操作失敗，請再試一次')
-    }
-  }
-}
 </script>
 
 <!--
@@ -110,7 +67,7 @@ async function join(table) {
     :image="mascot"
     :level="3"
     title="這款遊戲還沒有人開桌"
-    description="開一桌當第一位玩家，其他人就能加入你。"
+    description="開一桌當第一位玩家 其他人就能加入你"
     class="mx-auto"
   >
     <AppButton to="/coming-soon">建立遊戲桌</AppButton>

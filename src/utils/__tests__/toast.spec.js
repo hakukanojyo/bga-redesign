@@ -38,7 +38,7 @@ describe('提示', () => {
   })
 
   it('shows errors without an action', () => {
-    toast.error('加入失敗，牌桌已滿')
+    toast.error('加入失敗 牌桌已滿')
     const [, options] = sonner.error.mock.calls[0]
     expect(options.duration).toBe(DEFAULT_DURATION)
     expect(options.action).toBeUndefined()

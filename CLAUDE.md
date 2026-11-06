@@ -53,7 +53,7 @@
 2. 改動盡量小，跟著現有的寫法，不要過度設計；註解只寫不明顯的地方
 3. 只在明確要求時才 commit，絕不 force-push 到 `main`
 4. 回覆用繁體中文
-5. 文案：中文與英文、數字之間加半形空格（例：2-4 人、BGA 桌遊）
+5. 文案：中文與英文、數字之間加半形空格（例：2-4 人、BGA 桌遊）；介面文字不用逗號和句號，逗號換成半形空格、句號拿掉（例：加入失敗 牌桌已滿），遊戲介紹和只給螢幕閱讀器讀的文字例外（產品規則 6.6）
 
 ## 寫程式的規則
 
@@ -83,7 +83,7 @@
 
 - Figma 是設計意圖的參考，專案的寫法是正本：照意圖做，不逐像素照抄，新畫面要和其他畫面像同一個產品
 - Figma 和功能清單、PRD 對不上，或 Figma 的值找不到對應的 token 時，先問，不要自己選一個
-- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的用共用的元件，不複製一份；提示用 `src/utils/toast.js`（`docs/adr/0015`）；拿資料用 `useRequest`（`src/composables/`）；搜尋字、篩選條件、排序改網址用 `useSearchQuery`（push／replace、搜尋和篩選擇一、清空回首頁都在裡面）。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`；尊榮遊戲標籤用 `VipBadge`（卡片 `tab`、單獨放 `pill`）
+- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的用共用的元件，不複製一份；提示用 `src/utils/toast.js`（`docs/adr/0015`）；拿資料用 `useRequest`（`src/composables/`）；搜尋字、篩選條件、排序改網址用 `useSearchQuery`（push／replace、搜尋和篩選擇一、清空回首頁都在裡面）；尋找開放桌的條件用 `useTableQuery`。輸入框用 `SearchField`，分段按鈕用 `SegmentedControl`；定時刷新用 `usePolling`，加入這桌用 `useJoinTable`。按鈕用 `AppButton`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`；尊榮遊戲標籤用 `VipBadge`（卡片 `tab`、單獨放 `pill`）
 - 用原生的結構：`button`、`a`、`label`、`ul`、標題照層級；Figma 的絕對定位改寫成 flex 或 grid
 - 要對齊的一組東西（一排等高的卡片）做成一個元件，不分開擺位置
 - 圖片設寬高避免版面跳動，`alt` 寫有意義的文字（純裝飾才留空）
@@ -132,6 +132,7 @@
 - ✅ 資料模型與假資料（#23）：`docs/data-model.md`、`src/api/`、25 款遊戲、圖片壓縮
 - ✅ 首頁 #24，拆 3 個 PR：① 主視覺、排行榜、中段橫幅，共用 `SkeletonBlock`、`BlockError`、`useRequest`（#26）② 7 個遊戲分區、大卡和小卡（`GameCard`）、輪播（scroll-snap）、連線錯誤頁（#28、卡片修正 #29）③ 懸停預覽、加入收藏（Pinia）、最近看過、為你推薦權重（#30）
 - ✅ 搜尋與篩選 #25，拆 3 個 PR：① 搜尋框、搜尋結果頁、排序（shadcn-vue Select）、搜尋沒結果（#32）② 桌面篩選欄、已套用條件、篩選沒結果、`useSearchQuery`、Header 和左欄吸頂（#33）③ 平板篩選卡片（首頁、搜尋結果共用）
-- ⏳ 遊戲主畫面 #35，拆 3 個 PR：① 頁面狀態、主視覺、標籤（5 個＋「+N」）、VIP 標籤、開始／學習遊戲按鈕（#36、排法調整 #37）② 章節導覽（吸頂、scroll spy、寬版雙欄）和各章節；提示改到畫面上方（ADR 0016）（#38）③ 開放桌區塊和加入流程（每 10 秒刷新、已加入後淡出、空狀態）
+- ✅ 遊戲主畫面 #35，拆 3 個 PR：① 頁面狀態、主視覺、標籤（5 個＋「+N」）、VIP 標籤、開始／學習遊戲按鈕（#36、排法調整 #37）② 章節導覽（吸頂、scroll spy、寬版雙欄）和各章節；提示改到畫面上方（ADR 0016）（#38）③ 開放桌區塊和加入流程（每 10 秒刷新、已加入後淡出、空狀態，#39）
+- ⏳ 尋找開放桌 #40：① 篩選（加「全部」）、進階搜尋、排序、列表、網址參數、刷新、加入流程、四種空狀態；介面文字不用逗號句號、Label 14／Caption 12 字距 1.2px、主要按鈕底部厚度 ② 載入更多
 - ✅ 提示 Toast（shadcn-vue Sonner，`src/utils/toast.js`）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能

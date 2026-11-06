@@ -16,6 +16,7 @@ const bannerFailed = ref(false)
   Figma：以其他方式學習遊戲（303:2219）：Card/Rule（642:4825）、Card/Video（642:5085），各一排輪播。
   規則 PDF、影片本輪連到佔位頁、開新分頁（PRD 7.4 例外）。
   影片沒有授權的縮圖：用這款的橫幅加播放圖示（2026-11-05 決定），Figma 沒有播放圖示，刻意加上讓人看得出是影片。
+  卡片是 relative：裡面給螢幕閱讀器的 sr-only 文字是絕對定位，要被卡片框住，不然會跑出輪播、把整頁撐出橫向捲軸。
   hover（Figma 的 hover 變體）：規則卡變成較不透明的玻璃底加陰影，標題和大小變 text/link；
   影片縮圖加陰影、標題變 text/link。下載圖示兩種狀態都是 icon/primary（Figma 的 icon/current 預設值）
 -->
@@ -34,7 +35,7 @@ const bannerFailed = ref(false)
             href="/coming-soon"
             target="_blank"
             rel="noopener"
-            class="group/rule flex h-[72px] w-[284px] items-center justify-between gap-32 rounded-8 bg-surface-header px-20 hover:bg-surface-glass hover:shadow-card"
+            class="group/rule relative flex h-[72px] w-[284px] items-center justify-between gap-32 rounded-8 bg-surface-header px-20 hover:bg-surface-glass hover:shadow-card"
           >
             <span
               class="flex min-w-0 items-center gap-12 type-tc-title-16 text-text-body group-hover/rule:text-text-link"
@@ -63,7 +64,7 @@ const bannerFailed = ref(false)
             href="/coming-soon"
             target="_blank"
             rel="noopener"
-            class="group/video flex w-[351px] flex-col gap-12"
+            class="group/video relative flex w-[351px] flex-col gap-12"
           >
             <span
               class="relative flex h-[212px] items-center justify-center overflow-hidden rounded-8 bg-surface-placeholder group-hover/video:shadow-card"
