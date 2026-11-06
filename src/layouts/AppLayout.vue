@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, provide, ref } from 'vue'
+import { onMounted, provide, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useMediaQuery } from '@vueuse/core'
 import DeviceBanner from '@/components/DeviceBanner.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
@@ -17,6 +18,15 @@ const openPanel = ref(null)
 
 // 桌面打開右側面板，平板打開 Bottom Sheet 或個人面板；和 max-desktop: 同一個斷點
 const isTablet = useMediaQuery('(width < 1280px)')
+
+// 從面板裡的連結換頁（例如收藏卡片到遊戲頁）時關掉面板，使用者才看得到要去的地方
+const route = useRoute()
+watch(
+  () => route.fullPath,
+  () => {
+    openPanel.value = null
+  },
+)
 
 function togglePanel(panel) {
   openPanel.value = openPanel.value === panel ? null : panel

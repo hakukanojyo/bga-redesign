@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
-import { addFavorite } from '@/api/favorites'
+import { addFavorite, getFavorites } from '@/api/favorites'
 import { toast } from '@/utils/toast'
 import { useFavoritesStore } from '../favorites'
 
@@ -40,6 +40,19 @@ describe('收藏 store', () => {
     await store.load()
     await store.toggle('catan')
     expect(store.isFavorite('catan')).toBe(false)
-    expect(toast.neutral).toHaveBeenCalledWith('已取消收藏')
+    expect(toast.neutral).toHaveBeenCalledWith('已取消收藏', { undo: undefined })
+  })
+
+  it('puts the game back where it was when undo is pressed (FAV-05)', async () => {
+    getFavorites.mockResolvedValueOnce([{ slug: 'skull' }, { slug: 'catan' }, { slug: 'azul' }])
+    const store = useFavoritesStore()
+    await store.load()
+    await store.remove('catan', { undoable: true })
+    expect(store.slugs).toEqual(['skull', 'azul'])
+
+    const { undo } = toast.neutral.mock.calls[0][1]
+    await undo()
+    expect(store.slugs).toEqual(['skull', 'catan', 'azul'])
+    expect(addFavorite).toHaveBeenCalledWith('catan', 1)
   })
 })
