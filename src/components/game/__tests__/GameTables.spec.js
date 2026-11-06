@@ -1,10 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
+import { createPinia } from 'pinia'
 import { getGameTables, joinTable } from '@/api/tables'
 import { toast } from '@/utils/toast'
 import GameTables from '../GameTables.vue'
 
-vi.mock('@/api/tables', () => ({ getGameTables: vi.fn(), joinTable: vi.fn() }))
+vi.mock('@/api/tables', () => ({
+  getGameTables: vi.fn(),
+  joinTable: vi.fn(),
+  getMyTables: vi.fn(async () => ({ playing: [], queued: [] })),
+}))
 vi.mock('@/utils/toast', () => ({ toast: { success: vi.fn(), error: vi.fn() } }))
 
 const table = (id) => ({
@@ -20,6 +25,7 @@ async function mountTables() {
   const wrapper = mount(GameTables, {
     props: { slug: 'werewolves' },
     global: {
+      plugins: [createPinia()],
       stubs: { RouterLink: { template: '<a><slot /></a>' } },
       provide: { openPanel: vi.fn() },
     },

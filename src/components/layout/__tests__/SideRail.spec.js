@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { createPinia, setActivePinia } from 'pinia'
+import { useMyTablesStore } from '@/stores/myTables'
 import router from '@/router'
 import SideRail from '../SideRail.vue'
 
 async function mountRail(props = {}) {
+  setActivePinia(createPinia())
   await router.push('/')
   await router.isReady()
   return mount(SideRail, { props, global: { plugins: [router] } })
@@ -32,5 +35,14 @@ describe('SideRail', () => {
   it('formats the online stats with thousands separators', async () => {
     const wrapper = await mountRail({ stats: { playing: 3118, online: 18492 } })
     expect(wrapper.text()).toContain('3,118 / 18,492')
+  })
+
+  it('shows a red dot on 牌桌 only when it is your turn somewhere (MYTBL-04)', async () => {
+    const wrapper = await mountRail()
+    const tables = () => wrapper.findAll('button').find((b) => b.text().startsWith('牌桌'))
+    expect(tables().text()).not.toContain('有輪到你的牌桌')
+    useMyTablesStore().playing = [{ tableId: 'a', isMyTurn: true }]
+    await wrapper.vm.$nextTick()
+    expect(tables().text()).toContain('有輪到你的牌桌')
   })
 })

@@ -36,10 +36,14 @@
     cursor: pointer;
   }
 
-  /* 全站木紋背景：Figma 是 500×1000 的圖、縮放 0.5 平鋪 */
   body {
-    background: url('./assets/images/wood.jpg') repeat;
-    background-size: 250px 500px;
+    @apply bg-wood;
     color: var(--color-text-body);
   }
+}
+
+/* 全站木紋背景：Figma 是 500×1000 的圖、縮放 0.5 平鋪。頁面和平板底部導覽列共用 */
+@utility bg-wood {
+  background: url('./assets/images/wood.jpg') repeat;
+  background-size: 250px 500px;
 }

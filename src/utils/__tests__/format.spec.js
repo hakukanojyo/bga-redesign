@@ -8,6 +8,7 @@ import {
   formatScore,
   formatSeats,
   formatSettings,
+  formatTableInfo,
   formatTimeAgo,
   formatVersion,
   formatWait,
@@ -63,5 +64,13 @@ describe('遊戲主畫面', () => {
     expect(formatFileSize(12)).toBe('12 MB')
     expect(formatPlays(2310455)).toBe('2,310,455 場')
     expect(formatVersion({ version: '1.4.2', date: '2026-10-28' })).toBe('版本 1.4.2（2026-10-28）')
+  })
+})
+
+describe('formatTableInfo', () => {
+  it('puts pace and mode before the settings', () => {
+    expect(
+      formatTableInfo({ pace: 'turn', mode: 'simple', settings: ['基礎版', '10 分鐘局', '隨機'] }),
+    ).toBe('回合制／簡易／基礎版／10 分鐘局／隨機')
   })
 })

@@ -95,8 +95,8 @@ function onClick(event) {
       >
         <div class="flex min-h-0 flex-1 flex-col gap-16" :class="panel === 'profile' && 'pt-8'">
           <h2 class="px-16 type-tc-heading-20 text-text-primary">{{ panelTitles[panel] }}</h2>
-          <!-- 內容在這裡捲動、標題不動；上面多留 4（標題到卡片共 20），懸停時卡片的陰影才不會被切掉 -->
-          <div class="flex min-h-0 flex-1 flex-col overflow-y-auto px-16 pt-4 pb-8">
+          <!-- 標題到內容 20（gap 16＋4）；捲動區在各面板裡（panelClasses.js 的 panelScroll），分頁才能留在上面不動 -->
+          <div class="flex min-h-0 flex-1 flex-col px-16 pt-4 pb-8">
             <PanelContent :panel="panel" :touch="noHover" />
           </div>
         </div>

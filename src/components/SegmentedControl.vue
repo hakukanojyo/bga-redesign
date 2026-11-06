@@ -6,6 +6,8 @@ defineProps({
   legend: { type: String, required: true },
   // { value, label }[]；value 是空字串代表「全部」
   options: { type: Array, required: true },
+  // 名稱只給螢幕閱讀器（我的牌桌的分頁：面板標題已經說了是什麼）
+  hideLegend: { type: Boolean, default: false },
 })
 
 const model = defineModel({ type: String, default: '' })
@@ -20,7 +22,10 @@ const name = useId()
 -->
 <template>
   <fieldset class="flex min-w-0 items-center gap-4">
-    <legend class="float-left shrink-0 type-tc-heading-20 text-text-primary">{{ legend }}：</legend>
+    <legend v-if="hideLegend" class="sr-only">{{ legend }}</legend>
+    <legend v-else class="float-left shrink-0 type-tc-heading-20 text-text-primary">
+      {{ legend }}：
+    </legend>
     <div class="flex flex-1 overflow-hidden rounded-4 border border-border-brand-subtle">
       <label
         v-for="option in options"
