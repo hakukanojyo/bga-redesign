@@ -27,13 +27,17 @@ export function formatScore(score) {
   return `${Number((score / 1_000_000).toFixed(2))}M PX`
 }
 
-// 開桌時間：15 分鐘前、2 小時前、3 天前
+// 開桌時間（產品規則 6.6）：近的用相對時間，7 天以上換成日期，不用自己換算「32 天前」是哪天
+// 剛剛、15 分鐘前、3 小時前、2 天前、11/05
 export function formatTimeAgo(iso, now = Date.now()) {
   const minutes = Math.max(0, Math.floor((now - Date.parse(iso)) / 60000))
   if (minutes < 1) return '剛剛'
   if (minutes < 60) return `${minutes} 分鐘前`
   if (minutes < 60 * 24) return `${Math.floor(minutes / 60)} 小時前`
-  return `${Math.floor(minutes / 60 / 24)} 天前`
+  const days = Math.floor(minutes / 60 / 24)
+  if (days < 7) return `${days} 天前`
+  const date = new Date(iso)
+  return `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`
 }
 
 // 國家代碼 → 目前語言的國名（TW → 台灣）；瀏覽器內建，不用自己存國名表

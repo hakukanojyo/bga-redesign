@@ -27,11 +27,11 @@ const tableGames = [
 const timeLimits = ['10 分鐘局', '15 分鐘局', '慢速局', '每步 1 分鐘']
 const seating = ['隨機', '依加入順序']
 
-// 2026-11-05 10:00（台灣時間）往前推，每桌差 3 分鐘
-const base = Date.parse('2026-11-05T10:00:00+08:00')
+// 從打開網站的時間往前推，每桌差 3 分鐘：剛剛、3 分鐘前……最舊的約 2 小時前，畫面才像真的網站
+const base = Date.now()
 
-// 40 桌：前 4 款遊戲（狼人、璀璨寶石、多米諾王國、Sky Team）各有 4 桌，遊戲頁才看得到「查看全部 N 桌」
-export const openTables = Array.from({ length: 40 }, (_, i) => {
+// 第 i 桌（固定的規則，每次產生都一樣，測試才固定）。自動刷新時新開的桌也用這個，接著往下編號
+export function makeTable(i, createdAt) {
   const gameSlug = tableGames[i % tableGames.length]
   // 每輪完一次遊戲就錯開一格，同一款遊戲才會有不同的模式和制度
   const round = Math.floor(i / tableGames.length)
@@ -52,10 +52,15 @@ export const openTables = Array.from({ length: 40 }, (_, i) => {
     seats: { taken, max },
     // 每 5 桌有一桌沒資料，顯示「—」
     estimatedWaitMinutes: i % 5 === 4 ? null : 3 + ((i * 7) % 20),
-    createdAt: new Date(base - i * 3 * 60 * 1000).toISOString(),
+    createdAt,
     status: 'waiting',
   }
-})
+}
+
+// 40 桌：前 4 款遊戲（狼人、璀璨寶石、多米諾王國、Sky Team）各有 4 桌，遊戲頁才看得到「查看全部 N 桌」
+export const openTables = Array.from({ length: 40 }, (_, i) =>
+  makeTable(i, new Date(base - i * 3 * 60 * 1000).toISOString()),
+)
 
 // 我的牌桌一開始就有的幾桌（另外加入的存在 localStorage）
 export const initialMyTables = [

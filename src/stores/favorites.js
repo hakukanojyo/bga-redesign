@@ -30,7 +30,7 @@ export const useFavoritesStore = defineStore('favorites', () => {
       await addFavorite(slug)
     } catch {
       slugs.value = before
-      toast.error('操作失敗，請再試一次')
+      toast.error('操作失敗 請再試一次')
     }
   }
 
@@ -44,7 +44,7 @@ export const useFavoritesStore = defineStore('favorites', () => {
       await removeFavorite(slug)
     } catch {
       slugs.value = before
-      toast.error('操作失敗，請再試一次')
+      toast.error('操作失敗 請再試一次')
     }
   }
 

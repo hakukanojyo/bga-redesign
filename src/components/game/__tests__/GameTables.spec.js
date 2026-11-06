@@ -66,7 +66,7 @@ describe('GameTables', () => {
     await flushPromises()
     expect(firstButton(wrapper).text()).toBe('已額滿')
     expect(firstButton(wrapper).attributes('disabled')).toBeDefined()
-    expect(toast.error).toHaveBeenCalledWith('加入失敗，牌桌已滿')
+    expect(toast.error).toHaveBeenCalledWith('加入失敗 牌桌已滿')
   })
 
   it('keeps the old rows when an auto refresh fails (產品規則 5.3)', async () => {

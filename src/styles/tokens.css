@@ -487,7 +487,7 @@
   font-family: var(--font-cjk);
   font-size: var(--size-14);
   line-height: var(--line-height-22);
-  letter-spacing: var(--tracking-normal);
+  letter-spacing: var(--tracking-wide);
   font-weight: var(--weight-medium);
 }
 @utility type-tc-body-13 {
@@ -501,7 +501,7 @@
   font-family: var(--font-cjk);
   font-size: var(--size-12);
   line-height: var(--line-height-18);
-  letter-spacing: var(--tracking-normal);
+  letter-spacing: var(--tracking-wide);
   font-weight: var(--weight-medium);
 }
 @utility type-tc-caption-11 {

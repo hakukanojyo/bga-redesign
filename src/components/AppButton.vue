@@ -13,9 +13,9 @@ const props = defineProps({
 
 const variants = {
   primary:
-    'border-border-brand bg-surface-brand text-text-inverse hover:border-border-brand-strong hover:bg-action-primary-hover active:border-action-primary-pressed active:bg-action-primary-pressed',
+    'border-b-2 border-border-brand bg-surface-brand text-text-inverse hover:border-border-brand-strong hover:bg-action-primary-hover active:border-action-primary-pressed active:bg-action-primary-pressed',
   secondary:
-    'border-border-brand-subtle bg-surface-default text-selection-accent shadow-inner-button-secondary hover:border-selection-accent hover:bg-selection-bg hover:shadow-inner-button-secondary-hover active:border-selection-accent active:bg-selection-bg active:shadow-inner-button-secondary-press',
+    'border border-border-brand-subtle bg-surface-default text-selection-accent shadow-inner-button-secondary hover:border-selection-accent hover:bg-selection-bg hover:shadow-inner-button-secondary-hover active:border-selection-accent active:bg-selection-bg active:shadow-inner-button-secondary-press',
 }
 
 const sizes = {
@@ -27,7 +27,7 @@ const tag = computed(() => (props.to ? RouterLink : 'button'))
 </script>
 
 <!--
-  Figma：Button（573:655）size=md 的 primary、secondary。
+  Figma：Button（573:655）的 primary、secondary。primary 只有底部 2px 的深色邊（看起來有厚度），secondary 四邊 1px 加內陰影。
   刻意和 Figma 不同：primary 按下時 Figma 拿掉外框（40 → 38 高），這裡外框改成和底色同色，尺寸不變；
   primary hover 的外框 Figma 綁 Primitive blue/900，這裡用 border/brand-strong。
   平板的觸控高度由 --tap-button-min-height 切換（桌面 28、平板 44）。
@@ -39,7 +39,7 @@ const tag = computed(() => (props.to ? RouterLink : 'button'))
     :is="tag"
     :to="to"
     :type="to ? undefined : 'button'"
-    class="inline-flex min-h-(--tap-button-min-height) items-center justify-center border whitespace-nowrap disabled:pointer-events-none disabled:border-border-subtle disabled:bg-surface-muted disabled:text-text-disabled disabled:shadow-none aria-busy:border-action-primary-pressed aria-busy:bg-action-primary-pressed aria-busy:text-text-inverse"
+    class="inline-flex min-h-(--tap-button-min-height) items-center justify-center whitespace-nowrap disabled:pointer-events-none disabled:border-border-subtle disabled:bg-surface-muted disabled:text-text-disabled disabled:shadow-none aria-busy:border-action-primary-pressed aria-busy:bg-action-primary-pressed aria-busy:text-text-inverse"
     :class="[sizes[size], variants[variant]]"
   >
     <slot />
