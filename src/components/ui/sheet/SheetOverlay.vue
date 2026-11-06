@@ -22,7 +22,7 @@ const delegatedProps = reactiveOmit(props, 'class')
     data-slot="sheet-overlay"
     :class="
       cn(
-        'fixed inset-0 z-40 bg-overlay-backdrop backdrop-blur-[20px] duration-300 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 motion-reduce:animate-none',
+        'fixed inset-0 z-40 bg-overlay-backdrop backdrop-blur-[4px] duration-300 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 motion-reduce:animate-none',
         props.class,
       )
     "

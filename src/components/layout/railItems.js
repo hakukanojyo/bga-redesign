@@ -10,10 +10,11 @@ export const railItems = [
   { label: '精靈', image: elfIcon, color: '--color-rail-elf', panel: 'elf' },
 ]
 
+// 面板標題用全名（產品規則 6.6 用詞統一）；側欄和導覽列空間小，項目名稱縮成「牌桌」
 export const panelTitles = {
   profile: '個人',
   friends: '好友',
-  tables: '牌桌',
+  tables: '我的牌桌',
   favorites: '我的收藏',
   membership: '會員',
   elf: '精靈',

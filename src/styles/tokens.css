@@ -112,6 +112,7 @@
   --base-black: #000000;
   --base-black-a0: rgb(0 0 0 / 0);
   --base-black-a30: rgb(0 0 0 / 0.3);
+  --base-black-a40: rgb(0 0 0 / 0.4);
   --base-black-a76: rgb(0 0 0 / 0.76);
 
   /* 漸層色標：SYS-09 的例外，漸層直接用 Primitive */
@@ -325,7 +326,7 @@
 
   --color-overlay-scrim: var(--gray-950);
   --color-overlay-scrim-strong: var(--gray-950-a36);
-  --color-overlay-backdrop: var(--base-black-a30);
+  --color-overlay-backdrop: var(--base-black-a40);
 
   --color-border-default: var(--gray-950);
   --color-border-inverse: var(--base-white);

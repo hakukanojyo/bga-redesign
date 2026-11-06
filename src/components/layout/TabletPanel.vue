@@ -1,8 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
+import PanelContent from '@/components/layout/PanelContent.vue'
 import { panelTitles } from '@/components/layout/railItems'
 
 const props = defineProps({
@@ -31,7 +30,7 @@ function onInteractOutside(event) {
 <!--
   Figma：Layout/Bottom Sheet（993:1762）、Layout/Side Panel panel=個人-tablet（993:1769）。
   平板的頭像從右側滑出個人面板（寬 375），其他項目從下往上打開 Bottom Sheet（固定高 480）；遮罩和面板都停在底部導覽列上方。
-  shadcn-vue 的 Sheet（Reka UI Dialog）負責鎖焦點、Esc 關閉、關掉後焦點回到原本的按鈕。內容之後做
+  shadcn-vue 的 Sheet（Reka UI Dialog）負責鎖焦點、Esc 關閉、關掉後焦點回到原本的按鈕。內容見 PanelContent
 -->
 <template>
   <Sheet :open="!!panel" @update:open="(open) => !open && emit('close')">
@@ -43,12 +42,18 @@ function onInteractOutside(event) {
       :aria-describedby="undefined"
       @interact-outside="onInteractOutside"
     >
-      <div class="flex flex-1 flex-col" :class="shownPanel === 'profile' ? 'px-12 py-20' : 'p-24'">
-        <div class="flex flex-1 flex-col gap-16" :class="shownPanel === 'profile' && 'px-16 pt-8'">
+      <div
+        class="flex min-h-0 flex-1 flex-col"
+        :class="shownPanel === 'profile' ? 'px-12 py-20' : 'p-24'"
+      >
+        <div
+          class="flex min-h-0 flex-1 flex-col gap-16"
+          :class="shownPanel === 'profile' && 'px-16 pt-8'"
+        >
           <SheetTitle>{{ panelTitles[shownPanel] }}</SheetTitle>
-          <div class="flex flex-1 flex-col items-center justify-center gap-8 text-text-secondary">
-            <FontAwesomeIcon :icon="faScrewdriverWrench" class="text-[32px]" />
-            <p class="type-tc-body-13">這張桌子還在佈置中</p>
+          <!-- 內容在 sheet 裡上下捲動（PRD 7.8 第 8 條）；四周留 8 給卡片陰影，不會被捲動區切掉 -->
+          <div class="-m-8 flex min-h-0 flex-1 flex-col overflow-y-auto p-8">
+            <PanelContent :panel="shownPanel" touch />
           </div>
         </div>
       </div>
