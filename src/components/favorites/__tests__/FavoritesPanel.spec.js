@@ -20,12 +20,12 @@ async function mountWith(slugs, status = 'success') {
 beforeEach(() => vi.clearAllMocks())
 
 describe('我的收藏面板（FAV-01～06）', () => {
-  it('lists favorites newest first, linking to the game page open tables section', async () => {
+  it('lists favorites newest first, linking to the top of the game page', async () => {
     const { wrapper } = await mountWith(['azul', 'catan'])
     const names = wrapper.findAll('h3 a')
     expect(names).toHaveLength(2)
-    expect(names[0].attributes('href')).toBe('/game/azul#tables')
-    expect(names[1].attributes('href')).toBe('/game/catan#tables')
+    expect(names[0].attributes('href')).toBe('/game/azul')
+    expect(names[1].attributes('href')).toBe('/game/catan')
   })
 
   it('each card offers 建立遊戲桌, 查看開放桌 and 取消收藏', async () => {

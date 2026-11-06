@@ -355,6 +355,7 @@
 
   --color-status-online: var(--green-500);
   --color-status-notify: var(--red-500);
+  --color-status-live: var(--orange-400);
   --color-status-success: var(--green-500);
   --color-status-success-bg: var(--green-50);
   --color-status-error: var(--red-700);

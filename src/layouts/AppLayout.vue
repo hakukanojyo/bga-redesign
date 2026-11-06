@@ -12,6 +12,7 @@ import TabletPanel from '@/components/layout/TabletPanel.vue'
 import { Toaster } from '@/components/ui/sonner'
 import { getOnlineStats } from '@/api/stats'
 import { useFavoritesStore } from '@/stores/favorites'
+import { useMyTablesStore } from '@/stores/myTables'
 
 // 開著的側欄面板：profile、tables、favorites；同一時間只開一個
 const openPanel = ref(null)
@@ -43,9 +44,12 @@ const stats = ref(null)
 
 // 收藏在首頁卡片、遊戲頁、收藏面板都會用到，進站時拿一次
 const favorites = useFavoritesStore()
+// 我的牌桌：側欄和導覽列的紅點每一頁都要，進站時拿一次
+const myTables = useMyTablesStore()
 
 onMounted(async () => {
   favorites.load()
+  myTables.load()
   try {
     stats.value = await getOnlineStats()
   } catch {

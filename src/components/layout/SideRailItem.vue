@@ -1,5 +1,7 @@
 <script setup>
+import { computed } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useMyTablesStore } from '@/stores/myTables'
 
 const props = defineProps({
   item: { type: Object, required: true },
@@ -8,11 +10,15 @@ const props = defineProps({
 })
 
 defineEmits(['toggle'])
+
+// 牌桌的紅點：有輪到你的回合制牌桌（MYTBL-04）。右側欄、面板裡的側欄、平板導覽列都用這個元件，一起亮
+const myTables = useMyTablesStore()
+const notify = computed(() => props.item.panel === 'tables' && myTables.hasMyTurn)
 </script>
 
 <!-- Figma：Side Rail/Item（560:2132）。桌面 hover 顯示光暈＋提示框，平板圖示下方直接顯示名稱 -->
 <template>
-  <!-- 選中後圖示變成 rail 色，hover 的光暈改成白色 -->
+  <!-- 選中（面板開著）：圖示變成 rail 色、一直有白色光暈；選中再 hover 只多出左邊的提示框（2026-11-06）。平板底部導覽列選中時也有白色光暈，hover 不加 -->
   <button
     type="button"
     aria-haspopup="dialog"
@@ -23,8 +29,14 @@ defineEmits(['toggle'])
     @click="$emit('toggle', item.panel)"
   >
     <span
-      class="flex size-[34px] items-center justify-center group-hover/item:glow-rail group-focus-visible/item:glow-rail max-desktop:group-hover/item:filter-none"
+      class="relative flex size-[34px] items-center justify-center group-hover/item:glow-rail group-focus-visible/item:glow-rail group-data-active/item:glow-rail max-desktop:group-[:hover:not([data-active])]/item:filter-none"
     >
+      <!-- Figma Side Rail/Item 的 Notify Dot：8×8，貼在圖示框右上角 -->
+      <span
+        v-if="notify"
+        class="absolute top-0 right-0 size-[8px] rounded-full bg-status-notify"
+        aria-hidden="true"
+      />
       <FontAwesomeIcon v-if="item.icon" :icon="item.icon" class="text-[24px]" />
       <!-- 自製圖示用遮罩上色，顏色才會跟著文字色 -->
       <span
@@ -39,5 +51,6 @@ defineEmits(['toggle'])
     >
       {{ item.label }}
     </span>
+    <span v-if="notify" class="sr-only">（有輪到你的牌桌）</span>
   </button>
 </template>

@@ -51,8 +51,8 @@ function onInteractOutside(event) {
           :class="shownPanel === 'profile' && 'px-16 pt-8'"
         >
           <SheetTitle>{{ panelTitles[shownPanel] }}</SheetTitle>
-          <!-- 內容在 sheet 裡上下捲動（PRD 7.8 第 8 條）；四周留 8 給卡片陰影，不會被捲動區切掉 -->
-          <div class="-m-8 flex min-h-0 flex-1 flex-col overflow-y-auto p-8">
+          <!-- 內容在 sheet 裡上下捲動（PRD 7.8 第 8 條）；捲動區在各面板裡（panelClasses.js 的 panelScroll） -->
+          <div class="flex min-h-0 flex-1 flex-col">
             <PanelContent :panel="shownPanel" touch />
           </div>
         </div>

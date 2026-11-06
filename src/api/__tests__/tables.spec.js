@@ -1,9 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { openTables } from '../data/tables'
+import { initialMyTables, openTables } from '../data/tables'
 import {
   emptyReason,
   filterTables,
   getGameTables,
+  getMyTables,
   getOpenTables,
   joinTable,
   TABLES_PAGE_SIZE,
@@ -29,7 +30,6 @@ describe('開放桌（TABLE）', () => {
   })
 
   it('only gives 你的回合 to turn-based tables (MYTBL-04)', async () => {
-    const { initialMyTables } = await import('../data/tables')
     for (const mine of initialMyTables.filter((item) => item.isMyTurn)) {
       expect(openTables.find((table) => table.id === mine.tableId).pace).toBe('turn')
     }
@@ -100,12 +100,12 @@ describe('尋找開放桌（PRD 7.5）', () => {
   it('hands out tables in batches of 20 with the total (載入更多)', async () => {
     const first = await run(getOpenTables({}))
     expect(first.tables).toHaveLength(TABLES_PAGE_SIZE)
-    // 40 桌扣掉一開始就在我的牌桌裡的 3 桌
-    expect(first.total).toBe(37)
+    // 40 桌扣掉一開始就在我的牌桌裡的 7 桌
+    expect(first.total).toBe(33)
     const next = await run(getOpenTables({}, { offset: TABLES_PAGE_SIZE }))
-    expect(next.tables).toHaveLength(17)
+    expect(next.tables).toHaveLength(13)
     const ids = [...first.tables, ...next.tables].map((table) => table.id)
-    expect(new Set(ids).size).toBe(37)
+    expect(new Set(ids).size).toBe(33)
   })
 })
 
@@ -139,8 +139,27 @@ describe('自動刷新像真的網站一樣（TABLE-06）', () => {
       await vi.runAllTimersAsync()
       counts.push((await promise).total)
     }
-    expect(Math.min(...counts)).toBeGreaterThanOrEqual(34)
+    // 全站 34～46 桌；列表不放自己已經加入的
+    expect(Math.min(...counts)).toBeGreaterThanOrEqual(34 - initialMyTables.length)
     expect(Math.max(...counts)).toBeLessThanOrEqual(46)
     expect(new Set(counts).size).toBeGreaterThan(1)
+  })
+})
+
+describe('我的牌桌（MYTBL）', () => {
+  beforeEach(() => {
+    localStorage.clear()
+    vi.useFakeTimers()
+  })
+
+  it('puts tables that need you first: your turn, then realtime, then the rest', async () => {
+    const promise = getMyTables()
+    await vi.runAllTimersAsync()
+    const { playing, queued } = await promise
+    const kinds = playing.map((row) =>
+      row.isMyTurn ? 'turn' : row.table.pace === 'realtime' ? 'live' : 'other',
+    )
+    expect(kinds).toEqual(['turn', 'turn', 'live', 'live', 'other'])
+    expect(queued.every((row) => row.status === 'queued')).toBe(true)
   })
 })

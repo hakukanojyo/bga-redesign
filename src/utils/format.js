@@ -1,3 +1,5 @@
+import { modeLabels, paceLabels } from '@/api/data/options'
+
 // 全站統一的資料格式（產品規則 6.6）：每個畫面都用這裡的函式，不各自組字串
 
 export function formatPlayers({ min, max }) {
@@ -15,6 +17,12 @@ export function formatWait(minutes) {
 
 export function formatSettings(settings) {
   return settings.join('／')
+}
+
+// 牌桌的制度、模式加設定（2026-11-06）：「回合制／簡易／基礎版／10 分鐘局／隨機」。
+// 制度和模式會影響要不要選這桌，一律寫出來，不管篩選選了什麼；我的牌桌先用，尋找開放桌之後也改用這個
+export function formatTableInfo({ pace, mode, settings }) {
+  return formatSettings([paceLabels[pace], modeLabels[mode], ...settings])
 }
 
 export function formatSeats({ taken, max }) {

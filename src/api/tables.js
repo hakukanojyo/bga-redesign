@@ -133,7 +133,11 @@ export async function joinTable(tableId) {
   return fakeRequest(withGame(table))
 }
 
-// 我的牌桌（MYTBL）：進行中把輪到我的排最上面
+// 進行中的順序（MYTBL-04，2026-11-06）：現在需要你的在前——輪到你的回合制 → 即時制 → 其他回合制；同一組新加入的在前
+const urgency = (row) => (row.isMyTurn ? 0 : row.table.pace === 'realtime' ? 1 : 2)
+const byUrgency = (a, b) => urgency(a) - urgency(b) || b.joinedAt.localeCompare(a.joinedAt)
+
+// 我的牌桌（MYTBL）
 export function getMyTables() {
   const mine = scenario() === 'empty' ? [] : loadStored(KEY, initialMyTables)
   const rows = mine
@@ -143,8 +147,10 @@ export function getMyTables() {
     })
     .filter(Boolean)
   return fakeRequest({
-    playing: rows.filter((row) => row.status === 'playing').sort((a, b) => b.isMyTurn - a.isMyTurn),
-    queued: rows.filter((row) => row.status === 'queued'),
+    playing: rows.filter((row) => row.status === 'playing').sort(byUrgency),
+    queued: rows
+      .filter((row) => row.status === 'queued')
+      .sort((a, b) => b.joinedAt.localeCompare(a.joinedAt)),
   })
 }
 

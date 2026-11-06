@@ -1,6 +1,7 @@
 import { inject, reactive } from 'vue'
 import { joinTable } from '@/api/tables'
 import { toast } from '@/utils/toast'
+import { useMyTablesStore } from '@/stores/myTables'
 
 // 加入成功後「已加入」停多久才移除（2026-11-05 決定）
 export const JOINED_MS = 1500
@@ -15,6 +16,13 @@ export function useJoinTable() {
   // 加入成功、已經拿掉的桌（下次刷新伺服器也不會再給，因為在我的牌桌裡了）
   const removed = reactive(new Set())
   const openPanel = inject('openPanel', () => {})
+  const myTables = useMyTablesStore()
+
+  // 按提示的「查看」：打開我的牌桌，直接看排隊中（剛加入的在那裡）
+  function viewMyTables() {
+    myTables.tab = 'queued'
+    openPanel('tables')
+  }
 
   function stateOf(table) {
     return rowState[table.id] ?? (table.status === 'full' ? 'full' : 'waiting')
@@ -25,7 +33,8 @@ export function useJoinTable() {
     try {
       await joinTable(table.id)
       rowState[table.id] = 'joined'
-      toast.success('已加入這桌', { onView: () => openPanel('tables') })
+      myTables.load()
+      toast.success('已加入這桌', { onView: viewMyTables })
       setTimeout(() => removed.add(table.id), JOINED_MS)
     } catch (error) {
       if (error.code === 'full') {
