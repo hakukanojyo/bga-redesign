@@ -1,4 +1,5 @@
 <script setup>
+import UserAvatar from '@/components/UserAvatar.vue'
 import { computed } from 'vue'
 import { formatSeats, formatTableInfo, formatWait } from '@/utils/format'
 import AppButton from '@/components/AppButton.vue'
@@ -27,13 +28,7 @@ const settings = computed(() => formatTableInfo(props.table))
   >
     <div class="flex w-[256px] shrink-0 flex-col gap-8">
       <div class="flex items-center gap-12">
-        <img
-          :src="table.host.avatar"
-          alt=""
-          width="40"
-          height="40"
-          class="size-[40px] shrink-0 rounded-full border border-border-accent bg-surface-placeholder object-cover"
-        />
+        <UserAvatar :user="table.host" :size="40" />
         <p class="truncate type-tc-title-16 text-text-body">{{ table.host.name }}</p>
       </div>
       <p class="line-clamp-2 type-tc-label-14 text-text-body" :title="settings">

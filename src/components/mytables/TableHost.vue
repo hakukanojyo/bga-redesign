@@ -1,4 +1,5 @@
 <script setup>
+import UserAvatar from '@/components/UserAvatar.vue'
 defineProps({
   host: { type: Object, required: true },
 })
@@ -9,13 +10,7 @@ defineProps({
   <p class="flex min-w-0 items-center gap-8 type-tc-body-13 text-text-body">
     桌主：
     <span class="flex min-w-0 items-center gap-12">
-      <img
-        :src="host.avatar"
-        alt=""
-        width="20"
-        height="20"
-        class="size-[20px] shrink-0 rounded-full border-2 border-border-accent bg-surface-placeholder object-cover"
-      />
+      <UserAvatar :user="host" :size="20" />
       <span class="truncate type-en-body-13">{{ host.name }}</span>
     </span>
   </p>

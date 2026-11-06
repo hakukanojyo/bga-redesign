@@ -62,7 +62,7 @@
 | --- | --- | --- | --- |
 | `id` | string | `t-1024` | |
 | `gameSlug` | string | `werewolves` | 遊戲名稱、封面 |
-| `host` | `{ name, avatar }` | | 桌主 |
+| `host` | `{ name, avatar, isPremium }` | | 桌主；`isPremium` 是尊榮會員，頭像有黃色外框 |
 | `mode` | `simple` \| `arena` | | 遊戲模式篩選（簡易、競技場） |
 | `pace` | `realtime` \| `turn` | | 遊戲制度篩選；回合制才有「你的回合！」 |
 | `settings` | string[] | `['基礎版', '10 分鐘局', '隨機']` | 依序：版本、時間限制、座位；顯示時用「／」串接 |
@@ -117,6 +117,7 @@
 | `rank` | number | `1` |
 | `name` | string | 虛構的玩家名稱 |
 | `avatar` | string | |
+| `isPremium` | boolean | 尊榮會員，頭像有黃框 |
 | `countryCode` | string | `TW`（ISO 3166-1，國旗用 `flag-icons`，ADR 0009） |
 | `score` | number | `9980000` →「9.98M PX」 |
 

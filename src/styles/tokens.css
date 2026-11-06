@@ -289,6 +289,8 @@
     0 -1px 2.8px rgb(0 0 0 / 0.11);
   --shadow-glow-status-blue: 0 0 6.2px #0b72b5;
   --shadow-glow-status-green: 0 0 6.1px #17a91a;
+  /* glow/avatar-hover：滑鼠移到頭像上的黃色外光暈（Figma User/Avatar state=hover） */
+  --shadow-glow-avatar-hover: 0 0 12.6px rgb(239 210 22);
   /* inner/button-secondary：Figma 綁的是 Primitive（blue/400、blue/500），這裡改用同色的 Semantic */
   --shadow-inner-button-secondary: inset 0 -2px 0 var(--color-border-brand-subtle);
   --shadow-inner-button-secondary-hover: inset 0 -2px 0 var(--color-selection-accent);

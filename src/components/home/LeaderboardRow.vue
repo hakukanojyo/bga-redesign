@@ -2,12 +2,13 @@
 import { computed } from 'vue'
 import { formatCountry, formatScore } from '@/utils/format'
 import { flagUrl } from '@/utils/flags'
+import UserAvatar from '@/components/UserAvatar.vue'
 import medal1 from '@/assets/icons/medal-1.svg'
 import medal2 from '@/assets/icons/medal-2.svg'
 import medal3 from '@/assets/icons/medal-3.svg'
 
 const props = defineProps({
-  // { rank, name, avatar, countryCode, score }
+  // { rank, name, avatar, isPremium, countryCode, score }；isPremium 的頭像有黃框（尊榮會員）
   entry: { type: Object, required: true },
   // 自己那一列：名次用實心藍底，名字不加粗
   self: { type: Boolean, default: false },
@@ -33,14 +34,7 @@ const medal = computed(() => (props.self ? null : medals[props.entry.rank]))
       >
         <span class="sr-only">第</span>{{ entry.rank }}<span class="sr-only">名</span>
       </span>
-      <img
-        :src="entry.avatar"
-        alt=""
-        width="36"
-        height="36"
-        class="size-[36px] rounded-full bg-surface-placeholder object-cover"
-        :class="medal && 'ring-2 ring-border-accent'"
-      />
+      <UserAvatar :user="entry" :size="36" />
       <div class="flex flex-col">
         <span class="text-text-body" :class="self ? 'type-en-body-13' : 'type-en-body-13-strong'">
           {{ entry.name }}
