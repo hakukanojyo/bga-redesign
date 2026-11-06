@@ -1,4 +1,5 @@
 <script setup>
+import ListTransition from '@/components/ListTransition.vue'
 import { computed, watch } from 'vue'
 import { getGameTables } from '@/api/tables'
 import { useJoinTable } from '@/composables/useJoinTable'
@@ -72,18 +73,9 @@ watch(
   >
     <AppButton to="/coming-soon">建立遊戲桌</AppButton>
   </PageState>
-  <TransitionGroup
-    v-else
-    tag="ul"
-    class="relative flex flex-col gap-8"
-    move-class="transition-transform duration-300 motion-reduce:transition-none"
-    enter-active-class="transition-opacity duration-300 motion-reduce:transition-none"
-    enter-from-class="opacity-0"
-    leave-active-class="absolute inset-x-0 transition-opacity duration-300 motion-reduce:transition-none"
-    leave-to-class="opacity-0"
-  >
+  <ListTransition v-else class="flex flex-col gap-8">
     <li v-for="table in rows" :key="table.id">
       <OpenTableRow :table="table" :state="stateOf(table)" @join="join(table)" />
     </li>
-  </TransitionGroup>
+  </ListTransition>
 </template>

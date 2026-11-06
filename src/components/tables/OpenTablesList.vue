@@ -1,4 +1,5 @@
 <script setup>
+import ListTransition from '@/components/ListTransition.vue'
 import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
@@ -49,15 +50,7 @@ const failed = ref(new Set())
       >
     </div>
 
-    <TransitionGroup
-      tag="ul"
-      class="relative flex flex-col gap-8"
-      move-class="transition-transform duration-300 motion-reduce:transition-none"
-      enter-active-class="transition-opacity duration-300 motion-reduce:transition-none"
-      enter-from-class="opacity-0"
-      leave-active-class="absolute inset-x-0 transition-opacity duration-300 motion-reduce:transition-none"
-      leave-to-class="opacity-0"
-    >
+    <ListTransition class="flex flex-col gap-8">
       <li
         v-for="table in tables"
         :key="table.id"
@@ -155,6 +148,6 @@ const failed = ref(new Set())
           </span>
         </div>
       </li>
-    </TransitionGroup>
+    </ListTransition>
   </div>
 </template>

@@ -13,6 +13,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { getOnlineStats } from '@/api/stats'
 import { useFavoritesStore } from '@/stores/favorites'
 import { useMyTablesStore } from '@/stores/myTables'
+import { usePolling } from '@/composables/usePolling'
 
 // 開著的側欄面板：profile、tables、favorites；同一時間只開一個
 const openPanel = ref(null)
@@ -46,6 +47,8 @@ const stats = ref(null)
 const favorites = useFavoritesStore()
 // 我的牌桌：側欄和導覽列的紅點每一頁都要，進站時拿一次
 const myTables = useMyTablesStore()
+// 每 10 秒看一次：人到齊時排隊中 → 進行中並跳提示（MYTBL-11），輪到你的紅點也跟著更新
+usePolling(() => myTables.load(), 10 * 1000)
 
 onMounted(async () => {
   favorites.load()
@@ -75,5 +78,11 @@ onMounted(async () => {
   <TabletPanel :panel="isTablet ? openPanel : null" @close="openPanel = null" />
   <!-- 提示在畫面下方置中；平板在底部導覽列（72）上方，兩者都離 16 -->
   <!-- 提示在畫面上方置中、Header 下面 16（ADR 0016）：桌面和平板一樣 -->
-  <Toaster position="top-center" :offset="{ top: 'calc(var(--header-height) + 16px)' }" />
+  <!--
+    桌面側欄面板開著時，提示移進面板裡（docs/adr/0017）：面板是原生 dialog，在瀏覽器最上層，
+    提示留在外面會被蓋在模糊後面、「復原」按不到。移進去後一樣用 fixed 定位，位置不變
+  -->
+  <Teleport defer to="#side-panel" :disabled="!openPanel || isTablet">
+    <Toaster position="top-center" :offset="{ top: 'calc(var(--header-height) + 16px)' }" />
+  </Teleport>
 </template>

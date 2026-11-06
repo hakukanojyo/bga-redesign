@@ -3,9 +3,9 @@ import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 const props = defineProps({
-  // Figma Button 的 type；目前只做用到的 primary、secondary
+  // Figma Button 的 type；目前只做用到的 primary、secondary、danger
   variant: { type: String, default: 'primary' },
-  // md：一般按鈕；sm：列表裡的小按鈕（開放桌的「加入這桌」「查看詳細設定」）
+  // md：一般按鈕；sm：列表裡的小按鈕（開放桌的「加入這桌」「查看詳細設定」）；lg：彈窗的按鈕
   size: { type: String, default: 'md' },
   // 有 to 就是連結（RouterLink），沒有就是一般按鈕
   to: { type: [String, Object], default: null },
@@ -14,6 +14,9 @@ const props = defineProps({
 const variants = {
   primary:
     'border-b-2 border-border-brand bg-surface-brand text-text-inverse hover:border-border-brand-strong hover:bg-action-primary-hover active:border-action-primary-pressed active:bg-action-primary-pressed',
+  // 確認彈窗的「確定退出」（Figma Button type=alert 的實心版）：底部 2px 深一階的邊
+  danger:
+    'border-b-2 border-action-danger-hover bg-action-danger text-text-inverse hover:bg-action-danger-hover active:border-action-danger-pressed active:bg-action-danger-pressed',
   secondary:
     'border border-border-brand-subtle bg-surface-default text-selection-accent shadow-inner-button-secondary hover:border-selection-accent hover:bg-selection-bg hover:shadow-inner-button-secondary-hover active:border-selection-accent active:bg-selection-bg active:shadow-inner-button-secondary-press',
 }
@@ -21,6 +24,8 @@ const variants = {
 const sizes = {
   md: 'gap-8 rounded-8 px-16 py-8 type-tc-label-14',
   sm: 'gap-4 rounded-4 px-12 py-4 type-tc-caption-12',
+  // 彈窗裡的大按鈕（Figma Modal/Confirm）
+  lg: 'gap-8 rounded-8 px-32 py-16 type-tc-title-16',
 }
 
 const tag = computed(() => (props.to ? RouterLink : 'button'))

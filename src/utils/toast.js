@@ -12,11 +12,14 @@ export const toast = {
       action: undo ? { label: '復原', onClick: undo } : undefined,
     })
   },
-  // 系統完成一件有份量的事；onView 前往結果所在的地方，不會撤銷
-  success(message, { onView } = {}) {
+  // 系統完成一件有份量的事；onView 前往結果所在的地方，不會撤銷。
+  // 動作文字預設「查看」，人到齊時是「進入遊戲」（產品規則 4.1）。
+  // persistent：使用者可能不在座位上，提示留到按動作或 × 才關（人到齊，2026-11-06）
+  success(message, { onView, viewLabel = '查看', persistent = false } = {}) {
     return sonner.success(message, {
-      duration: DEFAULT_DURATION,
-      action: onView ? { label: '查看', onClick: onView } : undefined,
+      duration: persistent ? Infinity : DEFAULT_DURATION,
+      closeButton: persistent,
+      action: onView ? { label: viewLabel, onClick: onView } : undefined,
     })
   },
   // 操作失敗，不附動作

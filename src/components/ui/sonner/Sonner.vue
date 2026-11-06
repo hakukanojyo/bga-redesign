@@ -1,6 +1,6 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faCircleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { cn } from 'cn'
 import { Toaster as Sonner } from 'vue-sonner'
 import 'vue-sonner/style.css'
@@ -48,7 +48,11 @@ const designOptions = {
       'ml-8 shrink-0 cursor-pointer type-tc-label-14 text-text-link-on-light hover:underline',
       'in-data-[type=success]:ml-0 in-data-[type=success]:text-text-link',
     ),
+    // 不會自己消失的提示（人到齊）才有 ×：排在最右邊，點擊範圍 28，顏色跟著提示的文字色
+    closeButton:
+      'order-last -mr-4 flex size-[28px] shrink-0 cursor-pointer items-center justify-center rounded-4 text-[14px] hover:opacity-70',
   },
+  closeButtonAriaLabel: '關閉提示',
 }
 </script>
 
@@ -63,6 +67,9 @@ const designOptions = {
     </template>
     <template #error-icon>
       <FontAwesomeIcon :icon="faCircleExclamation" />
+    </template>
+    <template #close-icon>
+      <FontAwesomeIcon :icon="faXmark" />
     </template>
   </Sonner>
 </template>

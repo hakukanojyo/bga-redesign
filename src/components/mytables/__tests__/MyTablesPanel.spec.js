@@ -65,6 +65,8 @@ describe('我的牌桌面板（MYTBL-01～06、09、10）', () => {
     await flushPromises()
     expect(wrapper.find('li').text()).toContain('預估等待 約 13 分鐘')
     expect(wrapper.find('li').text()).toContain('查看此桌詳細設定')
+    // 點卡片到遊戲主畫面，「查看此桌詳細設定」才到詳細設定
+    expect(wrapper.find('li h3 a').attributes('href')).toBe('/game/skull')
   })
 
   it('shows the empty state with 尋找開放桌 (MYTBL-09)', async () => {
