@@ -60,7 +60,7 @@ const links = [
           alt=""
           width="40"
           height="40"
-          class="size-[40px] rounded-full border-2 border-border-accent object-cover"
+          class="size-[40px] rounded-full border-2 border-border-accent object-cover transition-shadow duration-200 hover:shadow-glow-avatar-hover motion-reduce:transition-none"
         />
       </button>
     </div>

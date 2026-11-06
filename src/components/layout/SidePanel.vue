@@ -73,7 +73,7 @@ function onClick(event) {
               alt=""
               width="34"
               height="34"
-              class="size-[40px] max-w-none rounded-full border-2 border-border-accent object-cover transition-[width,height] duration-300 ease-[cubic-bezier(0.2,0,0,1)] group-open/panel:size-[34px] starting:group-open/panel:size-[40px] motion-reduce:transition-none"
+              class="size-[40px] max-w-none rounded-full border-2 border-border-accent object-cover transition-[width,height,box-shadow] duration-300 hover:shadow-glow-avatar-hover ease-[cubic-bezier(0.2,0,0,1)] group-open/panel:size-[34px] starting:group-open/panel:size-[40px] motion-reduce:transition-none"
             />
           </button>
         </div>

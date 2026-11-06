@@ -1,5 +1,6 @@
 <script setup>
 import ListTransition from '@/components/ListTransition.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
 import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
@@ -98,13 +99,7 @@ const failed = ref(new Set())
           <span class="sr-only">人數</span>{{ formatSeats(table.seats) }}
         </p>
         <div class="flex min-w-0 items-center gap-12">
-          <img
-            :src="table.host.avatar"
-            alt=""
-            width="40"
-            height="40"
-            class="size-[40px] shrink-0 rounded-full border-2 border-border-accent bg-surface-placeholder object-cover"
-          />
+          <UserAvatar :user="table.host" :size="40" />
           <p class="truncate type-en-body-16 text-text-body">
             <span class="sr-only">桌主</span>{{ table.host.name }}
           </p>
