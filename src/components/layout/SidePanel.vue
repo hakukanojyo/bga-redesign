@@ -42,6 +42,7 @@ function onClick(event) {
 -->
 <template>
   <dialog
+    id="side-panel"
     ref="dialog"
     :aria-label="panelTitles[panel]"
     class="group/panel ml-auto h-dvh max-h-none w-[164px] overflow-visible bg-transparent transition-[width,overlay,display] transition-discrete duration-300 ease-[cubic-bezier(0.2,0,0,1)] open:w-[443px] starting:open:w-[164px] backdrop:bg-overlay-backdrop backdrop:opacity-0 backdrop:backdrop-blur-[4px] backdrop:transition-[opacity,overlay,display] backdrop:transition-discrete backdrop:duration-300 open:backdrop:opacity-100 starting:open:backdrop:opacity-0 motion-reduce:transition-none motion-reduce:backdrop:transition-none"

@@ -21,9 +21,10 @@ watch(
   },
 )
 
-// 點到底部導覽列時不關閉，交給導覽列切換或關掉面板（PRD 7.10：再點同一個按鈕關閉）
+// 點到底部導覽列時不關閉，交給導覽列切換或關掉面板（PRD 7.10：再點同一個按鈕關閉）；
+// 點在面板上面的確認彈窗（原生 dialog，不在 Sheet 裡面）也不關閉
 function onInteractOutside(event) {
-  if (event.target.closest?.('[data-panel-nav]')) event.preventDefault()
+  if (event.target.closest?.('[data-panel-nav], dialog')) event.preventDefault()
 }
 </script>
 

@@ -11,6 +11,7 @@ import {
 import { gameName } from '@/api/games'
 import { formatDuration, formatPlayers } from '@/utils/format'
 import AppButton from '@/components/AppButton.vue'
+import DangerTextButton from '@/components/DangerTextButton.vue'
 import GameBox from '@/components/GameBox.vue'
 import PanelCard from '@/components/PanelCard.vue'
 import { fadeOnHover, showOnHover } from '@/components/panelClasses'
@@ -58,14 +59,9 @@ defineEmits(['remove'])
     </div>
 
     <template #actions>
-      <!-- 危險動作放左邊、常用的按鈕放右邊，和確認彈窗「紅色在左」一致；右邊那組主要按鈕在右（產品規則 7.3，2026-11-06）；沒有底色的文字按鈕 hover 加底線（產品規則 7.3） -->
-      <button
-        type="button"
-        class="min-h-(--tap-button-min-height) shrink-0 px-4 whitespace-nowrap type-tc-label-14 text-action-danger hover:underline active:text-action-danger-pressed"
-        @click="$emit('remove')"
-      >
+      <DangerTextButton @click="$emit('remove')">
         取消收藏<span class="sr-only">：{{ gameName(game) }}</span>
-      </button>
+      </DangerTextButton>
       <div class="flex gap-8">
         <AppButton variant="secondary" size="sm" :to="`/game/${game.slug}#tables`">
           <FontAwesomeIcon :icon="faMagnifyingGlass" class="text-[12px]" aria-hidden="true" />

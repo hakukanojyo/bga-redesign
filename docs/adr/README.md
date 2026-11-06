@@ -57,3 +57,4 @@
 | [0014](0014-cta-accent-color.md) | 首頁「立即遊玩」的顏色從橫幅自動取 |
 | [0015](0015-sonner-toast.md) | 提示（Toast）用 shadcn-vue 的 Sonner |
 | [0016](0016-toast-at-top.md) | 提示（Toast）改到畫面上方 |
+| [0017](0017-native-confirm-dialog.md) | 確認彈窗用原生 `<dialog>` |

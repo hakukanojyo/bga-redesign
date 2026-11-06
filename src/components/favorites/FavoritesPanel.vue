@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { findGame } from '@/api/games'
 import { useFavoritesStore } from '@/stores/favorites'
 import AppButton from '@/components/AppButton.vue'
+import ListTransition from '@/components/ListTransition.vue'
 import BlockError from '@/components/BlockError.vue'
 import PageState from '@/components/PageState.vue'
 import SkeletonBlock from '@/components/SkeletonBlock.vue'
@@ -53,7 +54,7 @@ const games = computed(() => favorites.slugs.map(findGame).filter(Boolean))
         <AppButton :to="{ name: 'home' }">探索遊戲</AppButton>
       </PageState>
     </div>
-    <ul
+    <ListTransition
       v-else
       class="grid content-start"
       :class="
@@ -67,6 +68,6 @@ const games = computed(() => favorites.slugs.map(findGame).filter(Boolean))
           @remove="favorites.remove(game.slug, { undoable: true })"
         />
       </li>
-    </ul>
+    </ListTransition>
   </div>
 </template>

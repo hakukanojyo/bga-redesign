@@ -127,7 +127,15 @@ export async function joinTable(tableId) {
     throw Object.assign(new Error('牌桌已滿'), { code: 'full' })
   }
   if (!mine.some((item) => item.tableId === tableId)) {
-    mine.unshift({ tableId, status: 'queued', isMyTurn: false, joinedAt: new Date().toISOString() })
+    const now = Date.now()
+    mine.unshift({
+      tableId,
+      status: 'queued',
+      isMyTurn: false,
+      joinedAt: new Date(now).toISOString(),
+      // 假資料：加入後固定 30 秒人到齊（2026-11-06 決定，展示和可用性測試每次都一樣）
+      fillsAt: new Date(now + FILL_AFTER_MS).toISOString(),
+    })
     saveStored(KEY, mine)
   }
   return fakeRequest(withGame(table))
@@ -137,9 +145,28 @@ export async function joinTable(tableId) {
 const urgency = (row) => (row.isMyTurn ? 0 : row.table.pace === 'realtime' ? 1 : 2)
 const byUrgency = (a, b) => urgency(a) - urgency(b) || b.joinedAt.localeCompare(a.joinedAt)
 
+// 加入後多久人到齊（MYTBL-11）。一開始就在排隊中的桌沒有 fillsAt，一直排隊，給排隊中示範用
+export const FILL_AFTER_MS = 30 * 1000
+
+// 人到齊就自動開始：排隊中 → 進行中（產品規則 3.2）。存回去，下次拿也是進行中
+function startFilledTables() {
+  const mine = loadStored(KEY, initialMyTables)
+  const now = Date.now()
+  let changed = false
+  for (const item of mine) {
+    if (item.status === 'queued' && item.fillsAt && Date.parse(item.fillsAt) <= now) {
+      item.status = 'playing'
+      delete item.fillsAt
+      changed = true
+    }
+  }
+  if (changed) saveStored(KEY, mine)
+  return mine
+}
+
 // 我的牌桌（MYTBL）
 export function getMyTables() {
-  const mine = scenario() === 'empty' ? [] : loadStored(KEY, initialMyTables)
+  const mine = scenario() === 'empty' ? [] : startFilledTables()
   const rows = mine
     .map((item) => {
       const table = known.get(item.tableId)

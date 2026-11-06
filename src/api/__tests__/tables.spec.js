@@ -5,6 +5,7 @@ import {
   filterTables,
   getGameTables,
   getMyTables,
+  FILL_AFTER_MS,
   getOpenTables,
   joinTable,
   TABLES_PAGE_SIZE,
@@ -161,5 +162,30 @@ describe('我的牌桌（MYTBL）', () => {
     )
     expect(kinds).toEqual(['turn', 'turn', 'live', 'live', 'other'])
     expect(queued.every((row) => row.status === 'queued')).toBe(true)
+  })
+
+  it('starts a table I joined once it fills up 30 seconds later (MYTBL-11)', async () => {
+    const run = async (promise) => {
+      await vi.runAllTimersAsync()
+      return promise
+    }
+    const { tables } = await run(getOpenTables({}))
+    const target = tables.find((table) => table.status === 'waiting')
+    await run(joinTable(target.id))
+
+    let mine = await run(getMyTables())
+    expect(mine.queued.some((row) => row.tableId === target.id)).toBe(true)
+
+    vi.setSystemTime(Date.now() + FILL_AFTER_MS)
+    mine = await run(getMyTables())
+    expect(mine.queued.some((row) => row.tableId === target.id)).toBe(false)
+    expect(mine.playing.some((row) => row.tableId === target.id)).toBe(true)
+  })
+
+  it('keeps the tables that were already queued waiting (排隊中示範)', async () => {
+    vi.setSystemTime(Date.now() + 60 * 60 * 1000)
+    const promise = getMyTables()
+    await vi.runAllTimersAsync()
+    expect((await promise).queued.length).toBeGreaterThan(0)
   })
 })

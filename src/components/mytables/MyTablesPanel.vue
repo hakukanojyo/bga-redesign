@@ -2,6 +2,7 @@
 import { computed, onMounted } from 'vue'
 import { useMyTablesStore } from '@/stores/myTables'
 import AppButton from '@/components/AppButton.vue'
+import ListTransition from '@/components/ListTransition.vue'
 import BlockError from '@/components/BlockError.vue'
 import PageState from '@/components/PageState.vue'
 import SegmentedControl from '@/components/SegmentedControl.vue'
@@ -70,8 +71,10 @@ const empty = {
           <AppButton to="/tables">尋找開放桌</AppButton>
         </PageState>
       </div>
-      <ul
+      <!-- 換分頁是換一整份清單，用 key 直接換掉，不要每張卡都跑淡出淡入 -->
+      <ListTransition
         v-else
+        :key="store.tab"
         class="grid content-start"
         :class="
           touch ? 'grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-16' : 'grid-cols-1 gap-8'
@@ -81,7 +84,7 @@ const empty = {
           <PlayingTableItem v-if="store.tab === 'playing'" :row="row" :touch="touch" />
           <QueuedTableItem v-else :row="row" :touch="touch" />
         </li>
-      </ul>
+      </ListTransition>
     </div>
   </div>
 </template>
