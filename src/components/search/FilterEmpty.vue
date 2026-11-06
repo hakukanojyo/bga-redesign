@@ -10,7 +10,7 @@ import mascot from '@/assets/images/mascot-lost.svg'
 defineProps({
   // 建議移除的條件 { key, values, count }；沒有可以移除的（只選了人數、時間）是 null
   remove: { type: Object, default: null },
-  // 替代推薦 3 款；還沒拿到時是空的
+  // 替代推薦 3 款（不夠時 API 已經用為你推薦補滿）；還沒拿到時是空的
   games: { type: Array, default: () => [] },
 })
 defineEmits(['apply', 'reset'])
@@ -24,10 +24,13 @@ const colorOf = (key) => filterCategories.find((category) => category.key === ke
   平板沿用同樣內容（PRD 7.3 例外）
 -->
 <template>
-  <div class="flex flex-col items-center gap-48 pt-20">
+  <div class="flex flex-col items-center gap-80 pt-20">
     <PageState :image="mascot" title="查無符合條件的遊戲">
       <template v-if="remove" #details>
-        <p class="flex flex-wrap items-center justify-center gap-8 type-tc-body-16 text-text-body">
+        <!-- 這行等於說明文字：和標題距離 12（和其他狀態的標題到說明一樣），不用 PageState 區塊之間的 24 -->
+        <p
+          class="-mt-12 flex flex-wrap items-center justify-center gap-8 type-tc-body-16 text-text-body"
+        >
           移除
           <FilterTag :color="colorOf(remove.key)">{{
             filterLabel(remove.key, remove.values)
@@ -35,21 +38,18 @@ const colorOf = (key) => filterCategories.find((category) => category.key === ke
           可顯示另外 {{ remove.count }} 款遊戲
         </p>
       </template>
-      <div class="flex flex-col items-center gap-8">
-        <AppButton v-if="remove" @click="$emit('apply')">採納並移除條件</AppButton>
+      <!-- 左右排（2026-11-06 從上下排改）：主要按鈕放右邊，和遊戲頁平板「開始遊戲」在右一樣 -->
+      <div class="flex gap-12">
         <AppButton variant="secondary" @click="$emit('reset')">重設所有條件</AppButton>
+        <AppButton v-if="remove" @click="$emit('apply')">採納並移除條件</AppButton>
       </div>
     </PageState>
 
     <section v-if="games.length" class="flex w-full flex-col gap-12">
-      <div class="flex flex-col items-center gap-8 p-8 text-center">
-        <h2 class="type-tc-heading-20 text-text-secondary">
-          {{ remove ? '近似條件替代推薦' : '為你推薦' }}
-        </h2>
-        <p v-if="remove" class="type-tc-body-16 text-text-secondary">
-          移除「{{ filterLabel(remove.key, remove.values) }}」後的熱門遊戲
-        </p>
-      </div>
+      <!-- 只留一行標題（2026-11-06 拿掉「近似條件替代推薦」；字級維持原本副標的 Body 16） -->
+      <h2 class="px-8 pt-16 pb-8 text-center type-tc-body-16 text-text-secondary">
+        {{ remove ? '和你的條件最接近的遊戲' : '為你推薦' }}
+      </h2>
       <ul class="grid grid-cols-3 gap-12 max-desktop:gap-16">
         <li v-for="game in games" :key="game.slug">
           <GameCard :game="game" size="small" fluid />

@@ -64,12 +64,26 @@ export function filterTables(list, { query = '', mode = [], pace = [], sort = 'n
 
 const joinedIds = () => loadStored(KEY, initialMyTables).map((item) => item.tableId)
 
+// 尋找開放桌一次拿幾桌（#40，載入更多）
+export const TABLES_PAGE_SIZE = 20
+
+// 分批拿（PRD 7.5）：從第 offset 桌開始拿 limit 桌，另外回傳總共幾桌（「還有 N 桌」、標題的「共 N 個結果」）。
+// 第二階段接 Supabase 時對應 range(offset, offset + limit - 1) 和 count。
 // refresh：自動刷新時傳 true，假資料才會變化。自己已經加入的不放進來（它在我的牌桌裡，2026-11-06）
-export function getOpenTables(params, { refresh = false } = {}) {
+export function getOpenTables(
+  params,
+  { refresh = false, offset = 0, limit = TABLES_PAGE_SIZE } = {},
+) {
   if (refresh) simulateRefresh()
   const mine = joinedIds()
-  const list = current.filter((table) => !mine.includes(table.id))
-  return fakeRequest(scenario() === 'empty' ? [] : filterTables(list, params))
+  const list =
+    scenario() === 'empty'
+      ? []
+      : filterTables(
+          current.filter((table) => !mine.includes(table.id)),
+          params,
+        )
+  return fakeRequest({ total: list.length, tables: list.slice(offset, offset + limit) })
 }
 
 // 尋找開放桌沒有結果時，是哪一種（PRD 7.5 第 8、9 條、#40）：

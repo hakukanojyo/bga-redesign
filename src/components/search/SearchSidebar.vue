@@ -6,7 +6,8 @@ import SearchInput from '@/components/search/SearchInput.vue'
 // 和 max-desktop: 同一個斷點；桌面和平板的卡片數量、標題文字不同，用 v-if 換
 const isTablet = useMediaQuery('(width < 1280px)')
 
-const card = 'rounded-8 bg-surface-header p-12 shadow-glass-nav backdrop-blur-[4px]'
+// 底用 surface/glass-panel（白 56%，和其他放控制項的面板一樣；2026-11-06 從 surface/header 73% 改過來）
+const card = 'rounded-8 bg-surface-glass-panel p-12 shadow-glass-nav backdrop-blur-[4px]'
 </script>
 
 <!--

@@ -1,5 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import AppButton from '@/components/AppButton.vue'
 import GameCard from '@/components/GameCard.vue'
 import PageState from '@/components/PageState.vue'
@@ -20,7 +22,7 @@ defineEmits(['clear'])
   平板沿用同樣內容（PRD 7.2 例外）。尋找開放桌查無遊戲（TABLE-12）也用這個。許願（SRCH-07）本輪只放按鈕，連到佔位頁
 -->
 <template>
-  <div class="flex flex-col items-center gap-48 pt-20">
+  <div class="flex flex-col items-center gap-80 pt-20">
     <PageState
       :image="mascot"
       :level="level"
@@ -29,8 +31,13 @@ defineEmits(['clear'])
     >
       <div class="flex flex-col items-center gap-8">
         <AppButton variant="secondary" @click="$emit('clear')">清除搜尋條件</AppButton>
-        <RouterLink to="/coming-soon" class="type-tc-caption-12 text-text-link hover:underline">
-          向 BGA 許願引進此遊戲
+        <!-- 沒有底色的文字連結，右邊加「›」提示會前往別的頁面；箭頭是裝飾，底線只畫在文字下 -->
+        <RouterLink
+          to="/coming-soon"
+          class="group/link flex items-center gap-4 type-tc-caption-12 text-text-link"
+        >
+          <span class="group-hover/link:underline">向 BGA 許願引進此遊戲</span>
+          <FontAwesomeIcon :icon="faChevronRight" class="text-[10px]" aria-hidden="true" />
         </RouterLink>
       </div>
     </PageState>
@@ -38,7 +45,7 @@ defineEmits(['clear'])
     <section v-if="suggestions.length" class="flex w-full flex-col gap-12">
       <component
         :is="`h${level + 1}`"
-        class="p-8 text-center type-tc-heading-20 text-text-secondary"
+        class="px-8 pt-16 pb-8 text-center type-tc-body-16 text-text-secondary"
       >
         也許你想找的是這些？
       </component>

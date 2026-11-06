@@ -15,16 +15,17 @@ const name = useId()
 <!--
   Figma：Form/Segment（574:2672），一組只能選一個。用原生的 radio：方向鍵切換、Tab 進出整組、螢幕閱讀器讀「1／3」都是瀏覽器內建的。
   顏色改綁 Semantic（2026-11-06）：外框 border/brand-subtle、選中 surface/brand（Figma 原本是 blue/400）；
-  未選中 white 35% 底、hover white 90%（surface/glass-light、surface/glass）
+  未選中 white 35% 底、hover white 90%（surface/glass-light、surface/glass）。
+  外框給多寬就撐多寬，選項平分（尋找開放桌的篩選卡片撐滿整排）
 -->
 <template>
-  <fieldset class="flex items-center gap-4">
-    <legend class="float-left mr-4 type-tc-heading-20 text-text-primary">{{ legend }}：</legend>
-    <div class="flex overflow-hidden rounded-4 border border-border-brand-subtle">
+  <fieldset class="flex min-w-0 items-center gap-4">
+    <legend class="float-left shrink-0 type-tc-heading-20 text-text-primary">{{ legend }}：</legend>
+    <div class="flex flex-1 overflow-hidden rounded-4 border border-border-brand-subtle">
       <label
         v-for="option in options"
         :key="option.value"
-        class="flex min-h-[36px] cursor-pointer items-center justify-center bg-surface-glass-light px-16 py-4 type-tc-body-16 text-text-secondary max-desktop:min-h-(--tap-button-min-height) hover:bg-surface-glass has-checked:bg-surface-brand has-checked:text-text-inverse has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 has-focus-visible:outline-action-primary"
+        class="flex min-h-[36px] flex-1 cursor-pointer items-center justify-center whitespace-nowrap bg-surface-glass-light px-16 py-4 type-tc-body-16 text-text-secondary max-desktop:min-h-(--tap-button-min-height) hover:bg-surface-glass has-checked:bg-surface-brand has-checked:text-text-inverse has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 has-focus-visible:outline-action-primary"
       >
         <input v-model="model" type="radio" :name="name" :value="option.value" class="sr-only" />
         {{ option.label }}
