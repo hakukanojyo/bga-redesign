@@ -63,14 +63,15 @@ export const openTables = Array.from({ length: 40 }, (_, i) =>
 )
 
 // 我的牌桌一開始就有的幾桌（另外加入的存在 localStorage）
-// 進行中三種都有：回合制輪到我（t-1002、t-1011）、即時制（t-1004、t-1006）、回合制沒輪到我（t-1005）。
+// 進行中三種都有：回合制輪到我（t-1002、t-1011）、即時制（t-1004）、回合制沒輪到我（t-1005、t-1019）。
+// 即時制同時只能進行一桌（MYTBL-12），所以只放一桌。
 // 不放前 4 款遊戲的桌，遊戲頁的「查看全部 N 桌」才看得到（每款要有 4 桌）
 export const initialMyTables = [
   { tableId: 't-1002', status: 'playing', isMyTurn: true, joinedAt: '2026-11-04T20:00:00+08:00' },
   { tableId: 't-1005', status: 'playing', isMyTurn: false, joinedAt: '2026-11-04T18:30:00+08:00' },
   { tableId: 't-1004', status: 'playing', isMyTurn: false, joinedAt: '2026-11-05T21:10:00+08:00' },
   { tableId: 't-1011', status: 'playing', isMyTurn: true, joinedAt: '2026-11-05T08:20:00+08:00' },
-  { tableId: 't-1006', status: 'playing', isMyTurn: false, joinedAt: '2026-11-05T19:45:00+08:00' },
+  { tableId: 't-1019', status: 'playing', isMyTurn: false, joinedAt: '2026-11-05T19:45:00+08:00' },
   { tableId: 't-1009', status: 'queued', isMyTurn: false, joinedAt: '2026-11-05T09:40:00+08:00' },
   { tableId: 't-1008', status: 'queued', isMyTurn: false, joinedAt: '2026-11-05T10:15:00+08:00' },
 ]

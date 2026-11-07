@@ -3,15 +3,18 @@ import { ref } from 'vue'
 
 defineProps({
   game: { type: Object, required: true },
+  // 寬高（px）：面板卡片 74、人到齊確認視窗 56
+  size: { type: Number, default: 74 },
 })
 
 const failed = ref(false)
 </script>
 
-<!-- 面板卡片左邊的遊戲盒子圖（74×74）。圖是裝飾，alt 留空；沒有圖或載入失敗留灰底，尺寸不變（產品規則 5.3） -->
+<!-- 遊戲盒子圖（面板卡片 74、確認視窗 56）。圖是裝飾，alt 留空；沒有圖或載入失敗留灰底，尺寸不變（產品規則 5.3） -->
 <template>
   <div
-    class="size-[74px] shrink-0 rounded-4"
+    class="shrink-0 rounded-4"
+    :style="{ width: `${size}px`, height: `${size}px` }"
     :class="(!game.images.box || failed) && 'bg-surface-placeholder'"
     aria-hidden="true"
   >
@@ -19,8 +22,8 @@ const failed = ref(false)
       v-if="game.images.box && !failed"
       :src="game.images.box"
       alt=""
-      width="74"
-      height="74"
+      :width="size"
+      :height="size"
       loading="lazy"
       class="size-full object-contain"
       @error="failed = true"

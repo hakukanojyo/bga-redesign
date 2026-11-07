@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { initialMyTables, openTables } from '../data/tables'
 import {
+  acceptTable,
+  CONFIRM_MS,
   emptyReason,
   filterTables,
   getGameTables,
@@ -160,17 +162,24 @@ describe('我的牌桌（MYTBL）', () => {
     const kinds = playing.map((row) =>
       row.isMyTurn ? 'turn' : row.table.pace === 'realtime' ? 'live' : 'other',
     )
-    expect(kinds).toEqual(['turn', 'turn', 'live', 'live', 'other'])
+    expect(kinds).toEqual(['turn', 'turn', 'live', 'other', 'other'])
     expect(queued.every((row) => row.status === 'queued')).toBe(true)
   })
 
-  it('starts a table I joined once it fills up 30 seconds later (MYTBL-11)', async () => {
-    const run = async (promise) => {
-      await vi.runAllTimersAsync()
-      return promise
-    }
+  const run = async (promise) => {
+    await vi.runAllTimersAsync()
+    return promise
+  }
+  const joinWaiting = async (pace) => {
     const { tables } = await run(getOpenTables({}))
-    const target = tables.find((table) => table.status === 'waiting')
+    const target = tables.find((table) => table.status === 'waiting' && table.pace === pace)
+    await run(joinTable(target.id))
+    return target
+  }
+
+  it('starts a turn-based table I joined once it fills up 30 seconds later (MYTBL-11)', async () => {
+    const { tables } = await run(getOpenTables({}))
+    const target = tables.find((table) => table.status === 'waiting' && table.pace === 'turn')
     await run(joinTable(target.id))
 
     let mine = await run(getMyTables())
@@ -187,5 +196,62 @@ describe('我的牌桌（MYTBL）', () => {
     const promise = getMyTables()
     await vi.runAllTimersAsync()
     expect((await promise).queued.length).toBeGreaterThan(0)
+  })
+
+  it('asks me to confirm a realtime table once it fills up, still listed as queued (MYTBL-13)', async () => {
+    const target = await joinWaiting('realtime')
+    vi.setSystemTime(Date.now() + FILL_AFTER_MS)
+    const mine = await run(getMyTables())
+    expect(mine.playing.some((row) => row.tableId === target.id)).toBe(false)
+    expect(mine.queued.some((row) => row.tableId === target.id)).toBe(true)
+    expect(mine.confirming[0]).toMatchObject({ tableId: target.id, status: 'confirming' })
+    expect(mine.confirming[0].players).toHaveLength(target.seats.max - 1)
+  })
+
+  it('starts only after I and everyone else confirmed, leaving my other realtime queues (MYTBL-12)', async () => {
+    const other = await joinWaiting('realtime')
+    vi.setSystemTime(Date.now() + 1000)
+    const target = await joinWaiting('realtime')
+    // 兩桌都到齊、等確認，按其中一桌
+    vi.setSystemTime(Date.now() + FILL_AFTER_MS)
+    await run(getMyTables())
+    await run(acceptTable(target.id))
+    let mine = await run(getMyTables())
+    const waiting = mine.confirming.find((row) => row.tableId === target.id)
+    expect(waiting.accepted).toBe(true)
+    expect(waiting.players.some((player) => !player.confirmed)).toBe(true)
+
+    // 其他人在前 16 秒內陸續確認
+    vi.setSystemTime(Date.now() + 16000)
+    mine = await run(getMyTables())
+    const started = mine.playing.find((row) => row.tableId === target.id)
+    expect(started.autoLeft).toBeGreaterThanOrEqual(1)
+    expect(mine.queued.some((row) => row.tableId === other.id)).toBe(false)
+    // 之前進行中的即時制（假資料的 t-1004）當作已經玩完：進行中只剩這一桌即時制
+    const live = mine.playing.filter((row) => row.table.pace === 'realtime')
+    expect(live.map((row) => row.tableId)).toEqual([target.id])
+  })
+
+  it('drops a table I did not confirm in time', async () => {
+    const target = await joinWaiting('realtime')
+    vi.setSystemTime(Date.now() + FILL_AFTER_MS)
+    await run(getMyTables())
+    vi.setSystemTime(Date.now() + CONFIRM_MS)
+    const mine = await run(getMyTables())
+    expect(mine.queued.some((row) => row.tableId === target.id)).toBe(false)
+    expect(mine.confirming).toEqual([])
+  })
+
+  it('puts me back in the queue when someone else never confirms', async () => {
+    window.history.replaceState(null, '', '/?scenario=decline')
+    const target = await joinWaiting('realtime')
+    vi.setSystemTime(Date.now() + FILL_AFTER_MS)
+    await run(getMyTables())
+    window.history.replaceState(null, '', '/')
+    await run(acceptTable(target.id))
+    vi.setSystemTime(Date.now() + CONFIRM_MS)
+    const mine = await run(getMyTables())
+    expect(mine.playing.some((row) => row.tableId === target.id)).toBe(false)
+    expect(mine.queued.find((row) => row.tableId === target.id).status).toBe('queued')
   })
 })

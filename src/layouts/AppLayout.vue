@@ -9,6 +9,7 @@ import SideRail from '@/components/layout/SideRail.vue'
 import BottomNav from '@/components/layout/BottomNav.vue'
 import SidePanel from '@/components/layout/SidePanel.vue'
 import TabletPanel from '@/components/layout/TabletPanel.vue'
+import ReadyCheckDialog from '@/components/ReadyCheckDialog.vue'
 import { Toaster } from '@/components/ui/sonner'
 import { getOnlineStats } from '@/api/stats'
 import { useFavoritesStore } from '@/stores/favorites'
@@ -47,8 +48,18 @@ const stats = ref(null)
 const favorites = useFavoritesStore()
 // 我的牌桌：側欄和導覽列的紅點每一頁都要，進站時拿一次
 const myTables = useMyTablesStore()
-// 每 10 秒看一次：人到齊時排隊中 → 進行中並跳提示（MYTBL-11），輪到你的紅點也跟著更新
+// 每 10 秒看一次：人到齊時排隊中 → 進行中並跳提示（MYTBL-11），即時制跳確認視窗（MYTBL-13），輪到你的紅點也跟著更新
 usePolling(() => myTables.load(), 10 * 1000)
+// 確認視窗開著時每秒看一次：誰確認了（打勾）、全員確認就開始、逾時收尾（第二階段改成 Supabase 即時推送）
+usePolling(() => myTables.readyCheck && myTables.load(), 1000)
+
+// 平板的 Bottom Sheet（Reka UI）會把點到外面當成關閉，確認視窗跳出時先收起來，按鈕才按得到
+watch(
+  () => myTables.readyCheck,
+  (check) => {
+    if (check && isTablet.value) openPanel.value = null
+  },
+)
 
 onMounted(async () => {
   favorites.load()
@@ -76,6 +87,12 @@ onMounted(async () => {
   <BottomNav :open-panel="openPanel" :stats="stats" @toggle="togglePanel" />
   <SidePanel :panel="isTablet ? null : openPanel" @toggle="togglePanel" @close="openPanel = null" />
   <TabletPanel :panel="isTablet ? openPanel : null" @close="openPanel = null" />
+  <ReadyCheckDialog
+    :check="myTables.readyCheck"
+    :accepting="myTables.acceptingId === myTables.readyCheck?.tableId"
+    @accept="myTables.accept"
+    @decline="myTables.decline"
+  />
   <!-- 提示在畫面下方置中；平板在底部導覽列（72）上方，兩者都離 16 -->
   <!-- 提示在畫面上方置中、Header 下面 16（ADR 0016）：桌面和平板一樣 -->
   <!--
