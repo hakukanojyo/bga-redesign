@@ -26,6 +26,12 @@ watch(
 function onClick(event) {
   if (event.target === dialog.value) emit('cancel')
 }
+
+// 瀏覽器自己關掉了（Chrome 在使用者還沒跟頁面互動時，Esc 不經過 cancel 直接關）：
+// 外面的 open 還是 true，當作按了返回，狀態才不會不同步
+function onClose() {
+  if (props.open) emit('cancel')
+}
 </script>
 
 <!--
@@ -36,6 +42,8 @@ function onClick(event) {
   Esc 不往外傳：不然平板的 Sheet 也會收到 Esc，跟著關掉。
   開關只看 open：按 Esc 時擋掉瀏覽器自己關（cancel.prevent），改成通知外面把 open 設成 false，狀態才不會不同步
   （close 事件是非同步的，不能拿來同步狀態）
+  Esc 在 keydown 就攔下來當作返回（2026-11-07）：Chrome 在使用者還沒跟頁面互動時，cancel.prevent 擋不住，
+  會直接關掉；萬一還是被關了，close 時補通知（同 ReadyCheckDialog）
 -->
 <template>
   <dialog
@@ -44,7 +52,8 @@ function onClick(event) {
     class="m-auto w-[400px] max-w-[calc(100vw-32px)] rounded-16 bg-surface-default p-24 shadow-card backdrop:bg-overlay-backdrop backdrop:backdrop-blur-[4px]"
     @click="onClick"
     @cancel.prevent="emit('cancel')"
-    @keydown.esc.stop
+    @keydown.esc.prevent.stop="emit('cancel')"
+    @close="onClose"
   >
     <div class="flex flex-col gap-24">
       <div class="flex flex-col gap-8">
