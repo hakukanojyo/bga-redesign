@@ -47,7 +47,7 @@ const rows = computed(() => {
         <li
           v-for="entry in game.versions"
           :key="entry.version"
-          class="flex flex-col gap-12 rounded-8 bg-surface-header p-16"
+          class="flex flex-col gap-12 rounded-8 bg-surface-glass-card p-16"
         >
           <h4 class="type-tc-title-18 text-text-body">{{ formatVersion(entry) }}</h4>
           <ul class="flex flex-col gap-8 type-tc-label-14 text-text-body">

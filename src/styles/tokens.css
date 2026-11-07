@@ -316,6 +316,8 @@
   --color-surface-subtle: var(--gray-100);
   --color-surface-muted: var(--gray-300);
   --color-surface-header: var(--base-white-a73);
+  /* 木紋上的白色玻璃卡片、列表列；header 只給頂部導覽列、右側欄頂部、吸頂列（2026-11-07 分出來） */
+  --color-surface-glass-card: var(--base-white-a73);
   --color-surface-input: var(--base-white-a30);
   --color-surface-glass-faint: var(--base-white-a16);
   --color-surface-brand: var(--blue-500);

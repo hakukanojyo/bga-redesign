@@ -55,7 +55,7 @@ const failed = ref(new Set())
       <li
         v-for="table in tables"
         :key="table.id"
-        class="relative grid grid-cols-(--cols) items-center gap-x-24 rounded-8 bg-surface-header px-12 py-12 hover:bg-surface-glass hover:shadow-card max-desktop:pr-16"
+        class="relative grid grid-cols-(--cols) items-center gap-x-24 rounded-8 bg-surface-glass-card px-12 py-12 hover:bg-surface-glass hover:shadow-card max-desktop:pr-16"
       >
         <div class="flex min-w-0 items-center gap-8">
           <div
