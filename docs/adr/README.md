@@ -59,3 +59,4 @@
 | [0016](0016-toast-at-top.md) | 提示（Toast）改到畫面上方 |
 | [0017](0017-native-confirm-dialog.md) | 確認彈窗用原生 `<dialog>` |
 | [0018](0018-blur-fallback.md) | 背景模糊降級：全站一條 CSS 規則＋開頁時判斷裝置 |
+| [0019](0019-github-pages.md) | 部署到 GitHub Pages，只部署 main |

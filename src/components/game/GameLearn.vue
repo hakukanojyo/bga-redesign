@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCirclePlay, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { formatFileSize } from '@/utils/format'
@@ -31,8 +32,8 @@ const bannerFailed = ref(false)
       </div>
       <GameCarousel label="規則 PDF">
         <li v-for="rule in game.rules" :key="rule.title" class="snap-start">
-          <a
-            href="/coming-soon"
+          <RouterLink
+            to="/coming-soon"
             target="_blank"
             rel="noopener"
             class="group/rule relative flex h-[72px] w-[284px] items-center justify-between gap-32 rounded-8 bg-surface-glass-card px-20 hover:bg-surface-glass hover:shadow-card"
@@ -51,7 +52,7 @@ const bannerFailed = ref(false)
               {{ formatFileSize(rule.sizeMB) }}
             </span>
             <span class="sr-only">（PDF，在新分頁開啟）</span>
-          </a>
+          </RouterLink>
         </li>
       </GameCarousel>
     </div>
@@ -60,8 +61,8 @@ const bannerFailed = ref(false)
       <h3 class="type-tc-heading-20 text-text-primary">影音教學與策略實況</h3>
       <GameCarousel label="影音教學">
         <li v-for="video in game.videos" :key="video.title" class="snap-start">
-          <a
-            href="/coming-soon"
+          <RouterLink
+            to="/coming-soon"
             target="_blank"
             rel="noopener"
             class="group/video relative flex w-[351px] flex-col gap-12"
@@ -86,7 +87,7 @@ const bannerFailed = ref(false)
               {{ video.title }}
             </span>
             <span class="sr-only">（影片，在新分頁開啟）</span>
-          </a>
+          </RouterLink>
         </li>
       </GameCarousel>
     </div>
