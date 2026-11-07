@@ -30,6 +30,11 @@
     outline-offset: 2px;
   }
 
+  /* 程式移過去的焦點（換頁後的標題、面板標題）：只是告訴螢幕閱讀器到哪了，不是可以按的東西，不畫框 */
+  [tabindex='-1']:focus-visible {
+    outline: none;
+  }
+
   /* Tailwind v4 把按鈕的游標改回瀏覽器預設的箭頭，這裡全站改回手指（Tailwind 官方建議的寫法） */
   button:not(:disabled),
   [role='button']:not(:disabled) {

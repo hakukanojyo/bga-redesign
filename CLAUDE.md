@@ -73,6 +73,7 @@
 - 圖示用 Font Awesome（`docs/adr/0009`）：元件裡 import 用到的圖示，大小用 `text-[14px]` 這種 font-size 調（`size-*` 會被 Font Awesome 的 CSS 蓋掉）；BGA logo 等自製圖示從 Figma 匯出
 - 從 Figma 匯出圖片後，確認背景是透明的；`download_assets` 的 export 可能把底色一起輸出，這時改用原始圖片
 - 導覽連結的「目前這頁」用 `aria-[current=page]:` 寫樣式，RouterLink 會自動加 `aria-current`
+- 換頁後焦點由 `useRouteFocus`（掛在 `App.vue`）移到 `<main>` 裡的 h1：每頁的 h1 放在 `main` 裡（可以是 `sr-only`）；新頁要自己放焦點時（例如接回搜尋框）放在 `main` 裡就不會被蓋掉。面板打開時焦點在面板標題
 - 畫面不直接 import 假資料，一律透過 `src/api/`
 - 人數、時間、等待、牌桌設定、積分的顯示格式一律用 `src/utils/format.js`，不在元件裡組字串；遊戲名稱用 `gameName()`
 - 元件名稱至少兩個字（例：`AppHeader.vue`，不要 `Header.vue`），ESLint 會擋單字的名稱

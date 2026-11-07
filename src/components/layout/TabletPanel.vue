@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
@@ -28,6 +28,13 @@ watch(
 function onInteractOutside(event) {
   if (event.target.closest?.('[data-panel-nav], dialog')) event.preventDefault()
 }
+
+// 打開時焦點在標題，不是 Reka 預設的第一顆按鈕（右上角 ×）；和桌面側欄面板一樣，螢幕閱讀器先念出開的是哪個面板
+const title = useTemplateRef('title')
+function focusTitle(event) {
+  event.preventDefault()
+  title.value?.$el.focus()
+}
 </script>
 
 <!--
@@ -44,6 +51,7 @@ function onInteractOutside(event) {
       overlay-class="bottom-[72px]"
       :aria-describedby="undefined"
       @interact-outside="onInteractOutside"
+      @open-auto-focus="focusTitle"
     >
       <div
         class="flex min-h-0 flex-1 flex-col"
@@ -55,7 +63,7 @@ function onInteractOutside(event) {
         >
           <!-- 右上角 ×（2026-11-07）：只靠點遮罩、再點導覽列關閉不夠明顯。點擊範圍 44，疊在標題列右邊（absolute），標題列高度不變 -->
           <div class="relative pr-32">
-            <SheetTitle>{{ panelTitles[shownPanel] }}</SheetTitle>
+            <SheetTitle ref="title" tabindex="-1">{{ panelTitles[shownPanel] }}</SheetTitle>
             <button
               type="button"
               class="absolute top-1/2 -right-12 flex size-[44px] -translate-y-1/2 items-center justify-center rounded-full text-text-secondary hover:bg-surface-subtle"

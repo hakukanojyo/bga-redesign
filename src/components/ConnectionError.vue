@@ -10,10 +10,12 @@ const suggestions = ['確認 Wi-Fi 或行動網路已開啟', '重新整理這�
 
 <!--
   Figma：State/Connection Error（1119:16184，FB-07）。頁面的主要資料拿不到時，整頁換成這個（產品規則 5.1、5.3）。
-  吉祥物和找不到頁面同一隻（Figma 也是）。刻意和 Figma 不同：目前只有首頁用，在首頁上「回首頁」沒有意義，只留「重新嘗試」
+  吉祥物和找不到頁面同一隻（Figma 也是）。刻意和 Figma 不同：目前只有首頁用，在首頁上「回首頁」沒有意義，只留「重新嘗試」。
+  role="alert"：出現時螢幕閱讀器馬上念出來（換頁時、按「重新嘗試」又失敗時都會）
 -->
 <template>
   <PageState
+    role="alert"
     :image="mascot"
     title="目前無法連線"
     description="可能是網路連線中斷 或伺服器暫時沒有回應"

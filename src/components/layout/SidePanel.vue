@@ -104,7 +104,10 @@ function onClick(event) {
         class="flex w-[373px] shrink-0 flex-col pt-20 opacity-0 transition-opacity duration-300 group-open/panel:opacity-100 starting:group-open/panel:opacity-0 motion-reduce:transition-none"
       >
         <div class="flex min-h-0 flex-1 flex-col gap-16">
-          <h2 class="px-16 type-tc-heading-20 text-text-primary">{{ panelTitles[panel] }}</h2>
+          <!-- 打開時焦點在標題（autofocus），不是面板裡第一顆按鈕（頭像）；螢幕閱讀器先念出開的是哪個面板 -->
+          <h2 tabindex="-1" autofocus class="px-16 type-tc-heading-20 text-text-primary">
+            {{ panelTitles[panel] }}
+          </h2>
           <!-- 標題到內容 20（gap 16＋4）；捲動區在各面板裡（panelClasses.js 的 panelScroll），分頁才能留在上面不動 -->
           <div class="flex min-h-0 flex-1 flex-col px-16 pt-4 pb-8">
             <PanelContent :panel="panel" :touch="noHover" />
