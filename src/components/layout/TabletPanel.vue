@@ -1,5 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet'
 import PanelContent from '@/components/layout/PanelContent.vue'
 import { panelTitles } from '@/components/layout/railItems'
@@ -51,7 +53,18 @@ function onInteractOutside(event) {
           class="flex min-h-0 flex-1 flex-col gap-16"
           :class="shownPanel === 'profile' && 'px-16 pt-8'"
         >
-          <SheetTitle>{{ panelTitles[shownPanel] }}</SheetTitle>
+          <!-- 右上角 ×（2026-11-07）：只靠點遮罩、再點導覽列關閉不夠明顯。點擊範圍 44，疊在標題列右邊（absolute），標題列高度不變 -->
+          <div class="relative pr-32">
+            <SheetTitle>{{ panelTitles[shownPanel] }}</SheetTitle>
+            <button
+              type="button"
+              class="absolute top-1/2 -right-12 flex size-[44px] -translate-y-1/2 items-center justify-center rounded-full text-text-secondary hover:bg-surface-subtle"
+              @click="emit('close')"
+            >
+              <FontAwesomeIcon :icon="faXmark" class="text-[20px]" aria-hidden="true" />
+              <span class="sr-only">關閉{{ panelTitles[shownPanel] }}</span>
+            </button>
+          </div>
           <!-- 內容在 sheet 裡上下捲動（PRD 7.8 第 8 條）；捲動區在各面板裡（panelClasses.js 的 panelScroll） -->
           <div class="flex min-h-0 flex-1 flex-col">
             <PanelContent :panel="shownPanel" touch />
