@@ -35,7 +35,7 @@ const bannerFailed = ref(false)
             href="/coming-soon"
             target="_blank"
             rel="noopener"
-            class="group/rule relative flex h-[72px] w-[284px] items-center justify-between gap-32 rounded-8 bg-surface-header px-20 hover:bg-surface-glass hover:shadow-card"
+            class="group/rule relative flex h-[72px] w-[284px] items-center justify-between gap-32 rounded-8 bg-surface-glass-card px-20 hover:bg-surface-glass hover:shadow-card"
           >
             <span
               class="flex min-w-0 items-center gap-12 type-tc-title-16 text-text-body group-hover/rule:text-text-link"

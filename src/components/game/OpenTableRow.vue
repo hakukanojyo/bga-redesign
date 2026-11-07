@@ -24,7 +24,7 @@ const settings = computed(() => formatTableInfo(props.table))
 -->
 <template>
   <div
-    class="flex items-center justify-between gap-12 rounded-8 bg-surface-header px-20 py-12 hover:bg-surface-glass hover:shadow-card"
+    class="flex items-center justify-between gap-12 rounded-8 bg-surface-glass-card px-20 py-12 hover:bg-surface-glass hover:shadow-card"
   >
     <div class="flex w-[256px] shrink-0 flex-col gap-8">
       <div class="flex items-center gap-12">

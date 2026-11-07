@@ -26,13 +26,13 @@ const rings = {
     :class="[
       touch
         ? 'flex flex-col shadow-card'
-        : 'bg-surface-header hover:shadow-card focus-within:shadow-card',
+        : 'bg-surface-glass-card hover:shadow-card focus-within:shadow-card',
       rings[highlight],
     ]"
   >
     <div
       class="flex items-center gap-12 p-12"
-      :class="touch && ['bg-surface-header', $slots.actions && 'pb-8']"
+      :class="touch && ['bg-surface-glass-card', $slots.actions && 'pb-8']"
     >
       <slot />
     </div>
@@ -41,7 +41,7 @@ const rings = {
       class="pointer-events-none flex items-center justify-between gap-20 px-12 py-8 [&_a,&_button]:pointer-events-auto [&_a,&_button]:relative [&_a,&_button]:z-10"
       :class="
         !touch &&
-        'invisible absolute inset-x-0 bottom-0 h-[44px] translate-y-full bg-surface-header transition-[translate,visibility] duration-200 ease-[cubic-bezier(0.2,0,0,1)] group-focus-within/panel-card:visible group-focus-within/panel-card:translate-y-0 group-hover/panel-card:visible group-hover/panel-card:translate-y-0 motion-reduce:transition-none'
+        'invisible absolute inset-x-0 bottom-0 h-[44px] translate-y-full bg-surface-glass-card transition-[translate,visibility] duration-200 ease-[cubic-bezier(0.2,0,0,1)] group-focus-within/panel-card:visible group-focus-within/panel-card:translate-y-0 group-hover/panel-card:visible group-hover/panel-card:translate-y-0 motion-reduce:transition-none'
       "
     >
       <slot name="actions" />
