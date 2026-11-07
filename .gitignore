@@ -38,6 +38,11 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 
+# 環境變數（第二階段接 Supabase）：金鑰不進 git，範例檔可以進
+.env
+.env.*
+!.env.example
+
 # Claude Code personal settings
 CLAUDE.local.md
 

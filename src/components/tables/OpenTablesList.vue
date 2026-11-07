@@ -2,6 +2,7 @@
 import ListTransition from '@/components/ListTransition.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { gameName } from '@/api/games'
@@ -73,13 +74,13 @@ const failed = ref(new Set())
           </div>
           <div class="flex min-w-0 flex-col gap-4">
             <p class="type-tc-heading-20 text-text-body">
-              <a
-                href="/coming-soon"
+              <RouterLink
+                to="/coming-soon"
                 class="hover:underline max-desktop:after:absolute max-desktop:after:inset-0 max-desktop:after:rounded-8"
               >
                 {{ gameName(table.game) }}
                 <span class="sr-only">（查看這桌的詳細設定）</span>
-              </a>
+              </RouterLink>
             </p>
             <p
               class="truncate type-tc-label-14 text-text-body max-desktop:line-clamp-2 max-desktop:whitespace-normal"

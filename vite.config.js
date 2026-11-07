@@ -23,7 +23,9 @@ function buildVersion() {
 }
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // GitHub Pages 的網址在 /bga-redesign/ 底下（docs/adr/0019）；開發伺服器維持在根目錄
+  base: command === 'build' ? '/bga-redesign/' : '/',
   // build 時把值直接寫進程式（不是執行時才算），每次 build、部署都會更新
   define: {
     __BUILD_VERSION__: JSON.stringify(buildVersion()),
@@ -38,4 +40,4 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-})
+}))

@@ -30,6 +30,7 @@
 - 本機的 `format`、`lint` 會自動修；`format:check`、`lint:check` 只檢查不修改，給 CI 用
 - 檢查：ESLint（JS 建議規則＋`eslint-plugin-vue` 的 `flat/essential`，排版規則交給 Prettier），規則在 `eslint.config.js`，`npm run lint` 檢查並自動修
 - 測試：Vitest＋`@vue/test-utils`（jsdom 模擬瀏覽器），測試檔放 `__tests__/`、檔名 `*.spec.js`，`npm test`
+- 部署：GitHub Pages（`docs/adr/0019`），推進 `main` 時自動部署到 https://hakukanojyo.github.io/bga-redesign/ 。網站在子路徑底下：連結一律用 RouterLink 或 `router.push`，不要寫死 `<a href="/...">`
 - 之後加：Storybook
 
 ## 資料在哪（正本）
@@ -110,6 +111,7 @@
 | release PR（`develop` → `main`）等 reviewer approve 才合併 | 使用中 |
 | PR 範本（`.github/pull_request_template.md`）：做了什麼／為什麼／怎麼確認／相關／截圖／自我檢查 | 使用中 |
 | CI（`.github/workflows/ci.yml`）：PR 和推進 `main`、`develop` 時自動跑 `format:check`、`lint:check`、`test`、`build` | 使用中 |
+| 部署（`.github/workflows/deploy.yml`）：推進 `main` 時打包並部署到 GitHub Pages；也可以在 Actions 頁面手動觸發 | 使用中 |
 | 只允許壓縮合併（squash merge），合併後自動刪掉遠端分支 | 使用中 |
 | 分支保護（Rulesets）：`main` 要 1 個 approve＋CI 通過；`develop` 要 CI 通過；兩條都不能刪除、不能 force-push，沒有人可以繞過 | 使用中 |
 | 預設分支是 `develop`：新分支從 `develop` 開，功能 PR 合進 `develop`，再從 `develop` 開 release PR 合進 `main` | 使用中 |
@@ -142,4 +144,5 @@
 - ✅ 即時制人到齊確認視窗 #49（`ReadyCheckDialog`）：倒數 20 秒、全員確認才開始、等待其他玩家、逾時退出；排隊中卡片加制度
 - ✅ 個人面板 #55（`ProfilePanel`、遊玩紀錄卡片 `PlayHistoryItem`）：個人資訊、信譽、名次、經驗值、狀態訊息和成就只顯示、遊玩紀錄最多 8 筆；token `surface/glass-card`（#53）、平板面板 ×（#54）
 - ✅ 換頁進度條和背景模糊降級 #57，拆 2 個 PR：① 換頁進度條 `RouteProgress`（超過 150ms 才出現，#58）② 低效能裝置和減少透明度時拿掉背景模糊（ADR 0018）
+- ✅ release 前 audit 的修正：首頁主視覺吃掉剩下的寬度、橫幅漸層、排行榜名稱截斷（#60）；換頁後焦點移到 h1、面板焦點在標題、錯誤頁 `role="alert"`（#61）；GitHub Pages 部署（ADR 0019）、README 更新
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
