@@ -5,10 +5,12 @@ export const UNDO_DURATION = 5000
 export const DEFAULT_DURATION = 3000
 
 export const toast = {
-  // 使用者自己做的動作的結果；可以撤銷的才傳 undo
-  neutral(message, { undo } = {}) {
+  // 使用者自己做的動作的結果；可以撤銷的才傳 undo。
+  // persistent：使用者可能不在座位上，留到按 × 才關（確認視窗倒數到期自動退出，#49）
+  neutral(message, { undo, persistent = false } = {}) {
     return sonner(message, {
-      duration: undo ? UNDO_DURATION : DEFAULT_DURATION,
+      duration: persistent ? Infinity : undo ? UNDO_DURATION : DEFAULT_DURATION,
+      closeButton: persistent,
       action: undo ? { label: '復原', onClick: undo } : undefined,
     })
   },

@@ -25,6 +25,14 @@ export function formatTableInfo({ pace, mode, settings }) {
   return formatSettings([paceLabels[pace], modeLabels[mode], ...settings].filter(Boolean))
 }
 
+// 排隊中卡片（2026-11-07）：「即時制／預估等待 約 5 分鐘」。只放制度和等待：
+// 制度決定人到齊時要不要人在座位上（即時制跳確認視窗），完整設定在「查看此桌詳細設定」
+export function formatQueueInfo({ pace, estimatedWaitMinutes }) {
+  return formatSettings(
+    [paceLabels[pace], `預估等待 ${formatWait(estimatedWaitMinutes)}`].filter(Boolean),
+  )
+}
+
 export function formatSeats({ taken, max }) {
   return `${taken}/${max} 人`
 }

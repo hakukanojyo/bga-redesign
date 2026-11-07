@@ -78,9 +78,23 @@
 | 欄位 | 型別 | 說明 |
 | --- | --- | --- |
 | `tableId` | string | 對到開放桌的 `id`，遊戲、桌主、設定都從那裡來 |
-| `status` | `queued` \| `playing` | 排隊中、進行中 |
+| `status` | `queued` \| `confirming` \| `playing` | 排隊中、等確認（即時制人到齊，面板上還算排隊中）、進行中 |
 | `isMyTurn` | boolean | 只有 `pace` 是 `turn` 時才可能是 `true` |
 | `joinedAt` | string（時間） | |
+| `fillsAt` | string（時間），可省略 | 假資料：加入後 30 秒人到齊。一開始就在排隊中的沒有，一直排隊 |
+| `confirmBy` | string（時間） | 只有 `confirming`：確認期限（人到齊後 20 秒） |
+| `accepted` | boolean | 只有 `confirming`：我按了「進入遊戲」 |
+| `holdout` | boolean | 假資料：`?scenario=decline` 時有一位玩家一直不按 |
+| `autoLeft` | number | 開始時自動退出了幾桌即時制的排隊（提示用） |
+
+即時制人到齊後的流程（產品規則 3.2、MYTBL-12、13、#49）：`queued` → `confirming` →
+- 我和其他人都確認 → `playing`，其他排隊中的即時制自動退出（同時只能進行一桌）；假資料把之前進行中的即時制當作已經玩完、拿掉
+- 時間到我沒按 → 拿掉（視同退出）
+- 時間到我按了、有人沒按 → 回到 `queued`，順位保留
+
+回合制人到齊直接 `queued` → `playing`，不用確認。收尾由 API 決定（`getMyTables`），畫面只比對前後兩次的資料跳提示。
+
+`getMyTables()` 回傳 `{ playing, queued, confirming }`：`queued` 包含等確認的桌；`confirming` 另外帶 `players`（同桌其他玩家，每位有 `confirmed`）。
 
 ## 收藏
 

@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faChevronRight, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { gameName } from '@/api/games'
-import { formatWait } from '@/utils/format'
+import { formatQueueInfo } from '@/utils/format'
 import AppButton from '@/components/AppButton.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import DangerTextButton from '@/components/DangerTextButton.vue'
@@ -34,7 +34,8 @@ async function leave() {
 <!--
   Figma：List/Queue Table Row（832:7306）size=desktop state=default／hover、size=touch。
   整張卡到遊戲主畫面最上面，「查看此桌詳細設定」才到詳細設定（MYTBL-07，本輪佔位頁）：一個入口一個去處（2026-11-06）。
-  「退出這桌」先跳確認彈窗（MYTBL-08、產品規則 4.2），按鈕條裡放左邊（危險在左、主要在右）
+  「退出這桌」先跳確認彈窗（MYTBL-08、產品規則 4.2），按鈕條裡放左邊（危險在左、主要在右）。
+  制度寫在預估等待前面（2026-11-07）：即時制人到齊會跳確認視窗、要人在座位上
 -->
 <template>
   <PanelCard :touch="touch">
@@ -54,9 +55,7 @@ async function leave() {
         </span>
       </div>
       <div class="flex flex-col gap-4" :class="!touch && fadeOnHover">
-        <p class="type-tc-body-13 text-text-body">
-          預估等待 {{ formatWait(row.table.estimatedWaitMinutes) }}
-        </p>
+        <p class="type-tc-body-13 text-text-body">{{ formatQueueInfo(row.table) }}</p>
         <TableHost :host="row.table.host" />
       </div>
     </div>

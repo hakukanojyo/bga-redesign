@@ -8,6 +8,7 @@ import {
   formatScore,
   formatSeats,
   formatSettings,
+  formatQueueInfo,
   formatTableInfo,
   formatTimeAgo,
   formatVersion,
@@ -76,5 +77,14 @@ describe('formatTableInfo', () => {
 
   it('skips pace or mode when the data has none', () => {
     expect(formatTableInfo({ settings: ['基礎版'] })).toBe('基礎版')
+  })
+})
+
+describe('formatQueueInfo', () => {
+  it('writes the pace and the estimated wait for a queued table', () => {
+    expect(formatQueueInfo({ pace: 'realtime', estimatedWaitMinutes: 5 })).toBe(
+      '即時制／預估等待 約 5 分鐘',
+    )
+    expect(formatQueueInfo({ pace: 'turn', estimatedWaitMinutes: null })).toBe('回合制／預估等待 —')
   })
 })
