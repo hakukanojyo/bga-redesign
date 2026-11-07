@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="zh-Hant">
   <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
+    <script>
+      // 裝置寬度小於 768（手機）時，以 768 寬縮放顯示平板版（SYS-02）
+      function fitViewport() {
+        var narrow = screen.width < 768
+        // 明確指定縮放比例：只寫 width=768 時，有些瀏覽器不會自動縮小到剛好塞滿螢幕
+        var scale = screen.width / 768
+        document
+          .querySelector('meta[name="viewport"]')
+          .setAttribute(
+            'content',
+            narrow
+              ? 'width=768, initial-scale=' + scale
+              : 'width=device-width, initial-scale=1.0',
+          )
+      }
+      fitViewport()
+      addEventListener('orientationchange', fitViewport)
+    </script>
+    <script>
+      // 低效能裝置拿掉背景模糊（SYS-10、ADR 0018）：記憶體 4GB 以下或 CPU 4 核以下。
+      // 在畫面出現前判斷，不會先模糊再變清楚；Safari 沒有 deviceMemory，只看核心數
+      ;(function () {
+        var memory = navigator.deviceMemory
+        var cores = navigator.hardwareConcurrency
+        if ((memory && memory <= 4) || (cores && cores <= 4)) {
+          document.documentElement.classList.add('reduce-blur')
+        }
+      })()
+    </script>
+    <title>BGA Redesign</title>
   </head>
   <body>
     <div id="app"></div>

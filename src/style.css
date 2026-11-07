@@ -1,0 +1,79 @@
+@import 'tailwindcss';
+@import './styles/tokens.css';
+/* shadcn-vue 元件的進場、離場動畫（animate-in、slide-in-from-bottom…） */
+@import 'tw-animate-css';
+
+/*
+  頂部導覽列的高度：Header 吸頂（產品規則 6.3），其他吸頂的東西（搜尋篩選左欄、遊戲頁章節導覽）都停在它下面。
+  寬高沒有 Figma 變數，這個是版面用的常數；Header 改高度只改這裡
+*/
+:root {
+  --header-height: 72px;
+}
+
+@layer base {
+  /* 版面最窄 768：手機靠 viewport 縮放；電腦把視窗拉窄時出現橫向捲軸，版面不會被擠壞 */
+  html {
+    min-width: 768px;
+    /* 點章節錨點、Tab 到被 Header 蓋住的東西時，捲動停在 Header 下面（產品規則 6.3） */
+    scroll-padding-top: var(--header-height);
+  }
+
+  /* 桌面側欄面板（原生 <dialog>）開著時鎖住背景捲動；平板的 Sheet 由 Reka 鎖，兩邊才一致 */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  /* 鍵盤焦點（產品規則 6.5、Figma Focus/Ring）：只在鍵盤操作時出現，所有可互動元素共用 */
+  :focus-visible {
+    outline: 2px solid var(--color-action-primary);
+    outline-offset: 2px;
+  }
+
+  /* 程式移過去的焦點（換頁後的標題、面板標題）：只是告訴螢幕閱讀器到哪了，不是可以按的東西，不畫框 */
+  [tabindex='-1']:focus-visible {
+    outline: none;
+  }
+
+  /* Tailwind v4 把按鈕的游標改回瀏覽器預設的箭頭，這裡全站改回手指（Tailwind 官方建議的寫法） */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  body {
+    @apply bg-wood;
+    color: var(--color-text-body);
+  }
+}
+
+/*
+  背景模糊降級（SYS-10、ADR 0018）：系統開「減少透明度」，或 index.html 判斷是低效能裝置（<html class="reduce-blur">）時，
+  全站拿掉背景模糊、只留半透明底色；沒有模糊時背後的頁面比較雜，遮罩從黑 40% 壓深到 76%（overlay/backdrop-strong）。
+  放在 @layer 外面：沒有 layer 的規則一定贏過 Tailwind 的 class，不用 !important；::backdrop 是原生 dialog 的遮罩
+*/
+html.reduce-blur *,
+html.reduce-blur *::before,
+html.reduce-blur *::after,
+html.reduce-blur *::backdrop {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  --color-overlay-backdrop: var(--color-overlay-backdrop-strong);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  *,
+  *::before,
+  *::after,
+  *::backdrop {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    --color-overlay-backdrop: var(--color-overlay-backdrop-strong);
+  }
+}
+
+/* 全站木紋背景：Figma 是 500×1000 的圖、縮放 0.5 平鋪。頁面和平板底部導覽列共用 */
+@utility bg-wood {
+  background: url('./assets/images/wood.jpg') repeat;
+  background-size: 250px 500px;
+}

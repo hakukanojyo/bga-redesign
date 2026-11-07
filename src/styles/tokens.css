@@ -1,0 +1,596 @@
+/*
+ * 設計 token：照 Figma 變數（fileKey YLgv7ISZngFsPRMqVxs8Aj）的名稱轉成 CSS。
+ * 規則見 Notion「顏色變數規則」；為什麼這樣接 Tailwind 見 docs/adr/0003。
+ *
+ * - Primitives：一般 CSS 變數，不產生 Tailwind class，畫面不直接用
+ * - Semantic：放在 @theme，產生 bg-*、text-*、border-* 等 class
+ * - Typography、Layout：Desktop／Tablet 兩種模式，用 media query 切換
+ */
+
+/* ---------- Primitives ---------- */
+:root {
+  --blue-50: #dae8ef;
+  --blue-100: #b1d0e3;
+  --blue-200: #87b9d8;
+  --blue-300: #5ea1cc;
+  --blue-400: #348ac1;
+  --blue-500: #0b72b5;
+  --blue-600: #0a6199;
+  --blue-700: #09507e;
+  --blue-800: #094062;
+  --blue-900: #082f47;
+  --blue-950: #071e2b;
+  --blue-50-a46: rgb(218 232 239 / 0.46);
+
+  --gray-50: #f4f4f4;
+  --gray-100: #dbdbdb;
+  --gray-200: #c2c2c2;
+  --gray-300: #a8a8a8;
+  --gray-400: #8f8f8f;
+  --gray-500: #767676;
+  --gray-600: #616161;
+  --gray-700: #4d4d4d;
+  --gray-750: #414141;
+  --gray-800: #383838;
+  --gray-900: #242424;
+  --gray-925: #212121;
+  --gray-950: #0f0f0f;
+  --gray-950-a36: rgb(15 15 15 / 0.36);
+
+  --red-50: #ffeeee;
+  --red-100: #e5a6a5;
+  --red-200: #e58584;
+  --red-300: #e46563;
+  --red-400: #e44442;
+  --red-450: #dc3131;
+  --red-500: #e42421;
+  --red-600: #c31e1c;
+  --red-700: #a11816;
+  --red-800: #801211;
+  --red-900: #5e0c0b;
+  --red-950: #3d0606;
+  --red-450-a25: rgb(220 49 49 / 0.25);
+
+  --gold-300: #ffe730;
+  --gold-500: #d2bd00;
+  --gold-600: #dc9600;
+  --gold-600-a0: rgb(220 150 0 / 0);
+
+  --yellow-50: #fdfff2;
+  --yellow-300: #f0eb5c;
+  --yellow-400: #dfdd45;
+  --yellow-950: #221d05;
+
+  --green-50: #f3fff9;
+  --green-300: #61e9a2;
+  --green-400: #49dc8f;
+  --green-500: #028805;
+  --green-950: #142706;
+
+  --purple-50: #fcf8ff;
+  --purple-300: #d49ff2;
+  --purple-400: #c788eb;
+  --purple-700: #7705a7;
+  --purple-950: #2c0a40;
+
+  --pink-50: #fff6f8;
+  --pink-300: #ffa2bb;
+  --pink-400: #f988a6;
+  --pink-950: #460c1c;
+
+  --cyan-50: #f0fbff;
+  --cyan-300: #58d3f9;
+  --cyan-400: #44c8f0;
+  --cyan-500: #00b2ff;
+  --cyan-950: #0b183d;
+
+  --orange-50: #fff8f0;
+  --orange-300: #fcab5e;
+  --orange-400: #ff9937;
+  --orange-950: #382009;
+
+  --coral-300: #ff6d53;
+  --coral-400: #e7573d;
+  --coral-500: #d0452b;
+  --coral-600: #b8331c;
+
+  --lime-300: #e3f637;
+  --lime-500: #c4d628;
+  --teal-400: #2bc8cc;
+  --mint-400: #13ff89;
+  --mint-400-a25: rgb(19 255 137 / 0.25);
+
+  --base-white: #ffffff;
+  --base-white-a0: rgb(255 255 255 / 0);
+  --base-white-a16: rgb(255 255 255 / 0.16);
+  --base-white-a25: rgb(255 255 255 / 0.25);
+  --base-white-a30: rgb(255 255 255 / 0.3);
+  --base-white-a35: rgb(255 255 255 / 0.35);
+  --base-white-a56: rgb(255 255 255 / 0.56);
+  --base-white-a73: rgb(255 255 255 / 0.73);
+  --base-white-a90: rgb(255 255 255 / 0.9);
+  --base-black: #000000;
+  --base-black-a0: rgb(0 0 0 / 0);
+  --base-black-a30: rgb(0 0 0 / 0.3);
+  --base-black-a40: rgb(0 0 0 / 0.4);
+  --base-black-a60: rgb(0 0 0 / 0.6);
+  --base-black-a76: rgb(0 0 0 / 0.76);
+
+  /* 漸層色標：SYS-09 的例外，漸層直接用 Primitive */
+  --gradient-learn-1: #e4a4ec;
+  --gradient-learn-2: #ad50dc;
+  --gradient-learn-3: #b532cc;
+  --gradient-learn-4: #6f1f82;
+  --gradient-find-hover-1: #e3ef96;
+  --gradient-find-hover-2: #e1f241;
+  --gradient-find-hover-3: #e9ff1f;
+  --gradient-find-hover-4: #98a413;
+}
+
+/* ---------- 漸層：用到的元件才加 ---------- */
+:root {
+  /* Button/CTA type=尋找開放桌 */
+  --gradient-cta-find: linear-gradient(
+    180deg,
+    var(--blue-200) 0%,
+    var(--blue-400) 15%,
+    var(--blue-500) 84%,
+    var(--blue-900) 100%
+  );
+  --gradient-cta-find-hover: linear-gradient(
+    180deg,
+    var(--gradient-find-hover-1) 0%,
+    var(--gradient-find-hover-2) 15%,
+    var(--gradient-find-hover-3) 84%,
+    var(--gradient-find-hover-4) 100%
+  );
+  --gradient-cta-find-pressed: linear-gradient(
+    180deg,
+    var(--gradient-find-hover-1) 0%,
+    var(--gradient-find-hover-2) 15%,
+    var(--gradient-find-hover-3) 80%,
+    var(--gradient-find-hover-4) 100%
+  );
+  /* Button/CTA type=立即遊玩 的主色：元件用圖片的主色覆蓋，沒給時是品牌藍 */
+  --cta-accent: var(--color-action-primary);
+  /* 遊戲主畫面主視覺：橫幅下方疊黑色漸層，白字才看得清楚（Figma 303:2096；色標綁 Primitive 是允許的例外） */
+  --gradient-game-hero: linear-gradient(0deg, var(--base-black-a76) 0%, var(--base-black-a0) 60%);
+  /* 首頁主視覺：比遊戲主畫面淡一點，標準字和按鈕已經夠清楚，插畫不要壓太暗（2026-11-08） */
+  --gradient-home-hero: linear-gradient(0deg, var(--base-black-a60) 0%, var(--base-black-a0) 60%);
+  /* Skeleton/Card 的掃光：白色半透明亮帶 */
+  --gradient-skeleton-shine: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--base-white-a56) 50%,
+    transparent 100%
+  );
+  /* Card/Carousel Arrow：靠卡片外側最實、往內變淡；Figma 整個填色再乘 72%，用 color-mix 算進去 */
+  --gradient-carousel-arrow: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--base-white) 72%, transparent),
+    color-mix(in srgb, var(--base-white-a30) 72%, transparent)
+  );
+  --gradient-carousel-arrow-hover: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--blue-50) 72%, transparent),
+    color-mix(in srgb, var(--blue-50-a46) 72%, transparent)
+  );
+  /* 首頁中段精選橫幅：右半邊壓暗，白字才看得清楚 */
+  --gradient-promo-overlay: linear-gradient(
+    90deg,
+    transparent 30%,
+    var(--color-overlay-scrim-strong) 55%,
+    var(--color-overlay-scrim-strong) 100%
+  );
+}
+
+/* ---------- Typography、Layout（Desktop 模式） ---------- */
+:root {
+  --size-10: 10px;
+  --size-11: 11px;
+  --size-12: 12px;
+  --size-13: 13px;
+  --size-14: 14px;
+  --size-16: 16px;
+  --size-18: 18px;
+  --size-20: 20px;
+  --size-24: 24px;
+
+  --line-height-14: 14px;
+  --line-height-16: 16px;
+  --line-height-18: 18px;
+  --line-height-20: 20px;
+  --line-height-22: 22px;
+  --line-height-24: 24px;
+  --line-height-28: 28px;
+  --line-height-32: 32px;
+
+  --tracking-none: 0px;
+  --tracking-tight: 0.1px;
+  --tracking-normal: 0.4px;
+  --tracking-wide: 1.2px;
+  --tracking-wider: 1.4px;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tap-checkbox-min-height: 20px;
+  --tap-checkbox-gap: 12px;
+  --tap-tag-min-height: 28px;
+  --tap-button-min-height: 28px;
+  --footer-social-max-width: 254px;
+  --card-min-width: 300px;
+}
+
+/* Tablet 模式：寬度 768～1279 */
+@media (max-width: 1279px) {
+  :root {
+    --size-20: 18px;
+    --size-24: 20px;
+    --line-height-28: 26px;
+    --line-height-32: 28px;
+    --footer-social-max-width: 1440px;
+  }
+}
+
+/* 觸控尺寸：平板寬度，或寬度 1280 以上的觸控裝置（產品規則 6.2） */
+@media (max-width: 1279px), (hover: none) {
+  :root {
+    --tap-checkbox-min-height: 44px;
+    --tap-checkbox-gap: 0px;
+    --tap-tag-min-height: 36px;
+    --tap-button-min-height: 44px;
+  }
+}
+
+/* ---------- Tailwind 主題：只留設計稿的值 ---------- */
+@theme {
+  /* 清掉 Tailwind 內建的色票、間距、字型等，寫不出設計稿以外的值 */
+  --*: initial;
+
+  /* 桌面優先：預設寫桌面版，平板用 max-desktop: 改寫（SYS-01） */
+  --breakpoint-desktop: 1280px;
+
+  --font-latin: 'Inter', 'Noto Sans TC', sans-serif;
+  --font-cjk: 'Noto Sans TC', sans-serif;
+  --default-font-family: var(--font-cjk);
+
+  --spacing-0: 0px;
+  --spacing-2: 2px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+
+  --radius-2: 2px;
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-24: 24px;
+  --radius-full: 9999px;
+
+  /* 效果樣式：Figma 的 Effect Styles 沒有綁變數，數值照抄；用到的元件才加 */
+  --shadow-cta-sm: 0 1px 0.8px rgb(0 0 0 / 0.36);
+  --shadow-cta-md-strong: 0 1.5px 1px rgb(0 0 0);
+  --shadow-cta-lg-strong: 0 2px 1.2px rgb(0 0 0);
+  --shadow-glass-nav: 0 2px 6.3px rgb(80 60 34 / 0.52);
+  --shadow-card: 0 2px 6.3px rgb(80 60 34 / 0.52);
+  --shadow-card-cover: 0 4px 7px rgb(0 0 0 / 0.25);
+  /* bevel/button-gold：VIP 標籤的立體感（亮邊、暗邊、外陰影） */
+  --shadow-bevel-button-gold:
+    inset 1px 1px 0 rgb(255 255 255 / 0.65), inset -1px -1px 0 rgb(215 197 37),
+    0 -1px 2.8px rgb(0 0 0 / 0.11);
+  --shadow-glow-status-blue: 0 0 6.2px #0b72b5;
+  --shadow-glow-status-green: 0 0 6.1px #17a91a;
+  /* glow/avatar-hover：滑鼠移到頭像上的黃色外光暈（Figma User/Avatar state=hover） */
+  --shadow-glow-avatar-hover: 0 0 12.6px rgb(239 210 22);
+  /* inner/button-secondary：Figma 綁的是 Primitive（blue/400、blue/500），這裡改用同色的 Semantic */
+  --shadow-inner-button-secondary: inset 0 -2px 0 var(--color-border-brand-subtle);
+  --shadow-inner-button-secondary-hover: inset 0 -2px 0 var(--color-selection-accent);
+  --shadow-inner-button-secondary-press: inset 0 2px 0 var(--color-selection-accent);
+
+  /* Semantic */
+  --color-text-primary: var(--blue-900);
+  --color-text-secondary: var(--gray-700);
+  --color-text-inverse: var(--base-white);
+  --color-text-link: var(--blue-500);
+  /* 淺色底（surface/toast）上的連結：text/link 在 blue/100 上只有 3.18:1，blue/700 是 5.28:1 */
+  --color-text-link-on-light: var(--blue-700);
+  --color-text-brand-strong: var(--blue-600);
+  --color-text-placeholder: var(--gray-400);
+  --color-text-danger: var(--red-400);
+  --color-text-body: var(--gray-925);
+  --color-text-disabled: var(--gray-200);
+  --color-text-link-inverse: var(--blue-200);
+
+  --color-surface-default: var(--base-white);
+  --color-surface-glass: var(--base-white-a90);
+  --color-surface-placeholder: var(--gray-200);
+  --color-surface-subtle: var(--gray-100);
+  --color-surface-muted: var(--gray-300);
+  --color-surface-header: var(--base-white-a73);
+  /* 木紋上的白色玻璃卡片、列表列；header 只給頂部導覽列、右側欄頂部、吸頂列（2026-11-07 分出來） */
+  --color-surface-glass-card: var(--base-white-a73);
+  --color-surface-input: var(--base-white-a30);
+  --color-surface-glass-faint: var(--base-white-a16);
+  --color-surface-brand: var(--blue-500);
+  --color-surface-brand-subtle: var(--blue-100);
+  --color-surface-tooltip: var(--gray-750);
+  --color-surface-glass-light: var(--base-white-a35);
+  --color-surface-glass-panel: var(--base-white-a56);
+  --color-surface-glass-nav: var(--base-white-a25);
+  --color-surface-toast: var(--blue-100);
+
+  --color-overlay-scrim: var(--gray-950);
+  --color-overlay-scrim-strong: var(--gray-950-a36);
+  --color-overlay-backdrop: var(--base-black-a40);
+  --color-overlay-backdrop-strong: var(--base-black-a76);
+
+  --color-border-default: var(--gray-950);
+  --color-border-inverse: var(--base-white);
+  --color-border-link-hover: var(--cyan-500);
+  --color-border-subtle: var(--gray-100);
+  --color-border-on-image: var(--base-white-a35);
+  --color-border-faint: var(--gray-50);
+  --color-border-accent: var(--gold-300);
+  --color-border-brand: var(--blue-700);
+  --color-border-brand-strong: var(--blue-800);
+  --color-border-brand-subtle: var(--blue-400);
+  --color-border-nav-active: var(--lime-500);
+
+  --color-action-primary: var(--blue-500);
+  --color-action-primary-hover: var(--blue-700);
+  --color-action-primary-pressed: var(--blue-800);
+  --color-action-danger: var(--red-500);
+  --color-action-danger-hover: var(--red-600);
+  --color-action-danger-pressed: var(--red-700);
+
+  --color-icon-primary: var(--blue-900);
+  --color-icon-onmain: var(--base-white);
+  --color-icon-inverse: var(--base-white);
+  --color-icon-placeholder: var(--gray-400);
+  --color-icon-danger: var(--red-400);
+
+  --color-status-online: var(--green-500);
+  --color-status-notify: var(--red-500);
+  --color-status-live: var(--orange-400);
+  --color-status-success: var(--green-500);
+  --color-status-success-bg: var(--green-50);
+  --color-status-error: var(--red-700);
+  --color-status-error-bg: var(--red-50);
+
+  --color-selection-bg: var(--blue-50);
+  --color-selection-accent: var(--blue-500);
+  --color-badge-vip: var(--gold-300);
+  --color-highlight-self: var(--lime-300);
+
+  --color-favorite-bg: var(--coral-300);
+  --color-favorite-bg-active: var(--coral-400);
+  --color-favorite-bg-active-hover: var(--coral-500);
+  --color-favorite-border: var(--coral-600);
+  --color-favorite-icon-active: var(--red-800);
+
+  --color-filter-players-bg: var(--yellow-300);
+  --color-filter-players-bg-hover: var(--yellow-400);
+  --color-filter-players-surface: var(--yellow-50);
+  --color-filter-players-ink: var(--yellow-950);
+  --color-filter-time-bg: var(--green-300);
+  --color-filter-time-bg-hover: var(--green-400);
+  --color-filter-time-surface: var(--green-50);
+  --color-filter-time-ink: var(--green-950);
+  --color-filter-complexity-bg: var(--purple-300);
+  --color-filter-complexity-bg-hover: var(--purple-400);
+  --color-filter-complexity-surface: var(--purple-50);
+  --color-filter-complexity-ink: var(--purple-950);
+  --color-filter-type-bg: var(--pink-300);
+  --color-filter-type-bg-hover: var(--pink-400);
+  --color-filter-type-surface: var(--pink-50);
+  --color-filter-type-ink: var(--pink-950);
+  --color-filter-mechanics-bg: var(--cyan-300);
+  --color-filter-mechanics-bg-hover: var(--cyan-400);
+  --color-filter-mechanics-surface: var(--cyan-50);
+  --color-filter-mechanics-ink: var(--cyan-950);
+  --color-filter-topic-bg: var(--orange-300);
+  --color-filter-topic-bg-hover: var(--orange-400);
+  --color-filter-topic-surface: var(--orange-50);
+  --color-filter-topic-ink: var(--orange-950);
+
+  --color-rail-friends: var(--purple-700);
+  --color-rail-table: var(--teal-400);
+  --color-rail-favorite: var(--coral-300);
+  --color-rail-member: var(--gold-500);
+  --color-rail-elf: var(--blue-500);
+
+  --color-cta-start-tint: var(--mint-400-a25);
+  --color-cta-learn-tint: var(--red-450-a25);
+}
+
+/* ---------- 文字樣式：對應 Figma 的 Text Styles ---------- */
+@utility type-en-body-13-strong {
+  font-family: var(--font-latin);
+  font-size: var(--size-13);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-semibold);
+}
+@utility type-en-body-13 {
+  font-family: var(--font-latin);
+  font-size: var(--size-13);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-medium);
+}
+@utility type-en-body-16 {
+  font-family: var(--font-latin);
+  font-size: var(--size-16);
+  line-height: var(--line-height-24);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-medium);
+}
+@utility type-en-caption-11 {
+  font-family: var(--font-latin);
+  font-size: var(--size-11);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-medium);
+}
+@utility type-en-caption-10 {
+  font-family: var(--font-latin);
+  font-size: var(--size-10);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-medium);
+}
+@utility type-en-heading-20 {
+  font-family: var(--font-latin);
+  font-size: var(--size-20);
+  line-height: var(--line-height-28);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-semibold);
+}
+@utility type-tc-heading-24 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-24);
+  line-height: var(--line-height-32);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-bold);
+}
+@utility type-tc-heading-20 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-20);
+  line-height: var(--line-height-28);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-bold);
+}
+@utility type-tc-title-18 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-18);
+  line-height: var(--line-height-24);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-bold);
+}
+@utility type-tc-title-16 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-16);
+  line-height: var(--line-height-24);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-bold);
+}
+@utility type-tc-body-16 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-16);
+  line-height: var(--line-height-28);
+  letter-spacing: var(--tracking-wider);
+  font-weight: var(--weight-medium);
+}
+@utility type-tc-label-14 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-14);
+  line-height: var(--line-height-22);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-medium);
+}
+@utility type-tc-body-13 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-13);
+  line-height: var(--line-height-20);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-medium);
+}
+@utility type-tc-caption-12 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-12);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-medium);
+}
+@utility type-tc-caption-11 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-11);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-medium);
+}
+@utility type-footer-title-13 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-13);
+  line-height: var(--line-height-20);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--weight-semibold);
+}
+@utility type-footer-link-11 {
+  font-family: var(--font-cjk);
+  font-size: var(--size-11);
+  line-height: var(--line-height-18);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-regular);
+}
+
+/* glow/purple：顏色跟著每個側欄項目的 --rail-color（見 SideRailItem）；選中的項目用 --rail-glow 改成白色 */
+@utility glow-rail {
+  filter: drop-shadow(0 0 17.5px var(--rail-glow, var(--rail-color, currentColor)))
+    drop-shadow(0 0 6.2px var(--rail-glow, var(--rail-color, currentColor)));
+}
+
+/*
+  Button/CTA type=立即遊玩：顏色從主視覺圖片自動擷取（npm run images → games/colors.json，docs/adr/0014）。
+  元件上設 --cta-accent，四段漸層從主色算：上面混白變淺、下面混黑變深；hover、按下各再深一階
+*/
+@utility cta-accent {
+  --cta-base: var(--cta-accent);
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--cta-base) 55%, white) 0%,
+    color-mix(in oklab, var(--cta-base) 85%, white) 15%,
+    var(--cta-base) 84%,
+    color-mix(in oklab, var(--cta-base) 40%, black) 100%
+  );
+}
+@utility cta-accent-hover {
+  --cta-base: color-mix(in oklab, var(--cta-accent) 86%, black);
+}
+@utility cta-accent-pressed {
+  --cta-base: color-mix(in oklab, var(--cta-accent) 74%, black);
+}
+
+/*
+  Button/CTA type=開始遊戲、學習遊戲：四段色標放在 --cta-1～4，漸層由 cta-gradient 畫；
+  hover、按下各深一階＝每段色標混黑 14%／26%（oklab），和立即遊玩一樣，Figma 也照這個算（不疊 Tint 圖層）
+*/
+@utility cta-gradient {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--cta-1) var(--cta-shade, 100%), black) 0%,
+    color-mix(in oklab, var(--cta-2) var(--cta-shade, 100%), black) 15%,
+    color-mix(in oklab, var(--cta-3) var(--cta-shade, 100%), black) 84%,
+    color-mix(in oklab, var(--cta-4) var(--cta-shade, 100%), black) 100%
+  );
+}
+@utility cta-start {
+  --cta-1: var(--blue-200);
+  --cta-2: var(--blue-400);
+  --cta-3: var(--blue-500);
+  --cta-4: var(--blue-900);
+}
+@utility cta-learn {
+  --cta-1: var(--gradient-learn-1);
+  --cta-2: var(--gradient-learn-2);
+  --cta-3: var(--gradient-learn-3);
+  --cta-4: var(--gradient-learn-4);
+}
+@utility cta-shade-hover {
+  --cta-shade: 86%;
+}
+@utility cta-shade-pressed {
+  --cta-shade: 74%;
+}

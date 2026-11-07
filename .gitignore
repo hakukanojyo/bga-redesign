@@ -38,5 +38,13 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 
+# 環境變數（第二階段接 Supabase）：金鑰不進 git，範例檔可以進
+.env
+.env.*
+!.env.example
+
 # Claude Code personal settings
 CLAUDE.local.md
+
+# 原始素材（未壓縮的遊戲圖片），壓縮後的版本放 src/assets/
+design-source
