@@ -46,36 +46,38 @@ const icons = {
 }
 
 // 每類的顏色；Tailwind 要看得到完整的 class 名稱。
-// head：桌面標題列、平板分類標籤；open：平板展開中的分類標籤（Figma Filter/Category Chip state=selected）；body：選項的底色
+// head：桌面標題列、平板分類標籤；body：選項的底色
+// open：平板分類標籤的厚度和展開中的外框（Figma Filter/Category Chip state=selected）。用內陰影不用 border：
+// border 左右透明、底部有色時，圓角處會斜切得不順；內陰影跟著圓角走，也不佔版面，展開時不會跳（2026-11-07）
 const colors = {
   players: {
     head: 'border-b-filter-players-ink bg-filter-players-bg text-filter-players-ink hover:bg-filter-players-bg-hover',
-    open: 'aria-expanded:border-filter-players-ink aria-expanded:bg-filter-players-bg-hover',
+    open: 'shadow-[inset_0_-2px_0_var(--color-filter-players-ink)] aria-expanded:bg-filter-players-bg-hover aria-expanded:shadow-[inset_0_0_0_2px_var(--color-filter-players-ink)]',
     body: 'bg-filter-players-surface',
   },
   time: {
     head: 'border-b-filter-time-ink bg-filter-time-bg text-filter-time-ink hover:bg-filter-time-bg-hover',
-    open: 'aria-expanded:border-filter-time-ink aria-expanded:bg-filter-time-bg-hover',
+    open: 'shadow-[inset_0_-2px_0_var(--color-filter-time-ink)] aria-expanded:bg-filter-time-bg-hover aria-expanded:shadow-[inset_0_0_0_2px_var(--color-filter-time-ink)]',
     body: 'bg-filter-time-surface',
   },
   complexity: {
     head: 'border-b-filter-complexity-ink bg-filter-complexity-bg text-filter-complexity-ink hover:bg-filter-complexity-bg-hover',
-    open: 'aria-expanded:border-filter-complexity-ink aria-expanded:bg-filter-complexity-bg-hover',
+    open: 'shadow-[inset_0_-2px_0_var(--color-filter-complexity-ink)] aria-expanded:bg-filter-complexity-bg-hover aria-expanded:shadow-[inset_0_0_0_2px_var(--color-filter-complexity-ink)]',
     body: 'bg-filter-complexity-surface',
   },
   mechanics: {
     head: 'border-b-filter-mechanics-ink bg-filter-mechanics-bg text-filter-mechanics-ink hover:bg-filter-mechanics-bg-hover',
-    open: 'aria-expanded:border-filter-mechanics-ink aria-expanded:bg-filter-mechanics-bg-hover',
+    open: 'shadow-[inset_0_-2px_0_var(--color-filter-mechanics-ink)] aria-expanded:bg-filter-mechanics-bg-hover aria-expanded:shadow-[inset_0_0_0_2px_var(--color-filter-mechanics-ink)]',
     body: 'bg-filter-mechanics-surface',
   },
   topic: {
     head: 'border-b-filter-topic-ink bg-filter-topic-bg text-filter-topic-ink hover:bg-filter-topic-bg-hover',
-    open: 'aria-expanded:border-filter-topic-ink aria-expanded:bg-filter-topic-bg-hover',
+    open: 'shadow-[inset_0_-2px_0_var(--color-filter-topic-ink)] aria-expanded:bg-filter-topic-bg-hover aria-expanded:shadow-[inset_0_0_0_2px_var(--color-filter-topic-ink)]',
     body: 'bg-filter-topic-surface',
   },
   type: {
     head: 'border-b-filter-type-ink bg-filter-type-bg text-filter-type-ink hover:bg-filter-type-bg-hover',
-    open: 'aria-expanded:border-filter-type-ink aria-expanded:bg-filter-type-bg-hover',
+    open: 'shadow-[inset_0_-2px_0_var(--color-filter-type-ink)] aria-expanded:bg-filter-type-bg-hover aria-expanded:shadow-[inset_0_0_0_2px_var(--color-filter-type-ink)]',
     body: 'bg-filter-type-surface',
   },
 }
@@ -138,7 +140,7 @@ onMounted(async () => {
           <li v-for="category in filterCategories" :key="category.key" class="shrink-0">
             <button
               type="button"
-              class="flex h-[48px] items-center gap-4 rounded-12 border-2 border-transparent px-16 type-tc-title-16 whitespace-nowrap"
+              class="flex h-[48px] items-center gap-4 rounded-12 px-16 type-tc-title-16 whitespace-nowrap"
               :class="[colors[category.color].head, colors[category.color].open]"
               :aria-expanded="tabletOpen === category.key"
               aria-controls="filter-tablet-panel"
