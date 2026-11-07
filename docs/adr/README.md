@@ -58,3 +58,4 @@
 | [0015](0015-sonner-toast.md) | 提示（Toast）用 shadcn-vue 的 Sonner |
 | [0016](0016-toast-at-top.md) | 提示（Toast）改到畫面上方 |
 | [0017](0017-native-confirm-dialog.md) | 確認彈窗用原生 `<dialog>` |
+| [0018](0018-blur-fallback.md) | 背景模糊降級：全站一條 CSS 規則＋開頁時判斷裝置 |

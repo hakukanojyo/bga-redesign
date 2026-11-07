@@ -25,6 +25,17 @@
       fitViewport()
       addEventListener('orientationchange', fitViewport)
     </script>
+    <script>
+      // 低效能裝置拿掉背景模糊（SYS-10、ADR 0018）：記憶體 4GB 以下或 CPU 4 核以下。
+      // 在畫面出現前判斷，不會先模糊再變清楚；Safari 沒有 deviceMemory，只看核心數
+      ;(function () {
+        var memory = navigator.deviceMemory
+        var cores = navigator.hardwareConcurrency
+        if ((memory && memory <= 4) || (cores && cores <= 4)) {
+          document.documentElement.classList.add('reduce-blur')
+        }
+      })()
+    </script>
     <title>BGA Redesign</title>
   </head>
   <body>

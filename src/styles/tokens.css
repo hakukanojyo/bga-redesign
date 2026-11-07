@@ -331,6 +331,7 @@
   --color-overlay-scrim: var(--gray-950);
   --color-overlay-scrim-strong: var(--gray-950-a36);
   --color-overlay-backdrop: var(--base-black-a40);
+  --color-overlay-backdrop-strong: var(--base-black-a76);
 
   --color-border-default: var(--gray-950);
   --color-border-inverse: var(--base-white);
