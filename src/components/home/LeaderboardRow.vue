@@ -21,11 +21,19 @@ const medal = computed(() => (props.self ? null : medals[props.entry.rank]))
 <!-- Figma：List/Leaderboard Row（rank=1～3 獎牌、rank=default 數字圈、rank=self 自己） -->
 <template>
   <div class="flex items-center justify-between gap-8 rounded-8 bg-surface-default px-8 py-4">
-    <div class="flex items-center gap-8">
-      <img v-if="medal" :src="medal" :alt="`第 ${entry.rank} 名`" width="29" height="36" />
+    <!-- min-w-0：flex 子元素預設不會比內容窄，不加的話名字太長時 truncate 不會生效 -->
+    <div class="flex min-w-0 items-center gap-8">
+      <img
+        v-if="medal"
+        :src="medal"
+        :alt="`第 ${entry.rank} 名`"
+        width="29"
+        height="36"
+        class="shrink-0"
+      />
       <span
         v-else
-        class="rounded-16 type-en-body-13-strong"
+        class="shrink-0 rounded-16 type-en-body-13-strong"
         :class="
           self
             ? 'bg-surface-brand px-12 text-text-inverse'
@@ -35,8 +43,11 @@ const medal = computed(() => (props.self ? null : medals[props.entry.rank]))
         <span class="sr-only">第</span>{{ entry.rank }}<span class="sr-only">名</span>
       </span>
       <UserAvatar :user="entry" :size="36" />
-      <div class="flex flex-col">
-        <span class="text-text-body" :class="self ? 'type-en-body-13' : 'type-en-body-13-strong'">
+      <div class="flex min-w-0 flex-col">
+        <span
+          class="truncate text-text-body"
+          :class="self ? 'type-en-body-13' : 'type-en-body-13-strong'"
+        >
           {{ entry.name }}
         </span>
         <span class="flex items-center gap-4 type-en-caption-11 text-text-body">
@@ -45,6 +56,6 @@ const medal = computed(() => (props.self ? null : medals[props.entry.rank]))
         </span>
       </div>
     </div>
-    <span class="type-en-body-13 text-text-body">{{ formatScore(entry.score) }}</span>
+    <span class="shrink-0 type-en-body-13 text-text-body">{{ formatScore(entry.score) }}</span>
   </div>
 </template>

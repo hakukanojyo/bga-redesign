@@ -16,7 +16,7 @@ const { data, status, retry } = useRequest(getLeaderboard)
   <section
     aria-labelledby="leaderboard-title"
     :aria-busy="status === 'loading'"
-    class="flex h-[421px] w-[292px] flex-col overflow-hidden rounded-8 max-desktop:w-auto max-desktop:flex-1"
+    class="flex h-[421px] w-[292px] shrink-0 flex-col overflow-hidden rounded-8 max-desktop:w-[296px]"
   >
     <div class="flex flex-1 flex-col items-center gap-12 bg-surface-brand px-8 pt-16 pb-8">
       <h2 id="leaderboard-title" class="type-tc-heading-20 text-text-inverse">排行榜</h2>

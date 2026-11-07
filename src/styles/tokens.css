@@ -113,6 +113,7 @@
   --base-black-a0: rgb(0 0 0 / 0);
   --base-black-a30: rgb(0 0 0 / 0.3);
   --base-black-a40: rgb(0 0 0 / 0.4);
+  --base-black-a60: rgb(0 0 0 / 0.6);
   --base-black-a76: rgb(0 0 0 / 0.76);
 
   /* 漸層色標：SYS-09 的例外，漸層直接用 Primitive */
@@ -154,6 +155,8 @@
   --cta-accent: var(--color-action-primary);
   /* 遊戲主畫面主視覺：橫幅下方疊黑色漸層，白字才看得清楚（Figma 303:2096；色標綁 Primitive 是允許的例外） */
   --gradient-game-hero: linear-gradient(0deg, var(--base-black-a76) 0%, var(--base-black-a0) 60%);
+  /* 首頁主視覺：比遊戲主畫面淡一點，標準字和按鈕已經夠清楚，插畫不要壓太暗（2026-11-08） */
+  --gradient-home-hero: linear-gradient(0deg, var(--base-black-a60) 0%, var(--base-black-a0) 60%);
   /* Skeleton/Card 的掃光：白色半透明亮帶 */
   --gradient-skeleton-shine: linear-gradient(
     90deg,
