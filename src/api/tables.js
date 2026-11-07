@@ -4,7 +4,8 @@ import { games } from './data/games'
 import { hosts } from './data/people'
 import { initialMyTables, makeTable, openTables } from './data/tables'
 
-const KEY = 'bga:myTables'
+// v2（2026-11-07）：假資料的規則改過（即時制同時只能進行一桌），換名稱讓瀏覽器裡的舊資料自動作廢，不用手動清
+const KEY = 'bga:myTables:v2'
 
 // 開放桌每 10 秒刷新（TABLE-06），模擬真的網站：
 // - 有幾桌人數加一，坐滿就變已額滿；已額滿的下一次刷新消失
@@ -126,6 +127,15 @@ export async function joinTable(tableId) {
   if (!table || table.status === 'full') {
     await fakeRequest(null)
     throw Object.assign(new Error('牌桌已滿'), { code: 'full' })
+  }
+  // 即時制同時只能進行一桌（MYTBL-12，2026-11-07）：已經有一桌即時制在對戰，就不能再排即時制——
+  // 人在對局裡，人到齊時一定按不到確認，會拖累別桌。回合制不限
+  const playingRealtime = mine.some(
+    (item) => item.status === 'playing' && known.get(item.tableId)?.pace === 'realtime',
+  )
+  if (table.pace === 'realtime' && playingRealtime) {
+    await fakeRequest(null)
+    throw Object.assign(new Error('即時制對戰中'), { code: 'busy' })
   }
   if (!mine.some((item) => item.tableId === tableId)) {
     const now = Date.now()

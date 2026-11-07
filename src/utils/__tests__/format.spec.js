@@ -5,6 +5,7 @@ import {
   formatFileSize,
   formatPlayers,
   formatPlays,
+  formatRank,
   formatScore,
   formatSeats,
   formatSettings,
@@ -36,6 +37,11 @@ describe('資料格式（產品規則 6.6）', () => {
     expect(formatScore(9980000)).toBe('9.98M PX')
     expect(formatScore(9800000)).toBe('9.8M PX')
     expect(formatScore(30)).toBe('30 PX')
+  })
+
+  it('formats my rank with thousands separators', () => {
+    expect(formatRank(16832)).toBe('第 16,832 名')
+    expect(formatRank(3)).toBe('第 3 名')
   })
 
   it('formats how long ago a table was opened', () => {

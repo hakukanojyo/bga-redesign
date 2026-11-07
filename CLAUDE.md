@@ -83,7 +83,7 @@
 
 - Figma 是設計意圖的參考，專案的寫法是正本：照意圖做，不逐像素照抄，新畫面要和其他畫面像同一個產品
 - Figma 和功能清單、PRD 對不上，或 Figma 的值找不到對應的 token 時，先問，不要自己選一個
-- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的用共用的元件，不複製一份；提示用 `src/utils/toast.js`（`docs/adr/0015`）；拿資料用 `useRequest`（`src/composables/`）；搜尋字、篩選條件、排序改網址用 `useSearchQuery`（push／replace、搜尋和篩選擇一、清空回首頁都在裡面）；尋找開放桌的條件用 `useTableQuery`。輸入框用 `SearchField`，分段按鈕用 `SegmentedControl`；定時刷新用 `usePolling`，加入這桌用 `useJoinTable`。按鈕用 `AppButton`（primary、secondary、danger；sm、md、lg），沒有底色的紅字按鈕用 `DangerTextButton`，影響大的動作先跳 `ConfirmDialog`，列表加入、移除的動畫用 `ListTransition`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`（不帶外圍內距，外面空多少由外層決定；空狀態的間距、按鈕排法看產品規則 7.3；側欄面板和 Bottom Sheet 裡用 `size="sm"`）；側欄面板和 Bottom Sheet 的內容放 `PanelContent`（`src/components/layout/`），兩邊共用；面板裡的卡片用 `PanelCard`（懸停按鈕條、觸控常駐、外框），被按鈕條蓋住的那行和捲動區用 `panelClasses.js`；尊榮遊戲標籤用 `VipBadge`（卡片 `tab`、單獨放 `pill`）；其他玩家的頭像用 `UserAvatar`（VIP 黃框、hover 黃色光暈、連到個人頁）；即時制人到齊的確認視窗是 `ReadyCheckDialog`（掛在 `AppLayout`，資料來自 `myTables.readyCheck`）
+- 先找現有的元件；載入中（`SkeletonBlock`）、區塊失敗（`BlockError`）、空的用共用的元件，不複製一份；提示用 `src/utils/toast.js`（`docs/adr/0015`）；拿資料用 `useRequest`（`src/composables/`）；搜尋字、篩選條件、排序改網址用 `useSearchQuery`（push／replace、搜尋和篩選擇一、清空回首頁都在裡面）；尋找開放桌的條件用 `useTableQuery`。輸入框用 `SearchField`，分段按鈕用 `SegmentedControl`；定時刷新用 `usePolling`，加入這桌用 `useJoinTable`。按鈕用 `AppButton`（primary、secondary、danger；sm、md、lg），沒有底色的紅字按鈕用 `DangerTextButton`，影響大的動作先跳 `ConfirmDialog`，列表加入、移除的動畫用 `ListTransition`，整頁狀態（找不到頁面、佔位頁、連線錯誤）用 `PageState`（不帶外圍內距，外面空多少由外層決定；空狀態的間距、按鈕排法看產品規則 7.3；側欄面板和 Bottom Sheet 裡用 `size="sm"`）；側欄面板和 Bottom Sheet 的內容放 `PanelContent`（`src/components/layout/`），兩邊共用；面板裡的卡片用 `PanelCard`（懸停按鈕條、觸控常駐、外框），被按鈕條蓋住的那行和捲動區用 `panelClasses.js`；尊榮遊戲標籤用 `VipBadge`（卡片 `tab`、單獨放 `pill`）；其他玩家的頭像用 `UserAvatar`（VIP 黃框、hover 黃色光暈、連到個人頁）；即時制人到齊的確認視窗是 `ReadyCheckDialog`（掛在 `AppLayout`，資料來自 `myTables.readyCheck`）；個人面板是 `ProfilePanel`（`src/components/profile/`，資料用 `getMe`，只有這裡用所以不放 Pinia）
 - 用原生的結構：`button`、`a`、`label`、`ul`、標題照層級；Figma 的絕對定位改寫成 flex 或 grid
 - 要對齊的一組東西（一排等高的卡片）做成一個元件，不分開擺位置
 - 圖片設寬高避免版面跳動，`alt` 寫有意義的文字（純裝飾才留空）
@@ -138,4 +138,5 @@
 - ✅ 頭像 VIP 黃框、hover 光暈、連到個人頁佔位頁（`UserAvatar`）
 - ✅ 提示 Toast（shadcn-vue Sonner，`src/utils/toast.js`）
 - ✅ 即時制人到齊確認視窗 #49（`ReadyCheckDialog`）：倒數 20 秒、全員確認才開始、等待其他玩家、逾時退出；排隊中卡片加制度
+- ✅ 個人面板 #55（`ProfilePanel`、遊玩紀錄卡片 `PlayHistoryItem`）：個人資訊、信譽、名次、經驗值、狀態訊息和成就只顯示、遊玩紀錄最多 8 筆；token `surface/glass-card`（#53）、平板面板 ×（#54）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能

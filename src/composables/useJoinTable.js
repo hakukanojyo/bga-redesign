@@ -9,7 +9,7 @@ export const JOINED_MS = 1500
 // 加入這桌的流程（PRD 7.6），遊戲頁的開放桌和尋找開放桌共用：
 // - 要等伺服器回應（結果看別人的狀態），中間顯示「加入中…」
 // - 成功：「已加入」＋提示「已加入這桌」和「查看」（按查看打開我的牌桌），1.5 秒後放進 removed，畫面把那一列拿掉
-// - 牌桌已滿：那一列改「已額滿」＋紅色提示；其他失敗：「操作失敗，請再試一次」
+// - 牌桌已滿：那一列改「已額滿」＋紅色提示；已經有即時制在對戰：那一列不變，紅色提示（MYTBL-12）；其他失敗：「操作失敗，請再試一次」
 export function useJoinTable() {
   // 每一列在使用者這邊的暫時狀態：joining、joined、full
   const rowState = reactive({})
@@ -40,6 +40,9 @@ export function useJoinTable() {
       if (error.code === 'full') {
         rowState[table.id] = 'full'
         toast.error('加入失敗 牌桌已滿')
+      } else if (error.code === 'busy') {
+        delete rowState[table.id]
+        toast.error('你有一桌即時制正在對戰 結束後才能加入')
       } else {
         delete rowState[table.id]
         toast.error('操作失敗 請再試一次')

@@ -82,6 +82,16 @@ describe('GameTables', () => {
     expect(toast.error).toHaveBeenCalledWith('加入失敗 牌桌已滿')
   })
 
+  it('keeps the row joinable when I already have a realtime game in play (MYTBL-12)', async () => {
+    joinTable.mockRejectedValue(Object.assign(new Error('即時制對戰中'), { code: 'busy' }))
+    const wrapper = await mountTables()
+    await firstButton(wrapper).trigger('click')
+    await flushPromises()
+    expect(firstButton(wrapper).text()).toBe('加入這桌')
+    expect(firstButton(wrapper).attributes('disabled')).toBeUndefined()
+    expect(toast.error).toHaveBeenCalledWith('你有一桌即時制正在對戰 結束後才能加入')
+  })
+
   it('keeps the old rows when an auto refresh fails (產品規則 5.3)', async () => {
     const wrapper = await mountTables()
     getGameTables.mockRejectedValueOnce(new Error('offline'))
