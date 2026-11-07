@@ -67,6 +67,7 @@
   - 寬高沒有 token（Figma 只有 padding、gap、圓角綁變數），照 Figma 的數值寫（例：`h-[72px]`）
 - 斷點：桌面優先，預設寫桌面版，平板（768～1279）用 `max-desktop:` 改寫（例：`p-24 max-desktop:p-16`）。沒有 768 以下的斷點：手機由 `index.html` 的 script 縮放成 768 寬，CSS 永遠看到 768 以上
 - 要判斷「是不是手機」時看 `screen.width < 768`（裝置寬度），不要看 `innerWidth` 或 media query，縮放後它們都是 768
+- 背景模糊直接用 `backdrop-blur-*`，不用另外處理降級：低效能裝置（`<html class="reduce-blur">`，`index.html` 判斷）和「減少透明度」由 `style.css` 一條規則全站拿掉，遮罩同時換成 `overlay/backdrop-strong`（黑 76%，`docs/adr/0018`）；模糊上限 15px；遮罩一律用 `bg-overlay-backdrop`，不要寫死顏色
 - Figma 變數改了：用 Figma MCP 重新讀變數，更新 `tokens.css`；`npm test` 會檢查每個 Semantic 都接到 Primitive
 - 資料夾和路由見 `docs/adr/0008`：頁面放 `src/views/`（`XxxView.vue`），版型放 `src/layouts/`，版型用的元件放 `src/components/layout/`
 - 圖示用 Font Awesome（`docs/adr/0009`）：元件裡 import 用到的圖示，大小用 `text-[14px]` 這種 font-size 調（`size-*` 會被 Font Awesome 的 CSS 蓋掉）；BGA logo 等自製圖示從 Figma 匯出
@@ -139,4 +140,5 @@
 - ✅ 提示 Toast（shadcn-vue Sonner，`src/utils/toast.js`）
 - ✅ 即時制人到齊確認視窗 #49（`ReadyCheckDialog`）：倒數 20 秒、全員確認才開始、等待其他玩家、逾時退出；排隊中卡片加制度
 - ✅ 個人面板 #55（`ProfilePanel`、遊玩紀錄卡片 `PlayHistoryItem`）：個人資訊、信譽、名次、經驗值、狀態訊息和成就只顯示、遊玩紀錄最多 8 筆；token `surface/glass-card`（#53）、平板面板 ×（#54）
+- ✅ 換頁進度條和背景模糊降級 #57，拆 2 個 PR：① 換頁進度條 `RouteProgress`（超過 150ms 才出現，#58）② 低效能裝置和減少透明度時拿掉背景模糊（ADR 0018）
 - 接下來：開 issue → 設計 token、路由、版面骨架、佔位頁 → PRD 完成後定資料模型，再寫 Pinia store 和頁面功能
