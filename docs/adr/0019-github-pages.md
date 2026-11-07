@@ -1,6 +1,6 @@
 # 0019. 部署到 GitHub Pages，只部署 main
 
-- 狀態：已採用
+- 狀態：已採用（「reviewer approve 過的版本」改為自我檢查過的版本，見 [0020](0020-release-self-review.md)）
 - 日期：2026-11-08
 
 ## 背景

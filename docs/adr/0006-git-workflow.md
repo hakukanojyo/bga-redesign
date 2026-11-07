@@ -1,6 +1,6 @@
 # 0006. develop ＋ release PR、壓縮合併
 
-- 狀態：已採用（「動到架構的 PR 等 reviewer 回覆」已被 [0011](0011-architecture-pr-review-after-merge.md) 取代）
+- 狀態：已採用（「動到架構的 PR 等 reviewer 回覆」已被 [0011](0011-architecture-pr-review-after-merge.md) 取代；「release PR 等 reviewer approve」已被 [0020](0020-release-self-review.md) 取代）
 - 日期：2026-11-03
 
 ## 背景

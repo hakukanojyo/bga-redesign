@@ -1,6 +1,6 @@
 # 0011. 動到架構的 PR 也自己合併，reviewer 事後看
 
-- 狀態：已採用
+- 狀態：已採用（「release PR 維持等 reviewer approve」已被 [0020](0020-release-self-review.md) 取代）
 - 日期：2026-11-05
 - 取代：[0006](0006-git-workflow.md) 的「動到架構的 PR，留言請 reviewer 看，等回覆再合」
 
