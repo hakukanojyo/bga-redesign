@@ -19,6 +19,7 @@ const name = useId()
   顏色改綁 Semantic（2026-11-06）：外框 border/brand-subtle、選中 surface/brand（Figma 原本是 blue/400）；
   未選中 white 35% 底、hover white 90%（surface/glass-light、surface/glass）。
   外框給多寬就撐多寬，選項平分（尋找開放桌的篩選卡片撐滿整排）
+  分隔線（2026-11-07）：沒選的選項之間一條細線，上下留 8 不頂到邊；緊貼選中那格的線藏起來，選中的色塊已經分開了（同 iOS）
 -->
 <template>
   <fieldset class="flex min-w-0 items-center gap-4">
@@ -26,11 +27,13 @@ const name = useId()
     <legend v-else class="float-left shrink-0 type-tc-heading-20 text-text-primary">
       {{ legend }}：
     </legend>
-    <div class="flex flex-1 overflow-hidden rounded-4 border border-border-brand-subtle">
+    <div
+      class="flex flex-1 overflow-hidden rounded-4 border border-border-brand-subtle [&>label:has(:checked)+label]:before:hidden"
+    >
       <label
         v-for="option in options"
         :key="option.value"
-        class="flex min-h-[36px] flex-1 cursor-pointer items-center justify-center whitespace-nowrap bg-surface-glass-light px-16 py-4 type-tc-body-16 text-text-secondary max-desktop:min-h-(--tap-button-min-height) hover:bg-surface-glass has-checked:bg-surface-brand has-checked:text-text-inverse has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 has-focus-visible:outline-action-primary"
+        class="relative flex min-h-[36px] flex-1 cursor-pointer items-center justify-center whitespace-nowrap bg-surface-glass-light px-16 py-4 type-tc-body-16 text-text-secondary not-first:before:absolute not-first:before:inset-y-8 not-first:before:left-0 not-first:before:w-px not-first:before:bg-border-brand-subtle max-desktop:min-h-(--tap-button-min-height) hover:bg-surface-glass has-checked:bg-surface-brand has-checked:text-text-inverse has-checked:before:hidden has-focus-visible:outline-2 has-focus-visible:-outline-offset-2 has-focus-visible:outline-action-primary"
       >
         <input v-model="model" type="radio" :name="name" :value="option.value" class="sr-only" />
         {{ option.label }}
