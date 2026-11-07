@@ -37,7 +37,7 @@ function onInteractOutside(event) {
 -->
 <template>
   <Sheet :open="!!panel" @update:open="(open) => !open && emit('close')">
-    <!-- 間距照 Figma：個人面板外層 12、內層 16、上方 20+8；Bottom Sheet 四周 24、標題和內容間隔 16 -->
+    <!-- 間距照 Figma：個人面板外層 12、內層 16、上方 20（2026-11-07 重畫後拿掉多的 8）；Bottom Sheet 四周 24、標題和內容間隔 16 -->
     <SheetContent
       :side="shownPanel === 'profile' ? 'right' : 'bottom'"
       :class="shownPanel === 'profile' ? 'bottom-[72px] w-[375px]' : 'bottom-[72px] h-[480px]'"
@@ -51,7 +51,7 @@ function onInteractOutside(event) {
       >
         <div
           class="flex min-h-0 flex-1 flex-col gap-16"
-          :class="shownPanel === 'profile' && 'px-16 pt-8'"
+          :class="shownPanel === 'profile' && 'px-16'"
         >
           <!-- 右上角 ×（2026-11-07）：只靠點遮罩、再點導覽列關閉不夠明顯。點擊範圍 44，疊在標題列右邊（absolute），標題列高度不變 -->
           <div class="relative pr-32">

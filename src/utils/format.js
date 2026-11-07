@@ -43,6 +43,11 @@ export function formatScore(score) {
   return `${Number((score / 1_000_000).toFixed(2))}M PX`
 }
 
+// 排行榜名次：16832 →「第 16,832 名」（個人面板）
+export function formatRank(rank) {
+  return `第 ${rank.toLocaleString('zh-TW')} 名`
+}
+
 // 開桌時間（產品規則 6.6）：近的用相對時間，7 天以上換成日期，不用自己換算「32 天前」是哪天
 // 剛剛、15 分鐘前、3 小時前、2 天前、11/05
 export function formatTimeAgo(iso, now = Date.now()) {

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { provide, ref, watch } from 'vue'
 import { useMediaQuery } from '@vueuse/core'
 import SideRailItem from '@/components/layout/SideRailItem.vue'
 import PanelContent from '@/components/layout/PanelContent.vue'
@@ -26,6 +26,13 @@ watch(
     if (!panel && dialog.value.open) dialog.value.close()
   },
 )
+
+// 個人面板打開時，圖示列上的小頭像飛到面板裡的大頭像（ProfilePanel 量位置、播動畫），飛的時候小頭像藏起來，
+// 面板裡就不會同時有兩個自己的頭像（2026-11-07，#55）。平板沒有 provide，就不飛
+const avatarImg = ref(null)
+const avatarHidden = ref(false)
+// 複製品放在 dialog 最上層飛（useAvatarFlight），不會被面板的捲動區裁掉
+provide('profileAvatar', { source: avatarImg, hidden: avatarHidden, container: dialog })
 
 // 點到面板外（遮罩）時，事件的目標是 dialog 本身
 function onClick(event) {
@@ -69,10 +76,12 @@ function onClick(event) {
           >
             <!-- 從右側欄的 40 縮到面板的 34 -->
             <img
+              ref="avatarImg"
               :src="avatar"
               alt=""
               width="34"
               height="34"
+              :class="avatarHidden && 'invisible'"
               class="size-[40px] max-w-none rounded-full border-2 border-border-accent object-cover transition-[width,height,box-shadow] duration-300 hover:shadow-glow-avatar-hover ease-[cubic-bezier(0.2,0,0,1)] group-open/panel:size-[34px] starting:group-open/panel:size-[40px] motion-reduce:transition-none"
             />
           </button>
@@ -90,11 +99,11 @@ function onClick(event) {
         <div class="h-[63px]" />
       </div>
 
-      <!-- 固定寬度，面板變寬時內容不會被擠壓；跟著淡入。上方間距照 Figma：個人面板 20＋8（和平板的 TabletPanel 一樣拆兩層），我的收藏 20 -->
+      <!-- 固定寬度，面板變寬時內容不會被擠壓；跟著淡入。上方間距照 Figma：每個面板都是 20，切換面板時標題不會上下跳（個人面板 2026-11-07 重畫後也一樣） -->
       <section
         class="flex w-[373px] shrink-0 flex-col pt-20 opacity-0 transition-opacity duration-300 group-open/panel:opacity-100 starting:group-open/panel:opacity-0 motion-reduce:transition-none"
       >
-        <div class="flex min-h-0 flex-1 flex-col gap-16" :class="panel === 'profile' && 'pt-8'">
+        <div class="flex min-h-0 flex-1 flex-col gap-16">
           <h2 class="px-16 type-tc-heading-20 text-text-primary">{{ panelTitles[panel] }}</h2>
           <!-- 標題到內容 20（gap 16＋4）；捲動區在各面板裡（panelClasses.js 的 panelScroll），分頁才能留在上面不動 -->
           <div class="flex min-h-0 flex-1 flex-col px-16 pt-4 pb-8">

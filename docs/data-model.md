@@ -92,6 +92,8 @@
 - 時間到我沒按 → 拿掉（視同退出）
 - 時間到我按了、有人沒按 → 回到 `queued`，順位保留
 
+已經有一桌即時制 `playing` 時，`joinTable` 加入即時制的桌會失敗（`code: 'busy'`，MYTBL-12）；回合制不限。
+
 回合制人到齊直接 `queued` → `playing`，不用確認。收尾由 API 決定（`getMyTables`），畫面只比對前後兩次的資料跳提示。
 
 `getMyTables()` 回傳 `{ playing, queued, confirming }`：`queued` 包含等確認的桌；`confirming` 另外帶 `players`（同桌其他玩家，每位有 `confirmed`）。
@@ -118,9 +120,13 @@
 | `avatar` | string | 圖片網址 |
 | `isPremium` | boolean | 尊榮標記 |
 | `reputation` | number（0～100） | `80` →「80 / 100」 |
-| `rank` | number | 排行榜名次 |
-| `statusMessage` | string | 空字串時顯示預設文字 |
-| `playHistory` | `{ gameSlug, playedAt }[]` | 遊玩紀錄 |
+| `rank` | number | 排行榜名次，`formatRank()` →「第 16,832 名」 |
+| `score` | number | 經驗值，排行榜用它排名，`formatScore()` →「30 PX」 |
+| `statusMessage` | string | 狀態訊息，只顯示（要改從「編輯個人檔案」進） |
+| `achievements` | `{ id, name, image }[]` | 成就徽章，只顯示 |
+| `playHistory` | `{ gameSlug, playedAt }[]` | 遊玩紀錄，一筆是一場（同一款可以有好幾筆） |
+
+`getMe()` 的遊玩紀錄最近的在前、最多 8 筆（`PLAY_HISTORY_LIMIT`），每筆帶 `game`；`?scenario=empty` 時是空的（#55）。排行榜的「我」（`myScore`）的名次、經驗值都從這裡來。
 
 ## 排行榜 `LeaderboardEntry`
 
@@ -141,7 +147,7 @@
 | --- | --- |
 | 遊戲、排行榜、我 | 寫在 `src/api/data/`，固定不變 |
 | 開放桌 | 寫在 `src/api/data/`；每 10 秒刷新時，假 API 隨機改人數、讓幾桌變成已額滿 |
-| 收藏、我的牌桌、最近看過 | 存在 localStorage，模擬伺服器；重新整理還在 |
+| 收藏、我的牌桌、最近看過 | 存在 localStorage，模擬伺服器；重新整理還在。我的牌桌的名稱是 `bga:myTables:v2`：假資料規則改了就換版本號，瀏覽器裡的舊資料自動作廢 |
 
 畫面只呼叫 `src/api/` 的函式，不直接 import 資料（ADR 0005）。網址加 `?scenario=slow`、`error`、`empty` 可以看到載入中、失敗、空的。
 

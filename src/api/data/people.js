@@ -1,6 +1,9 @@
 // 我、排行榜、桌主：全部虛構，不對應任何真實的 BGA 帳號
 // 假玩家的頭像是 Unsplash 的動物照片（design-source/avatars/CREDITS.md），8 張輪流用
 import avatar from '@/assets/images/avatar-demo.jpg'
+// 成就徽章（PROF-04，本輪只顯示）：原圖在 design-source/achievements/（從 Figma 匯出，50×50）
+import firstWin from '@/assets/images/achievements/achievement-1.webp'
+import nightOwl from '@/assets/images/achievements/achievement-2.webp'
 
 const avatarFiles = import.meta.glob('@/assets/images/avatars/*.webp', {
   eager: true,
@@ -17,11 +20,24 @@ export const me = {
   isPremium: true,
   reputation: 80,
   rank: 16832,
-  statusMessage: '',
+  // 經驗值：排行榜用它排名（Figma 的「30px」）
+  score: 30,
+  statusMessage: '週末晚上常在線 歡迎找我玩卡坦島',
+  achievements: [
+    { id: 'first-win', name: '第一場勝利', image: firstWin },
+    { id: 'night-owl', name: '夜貓子', image: nightOwl },
+  ],
+  // 一筆是一場遊戲，同一款玩好幾次就有好幾筆。只用這 3 款：「為你推薦」不推玩過的遊戲，換別款首頁推薦會跟著變
   playHistory: [
     { gameSlug: 'werewolves', playedAt: '2026-11-04T21:40:00+08:00' },
     { gameSlug: 'splendor', playedAt: '2026-11-03T20:15:00+08:00' },
+    { gameSlug: 'werewolves', playedAt: '2026-11-02T22:10:00+08:00' },
     { gameSlug: 'kingdomino', playedAt: '2026-11-01T14:05:00+08:00' },
+    { gameSlug: 'splendor', playedAt: '2026-10-31T20:30:00+08:00' },
+    { gameSlug: 'werewolves', playedAt: '2026-10-30T21:00:00+08:00' },
+    { gameSlug: 'kingdomino', playedAt: '2026-10-28T13:45:00+08:00' },
+    { gameSlug: 'splendor', playedAt: '2026-10-27T19:20:00+08:00' },
+    { gameSlug: 'werewolves', playedAt: '2026-10-25T22:30:00+08:00' },
   ],
 }
 
@@ -40,7 +56,7 @@ export const myScore = {
   rank: me.rank,
   name: me.name,
   countryCode: 'TW',
-  score: 30,
+  score: me.score,
   avatar,
   isPremium: me.isPremium,
 }

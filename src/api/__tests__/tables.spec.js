@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { initialMyTables, openTables } from '../data/tables'
+
+const STORAGE_KEY = 'bga:myTables:v2'
 import {
   acceptTable,
   CONFIRM_MS,
@@ -60,7 +62,8 @@ describe('遊戲主畫面的開放桌（PRD 7.4 第 4 條）', () => {
   })
 
   it('leaves out tables I already joined', async () => {
-    const first = (await load('werewolves')).tables[0]
+    // 回合制：一開始就有一桌即時制在對戰，即時制的桌加不進去（MYTBL-12）
+    const first = (await load('werewolves')).tables.find((table) => table.pace === 'turn')
     const joining = joinTable(first.id)
     await vi.runAllTimersAsync()
     await joining
@@ -87,7 +90,7 @@ describe('尋找開放桌（PRD 7.5）', () => {
 
   it('leaves out tables I already joined, like the game page does', async () => {
     const all = await run(getOpenTables({}))
-    const target = all.tables.find((table) => table.status === 'waiting')
+    const target = all.tables.find((table) => table.status === 'waiting' && table.pace === 'turn')
     await run(joinTable(target.id))
     const after = await run(getOpenTables({}))
     expect(after.tables.map((table) => table.id)).not.toContain(target.id)
@@ -170,7 +173,14 @@ describe('我的牌桌（MYTBL）', () => {
     await vi.runAllTimersAsync()
     return promise
   }
+  // 即時制同時只能進行一桌：示範人到齊前，先讓一開始就在對戰的即時制（t-1004）結束
+  const endPlayingRealtime = () => {
+    if (localStorage.getItem(STORAGE_KEY)) return
+    const rest = initialMyTables.filter((item) => item.tableId !== 't-1004')
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(rest))
+  }
   const joinWaiting = async (pace) => {
+    if (pace === 'realtime') endPlayingRealtime()
     const { tables } = await run(getOpenTables({}))
     const target = tables.find((table) => table.status === 'waiting' && table.pace === pace)
     await run(joinTable(target.id))
@@ -196,6 +206,19 @@ describe('我的牌桌（MYTBL）', () => {
     const promise = getMyTables()
     await vi.runAllTimersAsync()
     expect((await promise).queued.length).toBeGreaterThan(0)
+  })
+
+  it('refuses another realtime table while one is in play, but not turn-based ones (MYTBL-12)', async () => {
+    const { tables } = await run(getOpenTables({}))
+    const realtime = tables.find((table) => table.status === 'waiting' && table.pace === 'realtime')
+    const turn = tables.find((table) => table.status === 'waiting' && table.pace === 'turn')
+    const refused = joinTable(realtime.id).catch((error) => error)
+    await vi.runAllTimersAsync()
+    expect((await refused).code).toBe('busy')
+    await run(joinTable(turn.id))
+    const mine = await run(getMyTables())
+    expect(mine.queued.some((row) => row.tableId === turn.id)).toBe(true)
+    expect(mine.queued.some((row) => row.tableId === realtime.id)).toBe(false)
   })
 
   it('asks me to confirm a realtime table once it fills up, still listed as queued (MYTBL-13)', async () => {
