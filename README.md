@@ -49,7 +49,7 @@ npm test        # 測試
 
 ## 開發流程
 
-每個改動開 PR，CI 自動檢查排版、lint、測試、打包，通過後以 squash merge 合併。`develop` 累積功能後開 release PR 合進 `main`，合併時自動部署到 GitHub Pages。分支、commit、PR 規則見 [`CLAUDE.md`](CLAUDE.md)，技術決策見 [`docs/adr/`](docs/adr/README.md)。
+每個改動開 PR，CI 自動檢查排版、lint、測試、打包，通過後以 squash merge 合進 `develop`。`develop` 累積功能後開 release PR，用合併 commit 合進 `main`，合併時自動部署到 GitHub Pages。分支、commit、PR 規則見 [`CLAUDE.md`](CLAUDE.md)，技術決策見 [`docs/adr/`](docs/adr/README.md)。
 
 ## 版權
 

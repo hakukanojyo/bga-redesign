@@ -61,3 +61,4 @@
 | [0018](0018-blur-fallback.md) | 背景模糊降級：全站一條 CSS 規則＋開頁時判斷裝置 |
 | [0019](0019-github-pages.md) | 部署到 GitHub Pages，只部署 main |
 | [0020](0020-release-self-review.md) | release PR 也自我檢查後合併 |
+| [0021](0021-release-merge-commit.md) | release PR 用合併 commit，功能 PR 維持壓縮合併 |
