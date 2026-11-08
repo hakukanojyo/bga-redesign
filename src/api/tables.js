@@ -1,4 +1,4 @@
-import { fakeRequest, loadStored, saveStored, scenario } from './fake'
+import { fakeRequest, isUserTest, loadStored, saveStored, scenario } from './fake'
 import { findGame, matchesQuery } from './games'
 import { games } from './data/games'
 import { hosts } from './data/people'
@@ -144,8 +144,9 @@ export async function joinTable(tableId) {
       status: 'queued',
       isMyTurn: false,
       joinedAt: new Date(now).toISOString(),
-      // 假資料：加入後固定 30 秒人到齊（2026-11-06 決定，展示和可用性測試每次都一樣）
-      fillsAt: new Date(now + FILL_AFTER_MS).toISOString(),
+      // 假資料：加入後固定 30 秒人到齊（2026-11-06 決定，展示每次都一樣）。
+      // 可用性測試不到齊（#70）：會在任務中途跳確認視窗，而且舊版真的配對要等好幾分鐘，比開局不公平
+      ...(isUserTest() ? {} : { fillsAt: new Date(now + FILL_AFTER_MS).toISOString() }),
     })
     saveStored(KEY, mine)
   }
