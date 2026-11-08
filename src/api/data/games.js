@@ -3,6 +3,7 @@
 // 熱門度、上架日期、場數、版本紀錄是虛構的
 // 介紹的長度刻意長短都有（BGA 上也是），測得出很短、很長、有分段時的版面；分段用 \n\n
 // 沒有 zh-TW 的遊戲沒有官方中文名，顯示英文名；製作群空白的那一列畫面不顯示
+// 別名（aliases）要有來源：研究發現、正式名稱（其他地區或舊版的名稱）；每人叫法不同的俗稱、縮寫不放，旁邊註解寫來源（docs/data-model.md）
 // 遊戲圖片（gallery）還沒有授權的圖，先都是空的，遊戲頁整個章節不顯示（PRD 7.4）
 
 // 每款都有的規則手冊、影片、版本紀錄，內容一樣就用同一個樣板
@@ -38,7 +39,7 @@ export const games = [
   {
     slug: 'zombicide-2e',
     name: { 'zh-TW': '無盡殺戮（第二版）', en: 'Zombicide: 2nd Edition' },
-    aliases: ['無盡殺戮', 'Zombicide'],
+    aliases: [],
     players: { min: 1, max: 6 },
     duration: 60,
     complexity: 'standard',
@@ -138,7 +139,7 @@ export const games = [
   {
     slug: 'splendor',
     name: { 'zh-TW': '璀璨寶石', en: 'Splendor' },
-    aliases: ['寶石商人'],
+    aliases: [],
     players: { min: 2, max: 4 },
     duration: 30,
     complexity: 'casual',
@@ -188,7 +189,8 @@ export const games = [
   {
     slug: 'terraforming-mars',
     name: { 'zh-TW': '重塑火星', en: 'Terraforming Mars' },
-    aliases: ['殖民火星', 'TFM'],
+    // 台灣繁中版的名稱（桌遊行者商品頁「Terraforming Mars 殖民火星（繁中版）」）
+    aliases: ['殖民火星'],
     players: { min: 1, max: 5 },
     duration: 120,
     complexity: 'deep',
@@ -270,7 +272,8 @@ export const games = [
   {
     slug: 'werewolves',
     name: { 'zh-TW': '米勒山谷狼人', en: "The Werewolves of Miller's Hollow" },
-    aliases: ['狼人殺', '狼人', 'Werewolves'],
+    // 研究 HW-15：使用者搜「狼人殺」找不到這款（唯一嚴重度 4 的問題）
+    aliases: ['狼人殺'],
     players: { min: 8, max: 18 },
     duration: 30,
     complexity: 'casual',
@@ -295,6 +298,7 @@ export const games = [
   {
     slug: 'moonlight',
     name: { 'zh-TW': '月映狼煙', en: 'Moonlight' },
+    // 正式全名「Moonlight: The Land of the Wolves」（出版社 La Boîte de Jeu、BGA 英文遊戲頁）
     aliases: ['The Land of the Wolves'],
     players: { min: 2, max: 2 },
     duration: 11,
@@ -365,7 +369,7 @@ export const games = [
   {
     slug: 'next-station-tokyo',
     name: { en: 'Next Station: Tokyo' },
-    aliases: ['下一站東京'],
+    aliases: [],
     players: { min: 1, max: 4 },
     duration: 25,
     complexity: 'casual',
@@ -390,7 +394,8 @@ export const games = [
   {
     slug: 'twilight-imperium',
     name: { en: 'Twilight Imperium' },
-    aliases: ['星際帝國', 'TI4'],
+    // 中文版的名稱（BoardGameGeek 收錄「帝国曙光 第4版」，這裡用繁體）
+    aliases: ['帝國曙光'],
     players: { min: 3, max: 6 },
     duration: 240,
     complexity: 'deep',
@@ -415,7 +420,7 @@ export const games = [
   {
     slug: 'pi',
     name: { en: 'P.I.' },
-    aliases: ['私家偵探'],
+    aliases: [],
     players: { min: 2, max: 5 },
     duration: 60,
     complexity: 'standard',
@@ -490,7 +495,7 @@ export const games = [
   {
     slug: 'dig-up',
     name: { en: 'Dig Up! Adventure' },
-    aliases: ['Dig Up'],
+    aliases: [],
     players: { min: 2, max: 4 },
     duration: 18,
     complexity: 'casual',
@@ -528,7 +533,8 @@ export const games = [
   {
     slug: 'catan',
     name: { 'zh-TW': '卡坦島', en: 'Catan' },
-    aliases: ['卡坦', 'Settlers of Catan'],
+    // 2015 年以前的正式英文名，20 週年改成 Catan
+    aliases: ['Settlers of Catan'],
     players: { min: 3, max: 4 },
     duration: 75,
     complexity: 'standard',
@@ -578,7 +584,7 @@ export const games = [
   {
     slug: 'patchwork',
     name: { 'zh-TW': '拼布藝術', en: 'Patchwork' },
-    aliases: ['拼布'],
+    aliases: [],
     players: { min: 2, max: 2 },
     duration: 30,
     complexity: 'casual',
@@ -603,7 +609,7 @@ export const games = [
   {
     slug: 'azul',
     name: { 'zh-TW': '花磚物語', en: 'Azul' },
-    aliases: ['花磚', 'Azul'],
+    aliases: [],
     players: { min: 2, max: 4 },
     duration: 11,
     complexity: 'standard',

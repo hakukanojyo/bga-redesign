@@ -67,6 +67,26 @@ describe('名稱與搜尋（PRD 7.2）', () => {
     expect(matchesQuery(game('werewolves'), '狼人殺')).toBe(true)
   })
 
+  // 別名要有來源（docs/data-model.md）：研究發現、正式名稱
+  it('finds games by sourced aliases', () => {
+    expect(matchesQuery(game('terraforming-mars'), '殖民火星')).toBe(true)
+    expect(matchesQuery(game('catan'), 'Settlers of Catan')).toBe(true)
+    expect(matchesQuery(game('moonlight'), 'The Land of the Wolves')).toBe(true)
+    expect(matchesQuery(game('twilight-imperium'), '帝國曙光')).toBe(true)
+  })
+
+  it('still finds games by part of the name without an alias', () => {
+    expect(matchesQuery(game('catan'), '卡坦')).toBe(true)
+    expect(matchesQuery(game('azul'), 'Azul')).toBe(true)
+    expect(matchesQuery(game('dig-up'), 'Dig Up')).toBe(true)
+    expect(matchesQuery(game('zombicide-2e'), '無盡殺戮')).toBe(true)
+  })
+
+  it('does not keep nicknames without a source', () => {
+    expect(matchesQuery(game('splendor'), '寶石商人')).toBe(false)
+    expect(matchesQuery(game('terraforming-mars'), 'TFM')).toBe(false)
+  })
+
   it('does not match tags', () => {
     expect(matchesQuery(game('werewolves'), '社交推理')).toBe(false)
   })
