@@ -112,8 +112,8 @@
 | PR 範本（`.github/pull_request_template.md`）：做了什麼／為什麼／怎麼確認／相關／截圖／自我檢查 | 使用中 |
 | CI（`.github/workflows/ci.yml`）：PR 和推進 `main`、`develop` 時自動跑 `format:check`、`lint:check`、`test`、`build` | 使用中 |
 | 部署（`.github/workflows/deploy.yml`）：推進 `main` 時打包並部署到 GitHub Pages；也可以在 Actions 頁面手動觸發 | 使用中 |
-| 只允許壓縮合併（squash merge），合併後自動刪掉遠端分支 | 使用中 |
-| 分支保護（Rulesets）：`main` 要 CI 通過（2026-11-08 拿掉 approve，`docs/adr/0020`）；`develop` 要 CI 通過；兩條都不能刪除、不能 force-push，沒有人可以繞過 | 使用中 |
+| 合進 `develop` 的 PR 用壓縮合併（squash merge）；release PR（`develop` → `main`）用合併 commit（Create a merge commit），`main` 才會帶著 `develop` 的歷史（`docs/adr/0021`）；合併後自動刪掉遠端分支 | 使用中 |
+| 分支保護（Rulesets）：`main` 要 CI 通過（2026-11-08 拿掉 approve，`docs/adr/0020`）、只允許合併 commit；`develop` 要 CI 通過、只允許壓縮合併；兩條都不能刪除、不能 force-push，沒有人可以繞過 | 使用中 |
 | 預設分支是 `develop`：新分支從 `develop` 開，功能 PR 合進 `develop`，再從 `develop` 開 release PR 合進 `main` | 使用中 |
 
 ## 目前進度
