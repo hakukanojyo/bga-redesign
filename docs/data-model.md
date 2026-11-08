@@ -16,7 +16,7 @@
 | --- | --- | --- | --- |
 | `slug` | string | `kingdomino` | 網址、圖片檔名 |
 | `name` | `{ 'zh-TW', en }` | `{ 'zh-TW': '璀璨寶石', en: 'Splendor' }` | 顯示目前語言的；沒有 `zh-TW` 時顯示 `en`。搜尋時兩個都比對 |
-| `aliases` | string[] | `['寶石商人']` | 只給搜尋用，不顯示（SRCH-03） |
+| `aliases` | string[] | `['殖民火星']` | 只給搜尋用，不顯示（SRCH-03）。**要有來源**：研究發現（狼人殺，HW-15）、正式名稱（其他地區或舊版的名稱）；每個人叫法不同的俗稱、縮寫不放；名稱裡已經有的字不用重複寫。來源寫在 `games.js` 的註解（2026-11-08） |
 | `images` | `{ box, banner, logo }` | 圖片網址；沒有的是 `null` | 卡片、遊戲頁、主視覺 |
 | `accentColor` | string | `#cd4636` | 主視覺「立即遊玩」的顏色。不手動填，`npm run images` 從橫幅算出來（ADR 0014），沒有橫幅是品牌藍 |
 | `players` | `{ min, max }` | `{ min: 2, max: 4 }` | 卡片「2-4 人」、玩家數篩選 |
