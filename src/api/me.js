@@ -1,4 +1,4 @@
-import { fakeRequest, scenario } from './fake'
+import { fakeRequest, isUserTest, scenario } from './fake'
 import { findGame } from './games'
 import { leaderboard, me, myScore } from './data/people'
 
@@ -6,7 +6,7 @@ import { leaderboard, me, myScore } from './data/people'
 export const PLAY_HISTORY_LIMIT = 8
 
 export function getMe() {
-  const playHistory = scenario() === 'empty' ? [] : me.playHistory
+  const playHistory = scenario() === 'empty' || isUserTest() ? [] : me.playHistory
   return fakeRequest({
     ...me,
     playHistory: [...playHistory]

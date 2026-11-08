@@ -24,6 +24,8 @@
 | `?scenario=empty` | 沒有資料（空狀態） |
 | `?scenario=ready` | 即時制人到齊的確認視窗 |
 | `?scenario=decline` | 確認視窗裡有一位玩家一直不按 |
+| `?scenario=usertest` | 可用性測試用：像新玩家，沒有牌桌、收藏、遊玩紀錄；加入後一直排隊、不會到齊。換頁後還是這樣，每次打開都重新清空 |
+| `?scenario=reset` | 離開 usertest，回到預設的展示資料 |
 
 例如 https://hakukanojyo.github.io/bga-redesign/?scenario=ready 。系統開「減少動態效果」「降低透明度」時，動畫和背景模糊會跟著關掉。
 
