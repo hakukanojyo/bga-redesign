@@ -186,7 +186,6 @@
 
 /* ---------- Typography、Layout（Desktop 模式） ---------- */
 :root {
-  --size-10: 10px;
   --size-11: 11px;
   --size-12: 12px;
   --size-13: 13px;
@@ -196,7 +195,6 @@
   --size-20: 20px;
   --size-24: 24px;
 
-  --line-height-14: 14px;
   --line-height-16: 16px;
   --line-height-18: 18px;
   --line-height-20: 20px;
@@ -271,12 +269,10 @@
   --spacing-64: 64px;
   --spacing-80: 80px;
 
-  --radius-2: 2px;
   --radius-4: 4px;
   --radius-8: 8px;
   --radius-12: 12px;
   --radius-16: 16px;
-  --radius-24: 24px;
   --radius-full: 9999px;
 
   /* 效果樣式：Figma 的 Effect Styles 沒有綁變數，數值照抄；用到的元件才加 */
@@ -442,13 +438,6 @@
   font-size: var(--size-11);
   line-height: var(--line-height-18);
   letter-spacing: var(--tracking-tight);
-  font-weight: var(--weight-medium);
-}
-@utility type-en-caption-10 {
-  font-family: var(--font-latin);
-  font-size: var(--size-10);
-  line-height: var(--line-height-14);
-  letter-spacing: var(--tracking-normal);
   font-weight: var(--weight-medium);
 }
 @utility type-en-heading-20 {
