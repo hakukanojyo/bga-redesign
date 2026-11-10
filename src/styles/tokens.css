@@ -1,6 +1,6 @@
 /*
  * 設計 token：照 Figma 變數（fileKey YLgv7ISZngFsPRMqVxs8Aj）的名稱轉成 CSS。
- * 規則見 Notion「顏色變數規則」；為什麼這樣接 Tailwind 見 docs/adr/0003。
+ * 規則見 Notion「設計系統」（顏色、字體、間距各一頁）；為什麼這樣接 Tailwind 見 docs/adr/0003。
  *
  * - Primitives：一般 CSS 變數，不產生 Tailwind class，畫面不直接用
  * - Semantic：放在 @theme，產生 bg-*、text-*、border-* 等 class
