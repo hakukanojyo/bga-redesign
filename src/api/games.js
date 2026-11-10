@@ -1,4 +1,4 @@
-import { fakeRequest, loadStored, scenario } from './fake'
+import { fakeRequest, isUserTest, loadStored, scenario } from './fake'
 import { games } from './data/games'
 import { me } from './data/people'
 import { initialFavorites } from './data/tables'
@@ -245,7 +245,7 @@ export function getPromoGame() {
 // 為你推薦用的三種紀錄
 function currentSignals() {
   return {
-    played: me.playHistory.map((item) => item.gameSlug),
+    played: isUserTest() ? [] : me.playHistory.map((item) => item.gameSlug),
     favorites: loadStored('bga:favorites', initialFavorites),
     viewed: loadStored('bga:recently-viewed', []),
   }
