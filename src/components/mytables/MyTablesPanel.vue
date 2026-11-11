@@ -19,8 +19,12 @@ defineProps({
 
 const store = useMyTablesStore()
 
-// 打開面板時重拿一次：排隊的人數、輪到誰可能變了（已經有資料時不顯示骨架）
-onMounted(() => store.load())
+// 打開面板時重拿一次：排隊的人數、輪到誰可能變了（已經有資料時不顯示骨架）。
+// 進行中是 0、排隊中有桌時先看排隊中：剛加入的在那裡，不先看到「目前沒有進行中的牌桌」以為沒加入成功（2026-11-11）
+onMounted(() => {
+  if (!store.playing.length && store.queued.length) store.tab = 'queued'
+  store.load()
+})
 
 const tabs = computed(() => [
   { value: 'playing', label: `進行中 ${store.playing.length}` },
