@@ -69,6 +69,27 @@ describe('我的牌桌面板（MYTBL-01～06、09、10）', () => {
     expect(wrapper.find('li h3 a').attributes('href')).toBe('/game/skull')
   })
 
+  it('opens on 排隊中 when nothing is playing but something is queued', async () => {
+    const data = { playing: [], queued: [row('c', { status: 'queued' })] }
+    getMyTables.mockResolvedValue(data)
+    setActivePinia(createPinia())
+    const store = useMyTablesStore()
+    store.queued = data.queued
+    mount(MyTablesPanel, { global: { plugins: [router] } })
+    expect(store.tab).toBe('queued')
+  })
+
+  it('stays on 進行中 when something is playing', async () => {
+    const data = { playing: [row('a')], queued: [row('c', { status: 'queued' })] }
+    getMyTables.mockResolvedValue(data)
+    setActivePinia(createPinia())
+    const store = useMyTablesStore()
+    store.playing = data.playing
+    store.queued = data.queued
+    mount(MyTablesPanel, { global: { plugins: [router] } })
+    expect(store.tab).toBe('playing')
+  })
+
   it('shows the empty state with 尋找開放桌 (MYTBL-09)', async () => {
     const { wrapper } = await mountPanel({ playing: [], queued: [] })
     expect(wrapper.find('h3').text()).toBe('目前沒有進行中的牌桌')
