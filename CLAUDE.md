@@ -44,7 +44,7 @@
 | 設計決策 | Notion「Design Decision Record」 |
 | 技術決策 | `docs/adr/`（加套件、改架構、改開發流程時，在同一個 PR 新增） |
 | 資料模型 | `docs/data-model.md`（欄位、選項代號、假資料放哪） |
-| 顏色／尺寸變數規則 | Notion「顏色變數規則」 |
+| 設計系統（顏色、字體、間距、元件規則） | Notion「設計系統」：顏色變數規則、字體與文字樣式、間距圓角與版面、元件規則 |
 | 設計稿 | Figma fileKey `YLgv7ISZngFsPRMqVxs8Aj`：hifi 頁 `303:395`、Components 頁 `539:1140` |
 | 設計交接 | Notion「交接｜Stage 9 Mockup 進度」 |
 

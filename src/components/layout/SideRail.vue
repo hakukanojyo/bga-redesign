@@ -16,6 +16,8 @@ defineEmits(['toggle'])
 <template>
   <!--
     面板開著時藏起來，圖示只剩面板裡那一組；關閉時等面板縮回來（0.3 秒）才出現，剛好接上。
+    用 opacity 不用 invisible：dialog 關閉時要把焦點還給打開它的按鈕，invisible 的按鈕拿不到焦點會掉到 body；
+    面板開著時外面是 inert，透明的按鈕不會被按到或 Tab 到
     z-40：滑鼠移到圖示時的說明文字會往左伸到內容上，要蓋過內容裡有 z-index 的東西（卡片的收藏按鈕、
     遊戲頁的按鈕 z-10）和 Header（z-30）；平板的底部導覽列 z-50 不會同時出現
   -->
@@ -23,7 +25,7 @@ defineEmits(['toggle'])
     aria-label="側欄"
     class="fixed inset-y-0 right-0 z-40 flex w-[164px] flex-col max-desktop:hidden"
     :class="
-      openPanel ? 'invisible' : 'visible transition-[visibility] delay-300 motion-reduce:delay-0'
+      openPanel ? 'opacity-0' : 'transition-opacity duration-0 delay-300 motion-reduce:delay-0'
     "
   >
     <div class="bg-surface-header pt-20 pb-12 pl-20">
